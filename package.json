@@ -1,0 +1,12 @@
+{
+	"name": "@tech0ver/starlight-workspace",
+	"private": true,
+	"type": "module",
+	"workspaces": ["packages/*", "demo"],
+	"scripts": {
+		"dev": "bun run --cwd demo dev",
+		"build": "bun run --cwd demo build",
+		"test": "bun test",
+		"check:package": "bun scripts/check-package.mjs"
+	}
+}

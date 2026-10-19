@@ -1,0 +1,41 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+import config from 'virtual:tech0ver/config';
+
+const footer = config.footer ?? {};
+---
+
+<Default />
+{(footer.text || footer.copyright || footer.links?.length) && (
+	<p class="site-license">
+		{footer.text ?? footer.copyright}
+		{footer.links?.map((link, index) => (
+			<>
+				{(footer.text || footer.copyright || index > 0) && ' · '}
+				<a href={link.href} rel={/^https?:\/\//.test(link.href) ? 'noopener' : undefined}>{link.label}</a>
+			</>
+		))}
+	</p>
+)}
+
+<style>
+	.site-license {
+		margin-top: 1.5rem;
+		font-size: var(--sl-text-xs);
+		color: var(--sl-color-gray-3);
+		text-align: center;
+	}
+	.site-license a {
+		color: inherit;
+		text-decoration: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.site-license a:hover { color: var(--sl-color-text-accent); }
+	.site-license a:focus-visible {
+		outline: none;
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.3em;
+	}
+	@media print { .site-license { display: none; } }
+</style>

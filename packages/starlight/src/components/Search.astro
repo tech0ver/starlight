@@ -1,0 +1,48 @@
+---
+// Suggested links appear in the empty search dialog and disappear while typing.
+import Default from '@astrojs/starlight/components/Search.astro';
+import config from 'virtual:tech0ver/config';
+
+const base = config.base.replace(/\/$/, '');
+const starts = config.searchSuggestions;
+const hrefFor = (href: string) => (/^[a-z]+:\/\//i.test(href) ? href : `${base}/${href.replace(/^\/+/, '')}`);
+---
+
+<Default />
+{starts.length > 0 && (
+	<div class="site-search-start" hidden>
+		<p class="site-search-start-heading">Where to start</p>
+		<ul>
+			{starts.map(({ href, label, description }) => (
+				<li>
+					<a href={hrefFor(href)}>
+						<span class="site-search-start-title">{label}</span>
+						{description && <span class="site-search-start-description">{description}</span>}
+					</a>
+				</li>
+			))}
+		</ul>
+	</div>
+)}
+
+{starts.length > 0 && (
+	<script>
+		const start = document.querySelector<HTMLElement>('.site-search-start');
+		const container = document.querySelector('site-search .search-container');
+		if (start && container) {
+			container.append(start);
+			start.hidden = false;
+		}
+	</script>
+)}
+
+<style>
+	:global(.search-container:has(.pagefind-ui__search-input:not(:placeholder-shown))) .site-search-start { display: none; }
+	.site-search-start { margin-top: 1.5rem; }
+	.site-search-start-heading { margin-bottom: 0.5rem; color: var(--sl-color-gray-2); font-size: var(--sl-text-sm); font-weight: 600; }
+	ul { display: flex; flex-direction: column; gap: 0.5rem; padding: 0; list-style: none; }
+	a { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.75rem 1rem; border: 0; border-radius: 0.25rem; background: var(--sl-color-bg); text-decoration: none; }
+	.site-search-start-title { color: var(--sl-color-white); font-weight: 600; font-size: 1.05rem; }
+	a:hover .site-search-start-title, a:focus-visible .site-search-start-title { color: var(--sl-color-text-accent); }
+	.site-search-start-description { color: var(--sl-color-text); font-size: 0.8rem; line-height: 1.5; }
+</style>

@@ -1,0 +1,17 @@
+{
+	"name": "@tech0ver/starlight-demo",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview"
+	},
+	"dependencies": {
+		"@astrojs/markdown-satteri": "0.4.2",
+		"@astrojs/starlight": "0.42.5",
+		"@tech0ver/starlight": "workspace:*",
+		"astro": "7.3.5",
+		"sharp": "0.35.3"
+	}
+}

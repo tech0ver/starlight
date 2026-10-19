@@ -1,0 +1,19 @@
+<svg class="diagram-svg" viewBox="0 0 720 220" role="img" aria-labelledby="flow-title flow-desc">
+  <title id="flow-title">A reusable documentation template flow</title>
+  <desc id="flow-desc">A consumer configures the shared package, which renders pages for a reader.</desc>
+  <rect class="dg-box" x="20" y="70" width="150" height="80" rx="10"/>
+  <text class="dg-name" x="95" y="116" text-anchor="middle">Consumer</text>
+  <path class="dg-arrow" d="M170 110h42"/>
+  <path class="dg-head" d="m200 98 18 12-18 12"/>
+  <rect class="dg-box dg-box-accent" x="220" y="48" width="180" height="124" rx="10"/>
+  <text class="dg-name" x="310" y="92" text-anchor="middle">Template package</text>
+  <text class="dg-sub dg-accent-text" x="310" y="124" text-anchor="middle">Shared reading UI</text>
+  <path class="dg-arrow" d="M400 110h42"/>
+  <path class="dg-head" d="m430 98 18 12-18 12"/>
+  <rect class="dg-box" x="450" y="70" width="110" height="80" rx="10"/>
+  <text class="dg-name" x="505" y="116" text-anchor="middle">Pages</text>
+  <path class="dg-arrow" d="M560 110h42"/>
+  <path class="dg-head" d="m590 98 18 12-18 12"/>
+  <rect class="dg-box" x="610" y="70" width="90" height="80" rx="10"/>
+  <text class="dg-name" x="655" y="116" text-anchor="middle">Reader</text>
+</svg>

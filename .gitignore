@@ -1,0 +1,10 @@
+node_modules/
+.astro/
+dist/
+dist-*/
+*.tgz
+.agents/work/
+.env
+.env.*
+!.env.example
+.DS_Store
