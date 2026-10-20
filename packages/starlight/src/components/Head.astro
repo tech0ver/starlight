@@ -1,0 +1,30 @@
+---
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import config from 'virtual:tech0ver/config';
+
+const image = config.socialImage;
+const socialImage = image && (/^[a-z]+:\/\//i.test(image)
+	? image
+	: new URL(`${config.base.replace(/\/$/, '')}/${image.replace(/^\/+/, '')}`, Astro.site ?? Astro.url).href);
+const socialImageType = image?.toLowerCase().endsWith('.svg')
+	? 'image/svg+xml'
+	: image?.toLowerCase().endsWith('.webp')
+		? 'image/webp'
+		: image?.toLowerCase().match(/\.(jpe?g)$/)
+			? 'image/jpeg'
+			: 'image/png';
+---
+
+<StarlightHead />
+
+{socialImage && (
+	<>
+		<meta property="og:image" content={socialImage} />
+		<meta property="og:image:type" content={socialImageType} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={config.socialImageAlt} />
+		<meta name="twitter:image" content={socialImage} />
+		<meta name="twitter:image:alt" content={config.socialImageAlt} />
+	</>
+)}

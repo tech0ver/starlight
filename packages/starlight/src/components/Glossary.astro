@@ -1,0 +1,29 @@
+---
+// Renders the configured glossary in alphabetical order. The package does not
+// own glossary data; every consumer supplies its own entries.
+import config from 'virtual:tech0ver/config';
+
+const base = config.base.replace(/\/?$/, '/');
+const isExternal = (href: string) => /^[a-z]+:\/\//i.test(href);
+const readMoreHref = (href: string) => (isExternal(href) ? href : `${base}${href.replace(/^\/+/, '')}`);
+const sorted = [...config.glossaryEntries].sort((a, b) => a.term.localeCompare(b.term, 'en', { sensitivity: 'base' }));
+---
+
+{sorted.length ? (
+	<dl class="glossary-list">
+		{sorted.map((entry) => (
+			<>
+				<dt id={entry.id}>
+					{entry.term}
+					{entry.expansion && <span class="glossary-expansion"> ({entry.expansion})</span>}
+				</dt>
+				<dd>
+					<p>{entry.short} {entry.explanation}</p>
+					{entry.readMore && (
+						<p>Read more: <a href={readMoreHref(entry.readMore.href)}>{entry.readMore.label}</a></p>
+					)}
+				</dd>
+			</>
+		))}
+	</dl>
+) : <p>The glossary is empty for this site.</p>}

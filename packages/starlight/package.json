@@ -1,0 +1,31 @@
+{
+	"name": "@tech0ver/starlight",
+	"version": "0.1.0",
+	"license": "MIT",
+	"description": "Shared Astro and Starlight UI for tech0ver article sites",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tech0ver/starlight.git",
+		"directory": "packages/starlight"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"files": ["src", "notices", "README.md", "LICENSE"],
+	"exports": {
+		".": {
+			"types": "./src/index.d.ts",
+			"import": "./src/index.mjs"
+		},
+		"./components/*": "./src/components/*",
+		"./styles/*": "./src/styles/*",
+		"./plugins/*": "./src/plugins/*",
+		"./lib/*": "./src/lib/*",
+		"./font/*": "./src/assets/fonts/*",
+		"./package.json": "./package.json"
+	},
+	"peerDependencies": {
+		"@astrojs/markdown-satteri": "0.4.2",
+		"@astrojs/starlight": "0.42.5",
+		"astro": "7.3.5"
+	}
+}

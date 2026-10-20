@@ -1,0 +1,15 @@
+---
+import config from 'virtual:tech0ver/config';
+---
+
+<span class="site-name" translate="no">{config.brand.name}{config.brand.suffix && <span class="suffix">{config.brand.suffix}</span>}</span>
+<style>
+	@font-face {
+		font-family: 'Site Wordmark';
+		src: url('../assets/fonts/site-wordmark.ttf') format('truetype');
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+	.suffix { color: var(--sl-color-text-accent); font-family: 'Site Wordmark', monospace; font-weight: 700; }
+</style>
