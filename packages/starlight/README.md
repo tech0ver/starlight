@@ -18,3 +18,6 @@ and components cannot be represented as plain Markdown safely.
 
 The package is tested against Astro `7.3.5`, Starlight `0.42.5`, and
 `@astrojs/markdown-satteri` `0.4.2`.
+
+Licensed under [MIT](LICENSE). Third-party code and assets keep their included
+license notices.

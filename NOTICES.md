@@ -1,7 +1,7 @@
 # Third-party notices
 
-Keep these notices with the code and assets they cover. They do not assign a
-license to the project's own code; that license has not been chosen yet.
+The project's own code uses the [MIT License](LICENSE). Keep the notices below
+with the third-party code and assets they cover; those keep their own licenses.
 
 ## Starlight
 

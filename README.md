@@ -221,6 +221,11 @@ Peer dependencies are pinned to those versions. Changing the package version
 does not update an already-built consumer: update its dependency and lockfile,
 then rebuild. Publishing and consumer migrations are separate tasks.
 
+## License
+
+[MIT](LICENSE). Third-party code and assets keep the licenses listed in
+[NOTICES.md](NOTICES.md).
+
 ## Project documents
 
 - [Context and boundaries](CONTEXT.md)

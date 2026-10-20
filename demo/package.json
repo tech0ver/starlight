@@ -1,6 +1,7 @@
 {
 	"name": "@tech0ver/starlight-demo",
 	"private": true,
+	"license": "MIT",
 	"type": "module",
 	"scripts": {
 		"dev": "astro dev",

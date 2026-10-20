@@ -82,6 +82,10 @@ try {
 	write(join(temp, 'src/diagrams/layout.svg'), '<svg class="diagram-svg" viewBox="0 0 720 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Article layout</text></svg>\n');
 
 	run(['install', '--no-progress'], temp);
+	const installedPackage = join(temp, 'node_modules', '@tech0ver', 'starlight');
+	assert.equal(JSON.parse(readFileSync(join(installedPackage, 'package.json'), 'utf8')).license, 'MIT');
+	assert.equal(readFileSync(join(installedPackage, 'LICENSE'), 'utf8'),
+		readFileSync(join(workspace, 'LICENSE'), 'utf8'), 'installed package must include the project license');
 	run(['run', 'build'], temp);
 	const output = join(temp, 'dist', 'consumer');
 	assert.ok(existsSync(join(output, 'index.html')), 'packed home page is missing');
