@@ -16,7 +16,7 @@ const isArticle = sourcePath && !new RegExp(`^(index|${escapedGlossarySlug})\\.m
 <div class="article-heading">
 	{section && <p class="article-section">{section.label}</p>}
 	<h1 id="_top">{title}</h1>
-	{description && description !== 'TODO' && <p class="article-description">{description}</p>}
+	{description && <p class="article-description">{description}</p>}
 </div>
 {config.tutor.enabled && isArticle && sourcePath && <ArticleTutor title={title} sourcePath={sourcePath} />}
 

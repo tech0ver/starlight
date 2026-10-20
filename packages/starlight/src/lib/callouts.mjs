@@ -2,7 +2,7 @@
 export const defaultCalloutLabels = Object.freeze({
 	do: 'What to do',
 	tradeoff: 'Trade-off',
-	interview: 'In the interview',
+	explain: 'Explanation',
 	avoid: 'Avoid',
 	distinguish: 'Do not confuse',
 });

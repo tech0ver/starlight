@@ -1,17 +1,7 @@
-# Source and third-party notices
+# Third-party notices
 
-## Extraction source
-
-The UI components, styles, Markdown processors, and reading-position behavior are
-adapted from `tech0ver/sysdis`. The selected extraction baseline is recorded in
-[CONTEXT.md](CONTEXT.md). Project-specific content and service identifiers are not
-part of the shared defaults.
-
-The shared organization favicon is copied unchanged from `sysdis/public/favicon.png`.
-
-The demo contains original example content. Local extraction does not declare a
-new license for the author's code. Package publication and the license for that
-code remain separate decisions.
+Keep these notices with the code and assets they cover. They do not assign a
+license to the project's own code; that license has not been chosen yet.
 
 ## Starlight
 

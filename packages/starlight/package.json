@@ -1,7 +1,7 @@
 {
 	"name": "@tech0ver/starlight",
 	"version": "0.1.0",
-	"description": "Reusable Astro and Starlight UI for Tech0ver educational sites",
+	"description": "Shared Astro and Starlight UI for tech0ver article sites",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/tech0ver/starlight.git",

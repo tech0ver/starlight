@@ -12,7 +12,7 @@ export interface GlossaryEntry {
 	explainedIn?: string[];
 }
 
-export type CalloutKind = 'do' | 'tradeoff' | 'interview' | 'avoid' | 'distinguish';
+export type CalloutKind = 'do' | 'tradeoff' | 'explain' | 'avoid' | 'distinguish';
 export type CalloutLabels = Partial<Record<CalloutKind, string>>;
 
 export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integrations' | 'markdown'> {

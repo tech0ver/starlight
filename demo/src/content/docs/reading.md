@@ -40,7 +40,7 @@ A compact gallery is easy to scan, while separate pages give each feature more
 room for explanation and examples.
 :::
 
-:::interview
+:::explain
 Explain which settings belong to the consumer and which behavior comes from the
 shared package.
 :::

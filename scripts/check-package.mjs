@@ -56,8 +56,8 @@ try {
 		"  base: '/consumer',",
 		"  outDir: fileURLToPath(new URL('./dist/consumer/', import.meta.url)),",
 		"  brand: { name: 'Packed', suffix: 'Demo' },",
-		"  callouts: { do: 'Try \"this\" & learn' },",
-		"  glossary: { entries: [{ id: 'contract', term: 'Contract', short: 'A promise.', explanation: 'It describes allowed behavior.' }] },",
+		"  callouts: { do: 'Try \"this\" & learn', explain: 'How it works' },",
+		"  glossary: { entries: [{ id: 'callout', term: 'Callout', short: 'A guidance block.', explanation: 'It highlights a useful point.' }] },",
 		"  diagrams: { directory: './src/diagrams/' },",
 		"  rawMarkdown: { enabled: true },",
 		"  tutor: { enabled: true },",
@@ -71,15 +71,15 @@ try {
 		'export const collections = { docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }) };',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/index.mdx'), [
-		'---', 'title: PackedDemo', 'description: A packed consumer.', '---', '', 'A **contract** works.',
+		'---', 'title: PackedDemo', 'description: A packed consumer.', '---', '', 'A **callout** highlights a useful point.',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/reading.md'), [
-		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="queue"}', '', ':::do', 'Keep the contract.', ':::',
+		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="layout"}', '', ':::do', 'Use the shared layout.', ':::', '', ':::explain', 'Each site owns its articles.', ':::',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/glossary.mdx'), [
 		'---', 'title: Glossary', '---', '', "import Glossary from '@tech0ver/starlight/components/Glossary.astro';", '', '<Glossary />',
 	].join('\n'));
-	write(join(temp, 'src/diagrams/queue.svg'), '<svg class="diagram-svg" viewBox="0 0 720 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-text" x="30" y="55">queue</text></svg>\n');
+	write(join(temp, 'src/diagrams/layout.svg'), '<svg class="diagram-svg" viewBox="0 0 720 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Article layout</text></svg>\n');
 
 	run(['install', '--no-progress'], temp);
 	run(['run', 'build'], temp);
@@ -92,7 +92,9 @@ try {
 	assert.match(html, /PackedDemo|Packed/);
 	assert.match(html, /class="diagram-svg"/);
 	assert.match(html, /data-label="Try &quot;this&quot; &amp; learn"/);
+	assert.match(html, /class="block block-explain" data-label="How it works"/);
 	assert.match(readFileSync(join(output, 'reading.md'), 'utf8'), /> \*\*Try "this" & learn\*\*/);
+	assert.match(readFileSync(join(output, 'reading.md'), 'utf8'), /> \*\*How it works\*\*/);
 	const icons = [...html.matchAll(/<link\b[^>]*rel="(?:shortcut )?icon"[^>]*>/g)];
 	assert.equal(icons.length, 1, 'there must be one shared favicon');
 	const iconPath = icons[0][0].match(/href="([^"]+)"/)?.[1];

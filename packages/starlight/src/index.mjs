@@ -27,8 +27,6 @@ export function defineTech0verConfig(input = {}) {
 		socialImage: _socialImage,
 		socialImageAlt: _socialImageAlt,
 		social: _social,
-		// Ignore the removed local-preview option rather than forward it to Astro.
-		palette: _removedPalette,
 		glossary: _glossary,
 		diagrams: _diagrams,
 		tutor: _tutor,

@@ -1,7 +1,7 @@
 /*
- * Article blocks (see src/plugins/blocks.mjs): :::do, :::tradeoff, :::interview, :::avoid, :::distinguish.
+ * Article blocks (see src/plugins/blocks.mjs): :::do, :::tradeoff, :::explain, :::avoid, :::distinguish.
  * Minimal: a thin colored line on the left and a small label, no background.
- * Colors carry meaning: green = do this, yellow = trade-off, red = avoid, blue = what to say,
+ * Colors carry meaning: green = do this, yellow = trade-off, red = avoid, blue = explanation,
  * teal = do not confuse.
  */
 .sl-markdown-content .block {
@@ -37,7 +37,7 @@
 	--block-color: var(--sl-color-red);
 }
 
-.sl-markdown-content .block-interview {
+.sl-markdown-content .block-explain {
 	--block-color: var(--sl-color-accent);
 }
 

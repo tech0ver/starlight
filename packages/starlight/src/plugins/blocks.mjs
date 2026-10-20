@@ -2,7 +2,7 @@
 //
 //   :::do            → "What to do": the recommended action
 //   :::tradeoff      → "Trade-off": what you win and what you pay
-//   :::interview     → "In the interview": what to say
+//   :::explain       → "Explanation": how or why something works
 //   :::avoid         → "Avoid": a common mistake
 //   :::distinguish   → "Do not confuse": two things that share a name or look alike
 //

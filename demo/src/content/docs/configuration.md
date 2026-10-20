@@ -21,7 +21,7 @@ export default defineTech0verConfig({
 	base: '/starlight',
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
-	callouts: { do: 'Example', interview: 'Explain it' },
+	callouts: { do: 'Example', explain: 'Explain it' },
 	plannedTopics: { 'Feature gallery': ['Component overrides'] },
 	searchSuggestions: [
 		{ href: 'getting-started', label: 'Getting started' },
@@ -33,7 +33,7 @@ export default defineTech0verConfig({
 	},
 	glossary: { entries: glossaryEntries, route: 'glossary' },
 	diagrams: { directory: new URL('./src/diagrams/', import.meta.url) },
-	tutor: { enabled: true, intro: 'Help me study this Demo0ver template article.' },
+	tutor: { enabled: true, intro: 'Help me understand this Demo0ver article.' },
 	rawMarkdown: { enabled: true },
 	starlight: {
 		title: 'Demo0ver',
@@ -49,7 +49,7 @@ export default defineTech0verConfig({
 The package keeps the shared colors, fonts, organization favicon, and semantic
 callout colors. This consumer configures its name, labels, pages, and navigation.
 Changing `callouts.do` to `Example` changes the label while keeping the shared
-color. `callouts.interview` becomes `Explain it`; unspecified labels keep their
+color. `callouts.explain` becomes `Explain it`; unspecified labels keep their
 default names and colors.
 
 The package adds shared CSS and components first. A consumer can add `customCss`,

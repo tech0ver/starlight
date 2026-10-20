@@ -1,6 +1,6 @@
 # @tech0ver/starlight
 
-Reusable Astro/Starlight presentation for Tech0ver educational sites.
+Shared Astro/Starlight UI/UX for tech0ver sites built around articles.
 
 The package keeps shared navigation, responsive layout, theme controls, article
 callouts, glossary tooltips, inline diagrams, and optional article study prompts

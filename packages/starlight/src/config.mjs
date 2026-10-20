@@ -90,7 +90,7 @@ export function normalizeTech0verOptions(input = {}) {
 		glossaryRoute: glossary.route === false ? false : String(glossary.route ?? 'glossary').replace(/^\/+|\/+$/g, ''),
 		tutor: {
 			enabled: tutor.enabled === true,
-			intro: tutor.intro ?? 'Help me study this article for practical programming.',
+			intro: tutor.intro ?? 'Help me understand this article.',
 		},
 		rawMarkdown: { enabled: rawMarkdown.enabled === true },
 		diagramDirectory: normalizeDirectory(diagrams.directory, input.root),

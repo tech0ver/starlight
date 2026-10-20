@@ -33,7 +33,7 @@ export default defineTech0verConfig({
 	base: '/starlight',
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
-	callouts: { do: 'Example', interview: 'Explain it' },
+	callouts: { do: 'Example', explain: 'Explain it' },
 	socialImage: '/social-preview.svg',
 	socialImageAlt: 'Demo0ver reusable Starlight template demo.',
 	plannedTopics: { 'Feature gallery': ['Component overrides'] },
@@ -45,7 +45,7 @@ export default defineTech0verConfig({
 	footer: { text: 'Demo consumer', links: [{ href: 'https://github.com/tech0ver/starlight', label: 'Repository' }] },
 	glossary: { entries: glossaryEntries, route: 'glossary' },
 	diagrams: { directory: new URL('./src/diagrams/', import.meta.url) },
-	tutor: { enabled: true, intro: 'Help me study this Demo0ver template article for practical documentation work.' },
+	tutor: { enabled: true, intro: 'Help me understand this Demo0ver article.' },
 	rawMarkdown: { enabled: true },
 	starlight: {
 		title: 'Demo0ver',

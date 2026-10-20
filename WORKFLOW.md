@@ -1,76 +1,46 @@
-# Change workflow
+# Making changes
 
-This workflow adapts the focused-change and visual-review approach from
-`tech0ver/sysdis` to a shared UI package. [README.md](README.md) owns commands and
-API usage; [AGENTS.md](AGENTS.md) owns engineering rules.
+1. Decide what should change for a reader or a site developer.
+2. Update the package and show the behavior in `Demo0ver`. Keep changes focused
+   and preserve other work in progress.
+3. Run the relevant checks below. Update the README when setup or the API changes.
+4. Open a PR that explains the result, how it was checked, and any remaining limits.
 
-## Develop a change
+## Checks
 
-1. Identify the user-visible behavior, affected public API, and consumer example.
-   Use existing decisions; ask only for a missing choice that affects the result.
-2. Make the smallest coherent package change and update the demo that exercises it.
-   Preserve unrelated changes and consumer customization.
-3. Run relevant behavior tests and builds. For packaging, exports, paths, or asset
-   changes, run the packed-consumer check as well as the workspace build.
-4. Check changed UI in a browser. Review light and dark themes at desktop and phone
-   widths. Exercise controls, keyboard focus, search, navigation, and base-path links
-   when affected. Inspect console errors and horizontal overflow.
-5. Update API documentation, supported-version claims, and provenance where needed.
-6. Report what changed, which checks passed, and any unverified behavior. Use a
-   fresh reviewer for substantial package integration or compatibility changes.
+Commands are in [README.md](README.md).
 
-An unrelated typography edit does not require retesting every public option. Run
-checks proportional to the change; repeat them after a relevant correction.
+- For docs, check links and confirm that examples match the current code.
+- For Markdown or config changes, run the behavior tests and build the demo.
+- For package exports, paths, dependencies, or assets, also run `check:package`.
+  It installs an archive into a separate project and builds it there.
+- For visual or interaction changes, use a browser at phone and desktop widths
+  in both themes. Check the affected controls, keyboard use, links, overflow,
+  and console errors.
 
-## Public API and compatibility
+Use a fresh reviewer for substantial package or compatibility changes. A passing
+build alone does not show that the UI works. Repeat checks after a relevant fix;
+avoid unrelated changes just to make a check pass.
 
-Keep consumer data out of shared defaults. Prefer explicit configuration over
-copying components. Preserve a documented escape hatch for project CSS and
-Starlight component overrides. Avoid silently changing option precedence.
+## Compatibility
 
-Use semantic versioning when releasing. Describe breaking configuration or
-compatibility changes and provide migration instructions. For a pre-1.0 version,
-call out breaking changes explicitly; do not rely on the version number alone.
+Keep the demo's toolchain pinned in the lockfile. Test wider dependency ranges
+before claiming support. When updating Astro or Starlight, check the markup and
+behavior used by component overrides.
 
-Pin the demo's tested toolchain in its lockfile. A wider peer dependency range is
-a compatibility promise: test it or keep the claim narrow. Review upstream markup
-and interaction changes when updating Astro or Starlight.
+Use semantic versioning for releases. Explain breaking API changes and how sites
+can update, including before version 1.0. Sites must update their dependency and
+lockfile, then rebuild, to receive a package change.
 
-## Source copying
+Keep third-party notices with copied code and assets. See [NOTICES.md](NOTICES.md).
 
-Inspect the current source before copying. Record where adapted files came from
-and preserve their attribution. Verify that configurable data, paths, services,
-and content were not carried into generic defaults.
+## Git and releases
 
-Do not modify source or consuming projects merely to make the shared demo pass.
-Keep a failing package installation reproducible, and fix it in the package or
-the documented consumer contract.
-
-## Preview
-
-Start previews on an available port and keep ownership of the process clear.
-Do not stop another project's server. For a remote BB reader, share the preview
-through the existing BB Connect service and give the returned authenticated URL.
-This preview is distinct from a production deployment or package release.
-
-## Git and publication
-
-The public source repository is `tech0ver/starlight`. Its `main` branch starts
-with an empty bootstrap commit so the complete initial code can be reviewed in a
-PR. Keep the first PR focused on the shared package, one `Demo0ver` demo, tests,
-and documentation. Add build automation and GitHub Artifacts publication in a
-separate follow-up PR.
-
-Use these conventions:
-
-- GitHub Flow with focused `<type>/<kebab-case-topic>` branches.
-- Conventional Commits for English commit messages and PR titles.
-- Signed-off commits and accurate `Co-authored-by` trailers for agent contributions.
-- PR descriptions that explain final behavior and validation without tool banners.
-- Human approval before squash merge. Let GitHub derive the squash message from
-  the PR title and description rather than passing subject/body overrides.
-
-Branch protections and automation must be verified separately; these conventions
-do not claim they exist. Keep registry releases and deployments behind explicit
-session authorization. Preserve authorization already granted in the current
-session; do not ask for the same permission again.
+- Use branches named `<type>/<short-topic>` and open a PR against `main`.
+- Use Conventional Commits, sign off commits, and credit agent contributions
+  with accurate `Co-authored-by` trailers.
+- Write PR descriptions for a reader who has not seen the discussion.
+- Wait for the author's approval before squash merging. Let GitHub use the PR
+  title and description for the squash commit.
+- Publish packages and deploy sites only when requested. Check the actual
+  repository settings and automation instead of assuming they are configured.
