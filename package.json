@@ -8,6 +8,8 @@
 		"dev": "bun run --cwd demo dev",
 		"build": "bun run --cwd demo build",
 		"test": "bun test",
-		"check:package": "bun scripts/check-package.mjs"
+		"check:package": "bun scripts/check-package.mjs",
+		"check:release": "node scripts/check-release.mjs",
+		"check:release-please": "node scripts/check-release-please.mjs"
 	}
 }

@@ -17,7 +17,7 @@
     },
     "packages/starlight": {
       "name": "@tech0ver/starlight",
-      "version": "0.1.0",
+      "version": "0.1.0", // x-release-please-version
       "peerDependencies": {
         "@astrojs/markdown-satteri": "0.4.2",
         "@astrojs/starlight": "0.42.5",
