@@ -12,6 +12,18 @@ responsive reading shell, search, themes, and reusable article components.
 This demo is served below the **base path** `/starlight`. The prefix is part of
 links, assets, search, glossary tooltips, and the optional Markdown export.
 
+## Install in another site
+
+This demo uses the workspace package. Other sites install a released version of
+`@tech0ver/starlight` from GitHub Packages and supply their own content and config.
+Installation needs registry authentication, including for a public package.
+Follow the repository's
+[setup guide](https://github.com/tech0ver/starlight#use-the-package-in-another-project).
+
+After updating a package version, update the site's lockfile and rebuild it.
+See the [changelog](https://github.com/tech0ver/starlight/blob/main/packages/starlight/CHANGELOG.md)
+for the initial capabilities and later changes.
+
 ## Follow the navigation
 
 The sidebar keeps the tour short:

@@ -5,8 +5,10 @@ Keep articles and site settings in each project. Improve the shared package here
 then update its version in each site to receive layout and reading improvements.
 
 Source: [tech0ver/starlight](https://github.com/tech0ver/starlight). The repository
-contains the shared package and one `Demo0ver` demo. Version 0.1.0 has not been
-published to a package registry. Build and artifact automation are not configured.
+contains the shared package and one `Demo0ver` demo. Release Please prepares
+version and changelog updates. A maintainer publishes a GitHub Release to publish
+the package to GitHub Packages. See [the release workflow](WORKFLOW.md#releases)
+and [the changelog](packages/starlight/CHANGELOG.md).
 
 ## Run the demo
 
@@ -52,8 +54,30 @@ See [the actual demo configuration](demo/astro.config.mjs) and
 ## Use the package in another project
 
 The workspace demo imports `@tech0ver/starlight` through a workspace dependency.
-An independent project can install an archive instead. From `packages/starlight/`,
-run:
+An independent project can install a published version from GitHub Packages.
+Add this `.npmrc` to the consumer project:
+
+```ini
+@tech0ver:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+```
+
+Set `NODE_AUTH_TOKEN` in your environment to a personal access token (classic)
+with `read:packages` and access to the package. GitHub's npm registry requires
+an access token even for public packages. Keep token values out of committed files.
+Then install the package with the tested peer versions:
+
+```sh
+bun add @tech0ver/starlight@0.1.0 astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
+```
+
+In a consumer's GitHub Actions workflow, use its `GITHUB_TOKEN` with
+`packages: read` and grant that repository read access under the package's
+**Manage Actions access** settings. Pass the token as `NODE_AUTH_TOKEN` during
+installation. Rebuild the consumer after updating its dependency and lockfile.
+
+To test a local change before publication, install an archive instead.
+From `packages/starlight/`, run:
 
 ```sh
 bun pm pack
@@ -206,6 +230,7 @@ location instead. Recheck the rendered output after a processor or package updat
 ## Verify a change
 
 ```sh
+bun run check:release
 bun test
 bun run build
 bun run check:package

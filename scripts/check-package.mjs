@@ -7,6 +7,7 @@ import { join, resolve } from 'node:path';
 
 const workspace = resolve(new URL('..', import.meta.url).pathname);
 const temp = mkdtempSync(join(tmpdir(), 'tech0ver-starlight-consumer-'));
+const requestedArchive = process.argv[2] ? resolve(process.argv[2]) : undefined;
 
 function write(path, content) {
 	writeFileSync(path, content);
@@ -26,10 +27,10 @@ try {
 	mkdirSync(join(temp, 'src/content/docs'), { recursive: true });
 	mkdirSync(join(temp, 'src/diagrams'), { recursive: true });
 	const packageDirectory = join(workspace, 'packages', 'starlight');
-	const packedOutput = run(['pm', 'pack', '--destination', temp], packageDirectory);
-	const archiveName = packedOutput.split(/\r?\n/).map((line) => line.trim()).find((line) => line.endsWith('.tgz'));
-	assert.ok(archiveName, 'bun pm pack did not report an archive path');
-	const archive = archiveName.startsWith('/') ? archiveName : join(temp, archiveName);
+	const packedOutput = requestedArchive ? undefined : run(['pm', 'pack', '--destination', temp], packageDirectory);
+	const archiveName = packedOutput?.split(/\r?\n/).map((line) => line.trim()).find((line) => line.endsWith('.tgz'));
+	assert.ok(requestedArchive || archiveName, 'bun pm pack did not report an archive path');
+	const archive = requestedArchive || (archiveName.startsWith('/') ? archiveName : join(temp, archiveName));
 	assert.ok(existsSync(archive), `Package archive was not created: ${archive}`);
 
 	write(join(temp, 'package.json'), JSON.stringify({
@@ -86,6 +87,8 @@ try {
 	assert.equal(JSON.parse(readFileSync(join(installedPackage, 'package.json'), 'utf8')).license, 'MIT');
 	assert.equal(readFileSync(join(installedPackage, 'LICENSE'), 'utf8'),
 		readFileSync(join(workspace, 'LICENSE'), 'utf8'), 'installed package must include the project license');
+	assert.equal(readFileSync(join(installedPackage, 'CHANGELOG.md'), 'utf8'),
+		readFileSync(join(packageDirectory, 'CHANGELOG.md'), 'utf8'), 'installed package must include the project changelog');
 	run(['run', 'build'], temp);
 	const output = join(temp, 'dist', 'consumer');
 	assert.ok(existsSync(join(output, 'index.html')), 'packed home page is missing');

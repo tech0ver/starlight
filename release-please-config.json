@@ -1,0 +1,22 @@
+{
+	"$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+	"bootstrap-sha": "acda484618a883b99b678e53b0c0f7acef565551",
+	"bump-minor-pre-major": true,
+	"bump-patch-for-minor-pre-major": false,
+	"include-component-in-tag": false,
+	"include-v-in-tag": true,
+	"skip-github-release": true,
+	"packages": {
+		"packages/starlight": {
+			"release-type": "node",
+			"package-name": "@tech0ver/starlight",
+			"changelog-path": "CHANGELOG.md",
+			"extra-files": [
+				{
+					"type": "generic",
+					"path": "/bun.lock"
+				}
+			]
+		}
+	}
+}
