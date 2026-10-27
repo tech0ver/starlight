@@ -6,7 +6,17 @@ description: One page that exercises the shared Markdown and reading features.
 ## Markdown blocks
 
 A **consumer** can combine a **callout**, code, tables, headings, and a diagram
-on one page. The **base path** keeps those links and assets under `/starlight`.
+on one page. The URL prefix keeps those links and assets under `/starlight`.
+
+Glossary terms can appear near the right edge of the article. Hover or focus
+the term below: its card should stay readable over the table of contents.
+The read-more link inside the card works with a pointer or keyboard.
+
+<div style="text-align: end">
+
+**base path**
+
+</div>
 
 ### Code
 
