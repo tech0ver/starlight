@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import { satteri } from '@astrojs/markdown-satteri';
 import { normalizeTech0verOptions, packagePaths } from './config.mjs';
-import { createConfigVirtualModule, createRawMarkdownIntegration, createTech0verPlugin } from './integration.mjs';
+import { createConfigVirtualModule, createRawMarkdownIntegration, createTech0verPlugin, LAYOUT_MODULE } from './integration.mjs';
 import { blocksPlugin } from './plugins/blocks.mjs';
 import { diagramsPlugin } from './plugins/diagrams.mjs';
 import { glossaryPlugin } from './plugins/glossary.mjs';
@@ -18,9 +18,11 @@ export function defineTech0verConfig(input = {}) {
 	const normalized = normalizeTech0verOptions(input);
 	const {
 		brand: _brand,
+		sidebarWidth: _sidebarWidth,
 		callouts: _callouts,
 		title: _title,
 		plannedTopics: _plannedTopics,
+		plannedTopLevel: _plannedTopLevel,
 		searchSuggestions: _searchSuggestions,
 		search: _search,
 		footer: _footer,
@@ -43,7 +45,7 @@ export function defineTech0verConfig(input = {}) {
 		title: normalized.brand.fullName,
 		...userStarlight,
 		favicon: '/favicon.png',
-		customCss: [...packagePaths.styles, ...(userStarlight.customCss ?? [])],
+		customCss: [...packagePaths.styles, LAYOUT_MODULE, ...(userStarlight.customCss ?? [])],
 		components: { ...packagePaths.components, ...(userStarlight.components ?? {}) },
 		plugins: [createTech0verPlugin(normalized), ...(userStarlight.plugins ?? [])],
 	};

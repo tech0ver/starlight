@@ -20,8 +20,11 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 	integrations?: AstroUserConfig['integrations'];
 	title?: string;
 	brand?: { name?: string; suffix?: string };
+	/** Width of the desktop sidebar and tablet drawer in pixels. Defaults to 200. */
+	sidebarWidth?: number;
 	callouts?: CalloutLabels;
 	plannedTopics?: Record<string, string[]>;
+	plannedTopLevel?: string[];
 	searchSuggestions?: Array<{ href: string; label: string; description?: string }>;
 	search?: { suggestions?: Array<{ href: string; label: string; description?: string }> };
 	footer?: {
@@ -49,8 +52,10 @@ export declare function defineTech0verConfig(input?: Tech0verOptions): AstroUser
 export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	base: string;
 	brand: { name: string; suffix: string; fullName: string };
+	sidebarWidth: number;
 	callouts: Record<CalloutKind, string>;
 	plannedTopics: Record<string, string[]>;
+	plannedTopLevel: string[];
 	searchSuggestions: Array<{ href: string; label: string; description?: string }>;
 	footer: Tech0verOptions['footer'];
 	socialImage?: string;

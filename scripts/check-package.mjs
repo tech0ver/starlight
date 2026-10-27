@@ -57,6 +57,9 @@ try {
 		"  base: '/consumer',",
 		"  outDir: fileURLToPath(new URL('./dist/consumer/', import.meta.url)),",
 		"  brand: { name: 'Packed', suffix: 'Demo' },",
+		"  sidebarWidth: 256,",
+		"  plannedTopLevel: ['Future guide', 'Glossary'],",
+		"  plannedTopics: { Docs: ['Reading', 'Coming next'] },",
 		"  callouts: { do: 'Try \"this\" & learn', explain: 'How it works' },",
 		"  glossary: { entries: [{ id: 'callout', term: 'Callout', short: 'A guidance block.', explanation: 'It highlights a useful point.' }] },",
 		"  diagrams: { directory: './src/diagrams/' },",
@@ -97,6 +100,9 @@ try {
 	assert.ok(existsSync(join(output, 'reading.md')), 'packed raw Markdown route is missing');
 	const html = readFileSync(join(output, 'reading', 'index.html'), 'utf8');
 	assert.match(html, /PackedDemo|Packed/);
+	const plannedLabels = [...html.matchAll(/class="planned-topic(?: [^"]*)?"[^>]*>\s*<span(?: class="[^"]*")?>([^<]+)<\/span>/g)].map((match) => match[1]);
+	assert.deepEqual(plannedLabels, ['Future guide', 'Coming next'], 'planned labels must be unlinked and skip published entries');
+	assert.match(html, /class="planned-topic(?: [^"]*)?" aria-disabled="true"/);
 	assert.match(html, /class="diagram-svg"/);
 	assert.match(html, /data-label="Try &quot;this&quot; &amp; learn"/);
 	assert.match(html, /class="block block-explain" data-label="How it works"/);
@@ -110,6 +116,8 @@ try {
 	assert.equal(digest(join(output, iconPath.slice('/consumer/'.length))),
 		digest(join(packageDirectory, 'src/assets/favicon.png')), 'favicon bytes changed during packaging');
 	const assets = readdirSync(join(output, '_astro'));
+	const css = assets.filter((name) => name.endsWith('.css')).map((name) => readFileSync(join(output, '_astro', name), 'utf8')).join('\n');
+	assert.match(css, /--site-left-sidebar-width:\s*256px/, 'consumer sidebar width must be included in the installed package build');
 	assert.ok(assets.some((name) => name.endsWith('.ttf')), 'wordmark font was not packaged');
 	console.log(`Packed consumer passed: ${temp}`);
 	rmSync(temp, { recursive: true, force: true });

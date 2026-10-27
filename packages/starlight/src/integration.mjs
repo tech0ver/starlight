@@ -3,6 +3,8 @@ import { packagePaths, serializableConfig } from './config.mjs';
 
 export const CONFIG_MODULE = 'virtual:tech0ver/config';
 const RESOLVED_CONFIG_MODULE = `\0${CONFIG_MODULE}`;
+export const LAYOUT_MODULE = 'virtual:tech0ver/layout.css';
+const RESOLVED_LAYOUT_MODULE = `\0${LAYOUT_MODULE}`;
 
 /**
  * Each call creates a new Vite plugin. The generated module belongs to one
@@ -14,10 +16,12 @@ export function createConfigVirtualModule(config) {
 		name: 'tech0ver-starlight-config',
 		enforce: 'pre',
 		resolveId(id) {
-			return id === CONFIG_MODULE ? RESOLVED_CONFIG_MODULE : undefined;
+			if (id === CONFIG_MODULE) return RESOLVED_CONFIG_MODULE;
+			if (id === LAYOUT_MODULE) return RESOLVED_LAYOUT_MODULE;
 		},
 		load(id) {
-			return id === RESOLVED_CONFIG_MODULE ? code : undefined;
+			if (id === RESOLVED_CONFIG_MODULE) return code;
+			if (id === RESOLVED_LAYOUT_MODULE) return `:root { --site-left-sidebar-width: ${config.sidebarWidth}px; }`;
 		},
 	};
 }
