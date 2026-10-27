@@ -58,7 +58,9 @@ as separate pieces when you describe the system.
 The first eligible mention of each configured glossary term gets a
 keyboard-friendly tooltip. This Markdown page also exposes the optional
 “Study this article with an AI assistant” prompt and a plain Markdown link when
-the reader opens the article tools.
+the reader opens the article tools. Both the prompt and the separate link
+include the full URL, such as `https://tech0ver.github.io/starlight/reading.md`,
+so they work when copied into an external chat.
 
 ## Try a small change
 

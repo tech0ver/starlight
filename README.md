@@ -232,7 +232,9 @@ stay the same. Plain Markdown exports use the same configured labels as the page
 Enable `tutor.enabled` and `rawMarkdown.enabled` together to offer a prompt linked
 to a plain Markdown article export. Set `tutor.intro` for the site's articles.
 The prompt is copied into the reader's chosen AI chat; the site does not call an
-AI service. Use a real `site` URL when creating absolute article links.
+AI service. Set `site` to the deployed site's URL so copied prompts and article
+links include the correct domain and base path. In the demo, the Markdown link
+is `https://tech0ver.github.io/starlight/reading.md`.
 Raw Markdown exports cover `.md` entries. MDX pages keep their rendered page URL
 because their components and imports are not plain Markdown.
 

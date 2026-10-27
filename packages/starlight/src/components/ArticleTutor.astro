@@ -11,7 +11,8 @@ const { title, sourcePath } = Astro.props;
 const base = config.base.replace(/\/$/, '');
 const articleUrl = `${base}/${sourcePath.replace(/^\/+/, '').replace(/\.mdx?$/, '')}/`;
 const hasRawMarkdown = config.rawMarkdown.enabled && sourcePath.endsWith('.md');
-const sourceUrl = hasRawMarkdown ? `${base}/${sourcePath.replace(/^\/+/, '').replace(/\.md$/, '.md')}` : articleUrl;
+const sourceHref = hasRawMarkdown ? `${base}/${sourcePath.replace(/^\/+/, '').replace(/\.md$/, '.md')}` : articleUrl;
+const sourceUrl = new URL(sourceHref, Astro.site ?? Astro.url).href;
 const prompt = `${config.tutor.intro}\n\nArticle: ${sourceUrl}\n\nAsk my goal and preferred depth: a quick recap, a walkthrough, or a deeper discussion. Use the article examples, flag your additions, and let me set the pace.`;
 ---
 
