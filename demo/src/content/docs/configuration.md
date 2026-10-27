@@ -35,7 +35,11 @@ export default defineTech0verConfig({
 	},
 	glossary: { entries: glossaryEntries, route: 'glossary' },
 	diagrams: { directory: new URL('./src/diagrams/', import.meta.url) },
-	tutor: { enabled: true, intro: 'Help me understand this Demo0ver article.' },
+	tutor: {
+		enabled: true,
+		title: 'Explore this article with AI',
+		intro: 'Help me understand this Demo0ver article.',
+	},
 	rawMarkdown: { enabled: true },
 	starlight: {
 		title: 'Demo0ver',
@@ -66,6 +70,10 @@ the planned label is hidden. Remove the planned setting when publishing it.
 The active link in the table of contents uses accent color and bold text.
 Scroll the [feature gallery](../reading/) to check it on desktop or open
 **On this page** on a phone.
+
+`tutor.title` sets the article tools heading. This demo uses **Explore this
+article with AI**. If omitted, the heading stays **Study this article with an AI
+assistant**. `tutor.intro` sets the first paragraph of the copied prompt.
 
 The package adds shared CSS and components first. A consumer can add `customCss`,
 component overrides, and Starlight plugins when a page needs an extension.

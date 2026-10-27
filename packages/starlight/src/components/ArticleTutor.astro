@@ -17,7 +17,7 @@ const prompt = `${config.tutor.intro}\n\nArticle: ${sourceUrl}\n\nAsk my goal an
 ---
 
 <details class="article-tutor" data-pagefind-ignore>
-	<summary><span>Study this article with an AI assistant</span><span aria-hidden="true">🤖</span></summary>
+	<summary><span>{config.tutor.title}</span><span aria-hidden="true">🤖</span></summary>
 	<div class="tutor-content">
 		<p>Copy this prompt and paste it into your AI chat:</p>
 		<Code code={prompt} lang="text" wrap />

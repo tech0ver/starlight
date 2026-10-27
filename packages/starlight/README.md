@@ -21,6 +21,10 @@ navigation groups, or
 inside a group, as shown in Demo0ver. Published entries with matching labels
 replace planned ones.
 
+Enable article study tools with `tutor.enabled`. Set `tutor.title` to customize
+the block heading and `tutor.intro` to customize the first paragraph of the
+copied prompt. The default heading is **Study this article with an AI assistant**.
+
 When enabled, the raw Markdown endpoint exports `.md` content entries. MDX-only
 pages keep their rendered article URL in the study prompt because their imports
 and components cannot be represented as plain Markdown safely.
