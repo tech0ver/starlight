@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0](https://github.com/tech0ver/starlight/compare/v0.1.0...v0.2.0) (2026-10-27)
+
+
+### Features
+
+* add sidebar options and highlight active TOC links ([#3](https://github.com/tech0ver/starlight/issues/3)) ([3e47df3](https://github.com/tech0ver/starlight/commit/3e47df3dba8fd545387df7653e748c0cf552bafa))
+
+
+### Bug Fixes
+
+* preserve compact diagram widths ([#6](https://github.com/tech0ver/starlight/issues/6)) ([75be345](https://github.com/tech0ver/starlight/commit/75be345c966b25d22d08cdeee9542625b66cf99e))
+* use absolute article URLs in study prompts ([#5](https://github.com/tech0ver/starlight/issues/5)) ([5440fbe](https://github.com/tech0ver/starlight/commit/5440fbebf9461b80e49be56bf266ea6d9c0447a9))
+
 ## 0.1.0
 
 Initial release of `@tech0ver/starlight`, a shared UI package for article sites
