@@ -15,9 +15,11 @@ shared defaults. The same labels appear in optional raw Markdown exports.
 Set `sidebarWidth: 256` to fit longer navigation labels. The value is a positive
 number of pixels; the default is `200`. It controls the desktop sidebar and
 tablet drawer, while the phone menu stays full width. Use
-`plannedTopLevel: ['Framework']` for unlinked **Planned** labels before the
-navigation groups, or `plannedTopics: { Guides: ['Next steps'] }` for labels
-inside a group. Published entries with matching labels replace planned ones.
+`plannedTopLevel: ['Examples']` for unlinked **Planned** labels before the
+navigation groups, or
+`plannedTopics: { 'Feature gallery': ['Component overrides'] }` for labels
+inside a group, as shown in Demo0ver. Published entries with matching labels
+replace planned ones.
 
 When enabled, the raw Markdown endpoint exports `.md` content entries. MDX-only
 pages keep their rendered article URL in the study prompt because their imports

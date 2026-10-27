@@ -160,8 +160,8 @@ Choose a sidebar width that fits the site's navigation labels:
 
 ```js
 sidebarWidth: 256,
-plannedTopLevel: ['Framework'],
-plannedTopics: { Fundamentals: ['Messaging'] },
+plannedTopLevel: ['Examples'],
+plannedTopics: { 'Feature gallery': ['Component overrides'] },
 ```
 
 `sidebarWidth` is a positive number of pixels and defaults to `200`. It controls
