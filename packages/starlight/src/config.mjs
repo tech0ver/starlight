@@ -22,6 +22,7 @@ export const packagePaths = {
 		PageSidebar: fileURLToPath(new URL('./components/PageSidebar.astro', packageRoot)),
 		Sidebar: fileURLToPath(new URL('./components/Sidebar.astro', packageRoot)),
 		PageTitle: fileURLToPath(new URL('./components/PageTitle.astro', packageRoot)),
+		MarkdownContent: fileURLToPath(new URL('./components/MarkdownContent.astro', packageRoot)),
 		Pagination: fileURLToPath(new URL('./components/Pagination.astro', packageRoot)),
 		Search: fileURLToPath(new URL('./components/Search.astro', packageRoot)),
 		Hero: fileURLToPath(new URL('./components/Hero.astro', packageRoot)),
@@ -75,6 +76,10 @@ export function normalizeTech0verOptions(input = {}) {
 	const tutor = input.tutor && typeof input.tutor === 'object' ? input.tutor : {};
 	const rawMarkdown = input.rawMarkdown && typeof input.rawMarkdown === 'object' ? input.rawMarkdown : {};
 	const diagrams = input.diagrams && typeof input.diagrams === 'object' ? input.diagrams : {};
+	const reading = input.reading ?? {};
+	if (reading.storageKey !== undefined && (typeof reading.storageKey !== 'string' || !reading.storageKey.trim())) {
+		throw new Error('reading.storageKey must be a non-empty project key.');
+	}
 	const sidebarWidth = input.sidebarWidth ?? 200;
 	if (typeof sidebarWidth !== 'number' || !Number.isFinite(sidebarWidth) || sidebarWidth <= 0) {
 		throw new Error('sidebarWidth must be a positive number of pixels.');
@@ -84,6 +89,19 @@ export function normalizeTech0verOptions(input = {}) {
 		base,
 		brand,
 		sidebarWidth,
+		reading: {
+			enabled: reading.enabled !== false,
+			storageKey: reading.storageKey ?? `base:${base}`,
+			labels: {
+				markAsRead: 'Mark as read',
+				addFavorite: 'Add to favorites',
+				removeFavorite: 'Remove favorite',
+				new: 'New',
+				seen: 'Seen',
+				read: 'Read',
+				...clone(reading.labels ?? {}),
+			},
+		},
 		callouts: resolveCalloutLabels(input.callouts),
 		plannedTopics: clone(input.plannedTopics ?? {}),
 		plannedTopLevel: clone(input.plannedTopLevel ?? []),
@@ -111,6 +129,7 @@ export function serializableConfig(config) {
 		base: config.base,
 		brand: config.brand,
 		sidebarWidth: config.sidebarWidth,
+		reading: config.reading,
 		callouts: config.callouts,
 		plannedTopics: config.plannedTopics,
 		plannedTopLevel: config.plannedTopLevel,

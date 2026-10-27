@@ -27,6 +27,8 @@ with no dependency on another checkout or a particular machine.
   the navigation list; the site name links home.
 - Articles have a table of contents, search, light and dark themes, and saved
   reading position.
+- Nested sidebar articles have local reading status and favorites. Consumers
+  choose a stable project storage key to keep sites on one origin separate.
 - Markdown supports callouts, inline SVG diagrams, and glossary tooltips.
 - Sites can enable an article prompt for an AI chat and plain Markdown exports.
   The site itself does not call an AI service.

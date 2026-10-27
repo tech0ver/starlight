@@ -44,6 +44,7 @@ export function articleMarkdown({ title, description, body, renderedHtml = '', a
 			continue;
 		}
 		if (/^::diagram\{.*\}\s*$/.test(line)) continue;
+		if (/^\s*::mark-as-read\s*$/.test(line)) continue;
 		emit(inlineText(line, articleUrl));
 	}
 	if (containers.length) throw new Error('Unclosed article block');

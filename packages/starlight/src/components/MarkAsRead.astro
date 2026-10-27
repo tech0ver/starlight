@@ -1,0 +1,25 @@
+---
+import ReadingIcon from './ReadingIcon.astro';
+import config from 'virtual:tech0ver/config';
+import { currentArticleKey } from '../lib/reading-state.mjs';
+
+const { sidebar, entry } = Astro.locals.starlightRoute;
+const article = config.reading.enabled && entry.data.template !== 'splash'
+	? currentArticleKey(sidebar, config.base, Astro.site?.origin ?? Astro.url.origin) : null;
+---
+
+{article && <div class="mark-read-row not-content" data-mark-read-row hidden data-pagefind-ignore>
+	<button type="button" class="mark-read" data-mark-read={article} aria-pressed="false">
+		<ReadingIcon status="seen" />
+		<span>{config.reading.labels.markAsRead}</span>
+	</button>
+</div>}
+
+<style>
+	.mark-read-row { display: flex; justify-content: center; margin-block: 2rem; }
+	.mark-read-row[hidden] { display: none; }
+	.mark-read { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.75rem; padding: 0.625rem 1rem; border: 0; border-radius: 0; background: transparent; color: var(--sl-color-gray-2); font: inherit; font-weight: 600; line-height: 1.5; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+	.mark-read:hover, .mark-read[aria-pressed='true'] { color: var(--sl-color-text-accent); }
+	.mark-read:focus-visible { outline: 2px solid var(--sl-color-text-accent); outline-offset: 2px; }
+	@media print { .mark-read-row { display: none; } }
+</style>

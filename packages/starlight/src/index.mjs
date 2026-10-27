@@ -6,6 +6,7 @@ import { createConfigVirtualModule, createRawMarkdownIntegration, createTech0ver
 import { blocksPlugin } from './plugins/blocks.mjs';
 import { diagramsPlugin } from './plugins/diagrams.mjs';
 import { glossaryPlugin } from './plugins/glossary.mjs';
+import { readingPlugin } from './plugins/reading.mjs';
 
 /**
  * Create an Astro config with the shared Tech0ver presentation and a
@@ -19,6 +20,7 @@ export function defineTech0verConfig(input = {}) {
 	const {
 		brand: _brand,
 		sidebarWidth: _sidebarWidth,
+		reading: _reading,
 		callouts: _callouts,
 		title: _title,
 		plannedTopics: _plannedTopics,
@@ -55,6 +57,7 @@ export function defineTech0verConfig(input = {}) {
 		mdastPlugins: [
 			blocksPlugin(normalized.callouts),
 			diagramsPlugin({ directory: normalized.diagramDirectory }),
+			readingPlugin(),
 			...userMdastPlugins,
 			...(markdownOptions.mdastPlugins ?? []),
 		],

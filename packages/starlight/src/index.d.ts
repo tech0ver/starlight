@@ -15,6 +15,13 @@ export interface GlossaryEntry {
 export type CalloutKind = 'do' | 'tradeoff' | 'explain' | 'avoid' | 'distinguish';
 export type CalloutLabels = Partial<Record<CalloutKind, string>>;
 
+export interface ReadingOptions {
+	enabled?: boolean;
+	/** Keep this project key unchanged across releases and base path changes. */
+	storageKey?: string;
+	labels?: Partial<Record<'markAsRead' | 'addFavorite' | 'removeFavorite' | 'new' | 'seen' | 'read', string>>;
+}
+
 export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integrations' | 'markdown'> {
 	base?: string;
 	integrations?: AstroUserConfig['integrations'];
@@ -22,6 +29,7 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 	brand?: { name?: string; suffix?: string };
 	/** Width of the desktop sidebar and tablet drawer in pixels. Defaults to 200. */
 	sidebarWidth?: number;
+	reading?: ReadingOptions;
 	callouts?: CalloutLabels;
 	plannedTopics?: Record<string, string[]>;
 	plannedTopLevel?: string[];
@@ -53,6 +61,7 @@ export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	base: string;
 	brand: { name: string; suffix: string; fullName: string };
 	sidebarWidth: number;
+	reading: Required<Omit<ReadingOptions, 'labels'>> & { labels: Required<NonNullable<ReadingOptions['labels']>> };
 	callouts: Record<CalloutKind, string>;
 	plannedTopics: Record<string, string[]>;
 	plannedTopLevel: string[];

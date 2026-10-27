@@ -1,0 +1,67 @@
+<script>
+	import config from 'virtual:tech0ver/config';
+	import { createReadingStore } from '../lib/reading-state.mjs';
+
+	let storage: Storage | undefined;
+	try { storage = window.localStorage; } catch { /* Keep controls usable without storage. */ }
+	const store = createReadingStore(storage, config.reading.storageKey);
+	const labels = config.reading.labels;
+
+	function render() {
+		document.querySelectorAll<HTMLButtonElement>('[data-favorite-article]').forEach((button) => {
+			const state = store.get(button.dataset.favoriteArticle!);
+			const action = state.favorite ? labels.removeFavorite : labels.addFavorite;
+			button.hidden = false;
+			button.title = action;
+			button.setAttribute('aria-pressed', String(state.favorite));
+			button.setAttribute('aria-label', `${action}: ${button.dataset.articleLabel}. ${labels[state.status]}`);
+			const icon = button.querySelector<HTMLElement>('[data-reading-icon]')!;
+			icon.dataset.status = state.status;
+			icon.dataset.favorite = String(state.favorite);
+		});
+		document.querySelectorAll<HTMLButtonElement>('[data-mark-read]').forEach((button) => {
+			const state = store.get(button.dataset.markRead!);
+			button.setAttribute('aria-pressed', String(state.status === 'read'));
+			const icon = button.querySelector<HTMLElement>('[data-reading-icon]')!;
+			icon.dataset.status = state.status;
+			icon.dataset.favorite = String(state.favorite);
+			button.closest<HTMLElement>('[data-mark-read-row]')!.hidden = false;
+		});
+	}
+
+	function initialize() {
+		if (!config.reading.enabled) return;
+		const current = document.querySelector<HTMLButtonElement>('[data-article-current]');
+		if (current) {
+			const article = current.dataset.favoriteArticle!;
+			if (store.get(article).status === 'new') store.update(article, { status: 'seen' });
+		}
+		const template = document.querySelector<HTMLTemplateElement>('[data-mark-read-template]');
+		if (template?.content.querySelector('[data-mark-read]')) {
+			document.querySelectorAll<HTMLElement>('[data-mark-read-slot]:empty').forEach((slot) => {
+				slot.append(template.content.cloneNode(true));
+				slot.hidden = false;
+			});
+		}
+		render();
+	}
+
+	document.addEventListener('click', (event) => {
+		const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('[data-favorite-article], [data-mark-read]') : null;
+		if (!button) return;
+		if (button.dataset.favoriteArticle) {
+			const article = button.dataset.favoriteArticle;
+			store.update(article, { favorite: !store.get(article).favorite });
+		} else if (button.dataset.markRead) {
+			const article = button.dataset.markRead;
+			store.update(article, { status: store.get(article).status === 'read' ? 'seen' : 'read' });
+		}
+		render();
+	});
+	window.addEventListener('storage', (event) => {
+		if (store.ownsKey(event.key)) render();
+	});
+	window.addEventListener('pageshow', initialize);
+	document.addEventListener('astro:page-load', initialize);
+	initialize();
+</script>
