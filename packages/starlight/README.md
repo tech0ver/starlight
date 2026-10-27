@@ -28,7 +28,7 @@ and components cannot be represented as plain Markdown safely.
 The package is tested against Astro `7.3.5`, Starlight `0.42.5`, and
 `@astrojs/markdown-satteri` `0.4.2`.
 
-Install a released version from GitHub Packages. Configure the consumer's
+Install the latest published version from GitHub Packages. Configure the consumer's
 `.npmrc` and provide `NODE_AUTH_TOKEN` in its environment:
 
 ```ini
@@ -42,7 +42,7 @@ access in the package settings and use its `GITHUB_TOKEN` with `packages: read`.
 Even public npm packages on GitHub Packages require authentication.
 
 ```sh
-bun add @tech0ver/starlight@0.1.0 astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
+bun add @tech0ver/starlight@latest astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
 ```
 
 Import `defineTech0verConfig` from `@tech0ver/starlight` in your Astro config.
