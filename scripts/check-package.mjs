@@ -23,6 +23,16 @@ function run(args, cwd) {
 	return result.stdout;
 }
 
+function assertTutorUrl(html, url) {
+	const tutor = html.match(/<details\b[^>]*class="article-tutor(?: [^"]*)?"[^>]*>([\s\S]*?)<\/details>/)?.[1];
+	assert.ok(tutor, 'article study prompt is missing');
+	const blocks = [...tutor.matchAll(/<code\b[^>]*>([\s\S]*?)<\/code>/g)]
+		.map((match) => match[1].replace(/<[^>]*>/g, ''));
+	assert.equal(blocks.length, 2, 'study tools must show a prompt and a separate link');
+	assert.ok(blocks[0].includes(`Article: ${url}`), `study prompt must include ${url}`);
+	assert.equal(blocks[1], url, 'the separate article link must match the prompt');
+}
+
 try {
 	mkdirSync(join(temp, 'src/content/docs'), { recursive: true });
 	mkdirSync(join(temp, 'src/diagrams'), { recursive: true });
@@ -46,7 +56,7 @@ try {
 			sharp: '0.35.3',
 		},
 	}, null, 2));
-	write(join(temp, 'astro.config.mjs'), [
+	const consumerConfig = [
 		"import { defineTech0verConfig } from '@tech0ver/starlight';",
 		"import { fileURLToPath } from 'node:url';",
 		'default export should be replaced',
@@ -65,9 +75,10 @@ try {
 		"  diagrams: { directory: './src/diagrams/' },",
 		"  rawMarkdown: { enabled: true },",
 		"  tutor: { enabled: true },",
-		"  starlight: { title: 'PackedDemo', sidebar: [{ label: 'Docs', items: ['index', 'reading'] }, 'glossary'] },",
+		"  starlight: { title: 'PackedDemo', sidebar: [{ label: 'Docs', items: ['index', 'reading', 'interactive'] }, 'glossary'] },",
 		'});',
-	].join('\n')));
+	].join('\n'));
+	write(join(temp, 'astro.config.mjs'), consumerConfig);
 	write(join(temp, 'src/content.config.ts'), [
 		"import { defineCollection } from 'astro:content';",
 		"import { docsLoader } from '@astrojs/starlight/loaders';",
@@ -79,6 +90,9 @@ try {
 	].join('\n'));
 	write(join(temp, 'src/content/docs/reading.md'), [
 		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="layout"}', '', ':::do', 'Use the shared layout.', ':::', '', ':::explain', 'Each site owns its articles.', ':::',
+	].join('\n'));
+	write(join(temp, 'src/content/docs/interactive.mdx'), [
+		'---', 'title: Interactive', 'description: A packed MDX article.', '---', '', '<span>This page uses MDX.</span>',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/glossary.mdx'), [
 		'---', 'title: Glossary', '---', '', "import Glossary from '@tech0ver/starlight/components/Glossary.astro';", '', '<Glossary />',
@@ -100,6 +114,10 @@ try {
 	assert.ok(existsSync(join(output, 'reading.md')), 'packed raw Markdown route is missing');
 	const html = readFileSync(join(output, 'reading', 'index.html'), 'utf8');
 	assert.match(html, /PackedDemo|Packed/);
+	assertTutorUrl(html, 'https://example.test/consumer/reading.md');
+	const mdxHtml = readFileSync(join(output, 'interactive', 'index.html'), 'utf8');
+	assertTutorUrl(mdxHtml, 'https://example.test/consumer/interactive/');
+	assert.ok(!existsSync(join(output, 'interactive.md')), 'MDX must not have a plain Markdown endpoint');
 	const plannedLabels = [...html.matchAll(/class="planned-topic(?: [^"]*)?"[^>]*>\s*<span(?: class="[^"]*")?>([^<]+)<\/span>/g)].map((match) => match[1]);
 	assert.deepEqual(plannedLabels, ['Future guide', 'Coming next'], 'planned labels must be unlinked and skip published entries');
 	assert.match(html, /class="planned-topic(?: [^"]*)?" aria-disabled="true"/);
@@ -119,6 +137,18 @@ try {
 	const css = assets.filter((name) => name.endsWith('.css')).map((name) => readFileSync(join(output, '_astro', name), 'utf8')).join('\n');
 	assert.match(css, /--site-left-sidebar-width:\s*256px/, 'consumer sidebar width must be included in the installed package build');
 	assert.ok(assets.some((name) => name.endsWith('.ttf')), 'wordmark font was not packaged');
+
+	// Rebuild at the domain root without exports: prompts must use rendered pages.
+	write(join(temp, 'astro.config.mjs'), consumerConfig
+		.replace("base: '/consumer'", "base: '/'")
+		.replace("'./dist/consumer/'", "'./dist/root/'")
+		.replace('rawMarkdown: { enabled: true }', 'rawMarkdown: { enabled: false }'));
+	run(['run', 'build'], temp);
+	const rootOutput = join(temp, 'dist', 'root');
+	const rootHtml = readFileSync(join(rootOutput, 'reading', 'index.html'), 'utf8');
+	assertTutorUrl(rootHtml, 'https://example.test/reading/');
+	assert.ok(!existsSync(join(rootOutput, 'reading.md')), 'disabled exports must not create Markdown endpoints');
+	assertTutorUrl(readFileSync(join(rootOutput, 'interactive', 'index.html'), 'utf8'), 'https://example.test/interactive/');
 	console.log(`Packed consumer passed: ${temp}`);
 	rmSync(temp, { recursive: true, force: true });
 } catch (error) {
