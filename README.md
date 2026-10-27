@@ -65,10 +65,10 @@ Add this `.npmrc` to the consumer project:
 Set `NODE_AUTH_TOKEN` in your environment to a personal access token (classic)
 with `read:packages` and access to the package. GitHub's npm registry requires
 an access token even for public packages. Keep token values out of committed files.
-Then install the package with the tested peer versions:
+Then install the latest published package with the tested peer versions:
 
 ```sh
-bun add @tech0ver/starlight@0.1.0 astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
+bun add @tech0ver/starlight@latest astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
 ```
 
 In a consumer's GitHub Actions workflow, use its `GITHUB_TOKEN` with
@@ -84,10 +84,11 @@ bun pm pack
 ```
 
 Then install that archive from the consumer project, using its real path and the
-tested dependency versions:
+tested dependency versions. Replace `VERSION` with the version in the generated
+archive's filename:
 
 ```sh
-bun add /path/to/tech0ver-starlight-0.1.0.tgz astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
+bun add /path/to/tech0ver-starlight-VERSION.tgz astro@7.3.5 @astrojs/starlight@0.42.5 @astrojs/markdown-satteri@0.4.2
 ```
 
 In the consumer's `astro.config.mjs`:
