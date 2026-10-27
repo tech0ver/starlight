@@ -1,6 +1,6 @@
 {
 	"name": "@tech0ver/starlight",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"license": "MIT",
 	"description": "Shared Astro and Starlight UI for tech0ver article sites",
 	"publishConfig": {
@@ -13,7 +13,13 @@
 	},
 	"type": "module",
 	"sideEffects": false,
-	"files": ["src", "notices", "README.md", "CHANGELOG.md", "LICENSE"],
+	"files": [
+		"src",
+		"notices",
+		"README.md",
+		"CHANGELOG.md",
+		"LICENSE"
+	],
 	"exports": {
 		".": {
 			"types": "./src/index.d.ts",
