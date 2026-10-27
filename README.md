@@ -176,6 +176,7 @@ list. Remove its planned setting when publishing the page.
 
 The active table-of-contents link uses the accent color and bold text on both
 desktop and mobile. It follows the current section as the reader scrolls.
+The desktop panel scrolls to keep the active link visible in long outlines.
 
 ### Home page layout
 
@@ -194,6 +195,10 @@ and `explanation`; it can also have aliases, expansion, a read-more link, and pa
 that explain the term. Internal read-more links use paths relative to the site's
 base. Only the first eligible mention receives a tooltip. Links, code, headings,
 and the entry's own explanatory page are excluded.
+
+The glossary renders each term as a compact level-two heading with an anchor
+link. The table of contents highlights the term while scrolling. Entry IDs stay
+the URL fragments, so links from article tooltips and copied term links agree.
 
 Create a glossary page yourself, using the public component. The route option
 controls glossary-specific TOC behavior; it does not create the page. See

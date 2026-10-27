@@ -83,27 +83,30 @@
 	}
 }
 
-/* Glossary page */
-.glossary-list dt {
+/* Each term is a heading so Starlight can track it in the table of contents. */
+.glossary-list section + section {
 	margin-top: 1.5rem;
-	font-weight: 600;
-	color: var(--sl-color-white);
-	scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
 }
 
-.glossary-list dt .glossary-expansion {
+.glossary-list .sl-heading-wrapper,
+.glossary-list h2 {
+	font-size: inherit;
+}
+
+.glossary-list h2 {
+	font-weight: 600;
+	color: var(--sl-color-white);
+}
+
+.glossary-list .glossary-expansion {
 	font-weight: normal;
 	color: var(--sl-color-gray-2);
 }
 
-.glossary-list dd {
+.glossary-list p {
 	margin: 0.25rem 0 0;
 }
 
-.glossary-list dd p {
-	margin: 0.25rem 0 0;
-}
-
-.glossary-list dt:target {
+.glossary-list h2:target {
 	color: var(--sl-color-accent-high);
 }
