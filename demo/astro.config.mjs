@@ -47,7 +47,11 @@ export default defineTech0verConfig({
 	footer: { text: 'Demo consumer', links: [{ href: 'https://github.com/tech0ver/starlight', label: 'Repository' }] },
 	glossary: { entries: glossaryEntries, route: 'glossary' },
 	diagrams: { directory: new URL('./src/diagrams/', import.meta.url) },
-	tutor: { enabled: true, intro: 'Help me understand this Demo0ver article.' },
+	tutor: {
+		enabled: true,
+		title: 'Explore this article with AI',
+		intro: 'Help me understand this Demo0ver article.',
+	},
 	rawMarkdown: { enabled: true },
 	starlight: {
 		title: 'Demo0ver',

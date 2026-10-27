@@ -40,7 +40,7 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 		route?: string | false;
 	};
 	diagrams?: { directory?: URL | string };
-	tutor?: { enabled?: boolean; intro?: string };
+	tutor?: { enabled?: boolean; title?: string; intro?: string };
 	rawMarkdown?: { enabled?: boolean };
 	starlight?: Omit<Partial<StarlightUserConfig>, 'favicon'> & { plugins?: StarlightPlugin[] };
 	mdastPlugins?: unknown[];
@@ -64,7 +64,7 @@ export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	glossaryEntries: GlossaryEntry[];
 	glossarySkip: string[];
 	glossaryRoute: string | false;
-	tutor: { enabled: boolean; intro: string };
+	tutor: { enabled: boolean; title: string; intro: string };
 	rawMarkdown: { enabled: boolean };
 	starlight: Omit<Partial<StarlightUserConfig>, 'favicon'> & { plugins?: StarlightPlugin[] };
 };

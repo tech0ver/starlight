@@ -96,6 +96,7 @@ export function normalizeTech0verOptions(input = {}) {
 		glossaryRoute: glossary.route === false ? false : String(glossary.route ?? 'glossary').replace(/^\/+|\/+$/g, ''),
 		tutor: {
 			enabled: tutor.enabled === true,
+			title: tutor.title ?? 'Study this article with an AI assistant',
 			intro: tutor.intro ?? 'Help me understand this article.',
 		},
 		rawMarkdown: { enabled: rawMarkdown.enabled === true },

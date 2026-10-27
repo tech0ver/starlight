@@ -74,7 +74,7 @@ try {
 		"  glossary: { entries: [{ id: 'callout', term: 'Callout', short: 'A guidance block.', explanation: 'It highlights a useful point.' }] },",
 		"  diagrams: { directory: './src/diagrams/' },",
 		"  rawMarkdown: { enabled: true },",
-		"  tutor: { enabled: true },",
+		"  tutor: { enabled: true, title: 'Explore this article with AI' },",
 		"  starlight: { title: 'PackedDemo', sidebar: [{ label: 'Docs', items: ['index', 'reading', 'interactive'] }, 'glossary'] },",
 		'});',
 	].join('\n'));
@@ -116,6 +116,7 @@ try {
 	const html = readFileSync(join(output, 'reading', 'index.html'), 'utf8');
 	assert.match(html, /PackedDemo|Packed/);
 	assertTutorUrl(html, 'https://example.test/consumer/reading.md');
+	assert.match(html, /<summary\b[^>]*><span\b[^>]*>Explore this article with AI<\/span>/, 'installed package must use the configured study heading');
 	const mdxHtml = readFileSync(join(output, 'interactive', 'index.html'), 'utf8');
 	assertTutorUrl(mdxHtml, 'https://example.test/consumer/interactive/');
 	assert.ok(!existsSync(join(output, 'interactive.md')), 'MDX must not have a plain Markdown endpoint');
@@ -144,11 +145,13 @@ try {
 	write(join(temp, 'astro.config.mjs'), consumerConfig
 		.replace("base: '/consumer'", "base: '/'")
 		.replace("'./dist/consumer/'", "'./dist/root/'")
-		.replace('rawMarkdown: { enabled: true }', 'rawMarkdown: { enabled: false }'));
+		.replace('rawMarkdown: { enabled: true }', 'rawMarkdown: { enabled: false }')
+		.replace("tutor: { enabled: true, title: 'Explore this article with AI' }", 'tutor: { enabled: true }'));
 	run(['run', 'build'], temp);
 	const rootOutput = join(temp, 'dist', 'root');
 	const rootHtml = readFileSync(join(rootOutput, 'reading', 'index.html'), 'utf8');
 	assertTutorUrl(rootHtml, 'https://example.test/reading/');
+	assert.match(rootHtml, /<summary\b[^>]*><span\b[^>]*>Study this article with an AI assistant<\/span>/, 'omitting the study heading must preserve the default');
 	assert.ok(!existsSync(join(rootOutput, 'reading.md')), 'disabled exports must not create Markdown endpoints');
 	assertTutorUrl(readFileSync(join(rootOutput, 'interactive', 'index.html'), 'utf8'), 'https://example.test/interactive/');
 	console.log(`Packed consumer passed: ${temp}`);

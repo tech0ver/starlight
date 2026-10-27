@@ -235,7 +235,19 @@ stay the same. Plain Markdown exports use the same configured labels as the page
 ### Optional study prompt
 
 Enable `tutor.enabled` and `rawMarkdown.enabled` together to offer a prompt linked
-to a plain Markdown article export. Set `tutor.intro` for the site's articles.
+to a plain Markdown article export. Set `tutor.title` for the block heading and
+`tutor.intro` for the first paragraph of the copied prompt. When omitted, the
+heading is **Study this article with an AI assistant**. For example:
+
+```js
+tutor: {
+  enabled: true,
+  title: 'Explore this article with AI',
+  intro: 'Help me understand this Demo0ver article.',
+},
+rawMarkdown: { enabled: true },
+```
+
 The prompt is copied into the reader's chosen AI chat; the site does not call an
 AI service. Set `site` to the deployed site's URL so copied prompts and article
 links include the correct domain and base path. In the demo, the Markdown link
