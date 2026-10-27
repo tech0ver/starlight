@@ -13,6 +13,9 @@ permissions:
 
 jobs:
   verify:
+    permissions:
+      contents: read
+      packages: read
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     outputs:
@@ -34,6 +37,16 @@ jobs:
           if (!match) throw new Error(`Release tag is not a stable canonical version: ${JSON.stringify(tag)}`);
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${tag.slice(1)}\n`);
           NODE
+
+      - name: Require public package visibility
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          visibility="$(gh api /orgs/tech0ver/packages/npm/starlight --jq .visibility)"
+          if [ "$visibility" != public ]; then
+            echo '::error::Make @tech0ver/starlight public in its GitHub Package settings before publishing a release.'
+            exit 1
+          fi
 
       - name: Check out the published commit
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
