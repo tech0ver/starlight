@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { test } from 'node:test';
 import { normalizeTech0verOptions } from '../packages/starlight/src/config.mjs';
@@ -6,6 +9,7 @@ import { createConfigVirtualModule } from '../packages/starlight/src/integration
 import { articleMarkdown } from '../packages/starlight/src/lib/article-markdown.mjs';
 import { glossaryPlugin } from '../packages/starlight/src/plugins/glossary.mjs';
 import { blocksPlugin } from '../packages/starlight/src/plugins/blocks.mjs';
+import { diagramsPlugin } from '../packages/starlight/src/plugins/diagrams.mjs';
 
 const entry = {
 	id: 'callout',
@@ -66,6 +70,28 @@ test('relative diagram directories belong to the consumer root', () => {
 	assert.equal(config.diagramDirectory.href, 'file:///tmp/tech0ver-consumer/src/diagrams/');
 	const urlConfig = normalizeTech0verOptions({ diagrams: { directory: new URL('file:///tmp/tech0ver-url/diagrams') } });
 	assert.equal(urlConfig.diagramDirectory.href, 'file:///tmp/tech0ver-url/diagrams/');
+});
+
+test('compact diagrams keep the text scale of the 720-unit reference grid', () => {
+	const directory = mkdtempSync(join(tmpdir(), 'starlight-diagrams-'));
+	try {
+		const plugin = diagramsPlugin({ directory: pathToFileURL(`${directory}/`) });
+		for (const viewBox of ['0 0 360 120', '-10, -20, 360.0, 120', '0 0 720 120', '0 0 900 120']) {
+			writeFileSync(join(directory, 'flow.svg'), `<svg viewBox="${viewBox}"><text>Consumer</text></svg>`);
+			let rendered;
+			plugin.leafDirective({ name: 'diagram', attributes: { name: 'flow' } }, {
+				replaceNode(_node, value) { rendered = value.raw; },
+			});
+			if (viewBox.includes('360')) {
+				assert.match(rendered, /width: 50\.00%; min-width: 300px/);
+			} else {
+				assert.doesNotMatch(rendered, /style=/);
+			}
+			assert.ok(rendered.includes(`viewBox="${viewBox}"`));
+		}
+	} finally {
+		rmSync(directory, { recursive: true, force: true });
+	}
 });
 
 test('callout labels are local to a consumer and keep their semantic classes', () => {

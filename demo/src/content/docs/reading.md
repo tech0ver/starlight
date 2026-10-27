@@ -30,6 +30,11 @@ export function firstFeature(items = features) {
 
 ::diagram{name="template-flow"}
 
+This compact diagram shows the first step of the same flow. Its 360-unit width
+uses half of the 720-unit reference grid, keeping its text at the same scale.
+
+::diagram{name="compact-flow"}
+
 :::do
 Use a short page to show one idea, then link to a deeper article when the
 consumer needs more context.

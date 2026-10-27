@@ -89,7 +89,7 @@ try {
 		'---', 'title: PackedDemo', 'description: A packed consumer.', '---', '', 'A **callout** highlights a useful point.',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/reading.md'), [
-		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="layout"}', '', ':::do', 'Use the shared layout.', ':::', '', ':::explain', 'Each site owns its articles.', ':::',
+		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="layout"}', '', '::diagram{name="compact"}', '', ':::do', 'Use the shared layout.', ':::', '', ':::explain', 'Each site owns its articles.', ':::',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/interactive.mdx'), [
 		'---', 'title: Interactive', 'description: A packed MDX article.', '---', '', '<span>This page uses MDX.</span>',
@@ -98,6 +98,7 @@ try {
 		'---', 'title: Glossary', '---', '', "import Glossary from '@tech0ver/starlight/components/Glossary.astro';", '', '<Glossary />',
 	].join('\n'));
 	write(join(temp, 'src/diagrams/layout.svg'), '<svg class="diagram-svg" viewBox="0 0 720 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Article layout</text></svg>\n');
+	write(join(temp, 'src/diagrams/compact.svg'), '<svg class="diagram-svg" viewBox="0 0 360 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Compact layout</text></svg>\n');
 
 	run(['install', '--no-progress'], temp);
 	const installedPackage = join(temp, 'node_modules', '@tech0ver', 'starlight');
@@ -122,6 +123,7 @@ try {
 	assert.deepEqual(plannedLabels, ['Future guide', 'Coming next'], 'planned labels must be unlinked and skip published entries');
 	assert.match(html, /class="planned-topic(?: [^"]*)?" aria-disabled="true"/);
 	assert.match(html, /class="diagram-svg"/);
+	assert.match(html, /<svg style="width: 50\.00%; min-width: 300px"/);
 	assert.match(html, /data-label="Try &quot;this&quot; &amp; learn"/);
 	assert.match(html, /class="block block-explain" data-label="How it works"/);
 	assert.match(readFileSync(join(output, 'reading.md'), 'utf8'), /> \*\*Try "this" & learn\*\*/);

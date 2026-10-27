@@ -1,0 +1,10 @@
+<svg class="diagram-svg" viewBox="0 0 360 140" role="img" aria-labelledby="compact-flow-title compact-flow-desc">
+  <title id="compact-flow-title">The consumer-to-package step</title>
+  <desc id="compact-flow-desc">The consumer passes its configuration to the shared package.</desc>
+  <rect class="dg-box" x="10" y="30" width="140" height="80" rx="10"/>
+  <text class="dg-name" x="80" y="76" text-anchor="middle">Consumer</text>
+  <path class="dg-arrow" d="M150 70h50"/>
+  <path class="dg-head" d="m188 58 18 12-18 12"/>
+  <rect class="dg-box dg-box-accent" x="210" y="30" width="140" height="80" rx="10"/>
+  <text class="dg-name" x="280" y="76" text-anchor="middle">Package</text>
+</svg>

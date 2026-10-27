@@ -29,7 +29,8 @@ export function diagramsPlugin({ directory } = {}) {
 				.split('\n')
 				.filter((line) => line.trim())
 				.join('\n');
-			const width = Number(svg.match(/viewBox="0 (\d+)/)?.[1]);
+			const viewBox = svg.match(/\bviewBox=["']([^"']+)["']/)?.[1];
+			const width = Number(viewBox?.trim().split(/[\s,]+/)[2]);
 			if (width && width < FULL_WIDTH) {
 				const share = width / FULL_WIDTH;
 				svg = svg.replace(
