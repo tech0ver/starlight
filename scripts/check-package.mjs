@@ -112,6 +112,9 @@ try {
 	assert.ok(existsSync(join(output, 'index.html')), 'packed home page is missing');
 	assert.ok(existsSync(join(output, 'reading', 'index.html')), 'packed article is missing');
 	assert.ok(existsSync(join(output, 'glossary', 'index.html')), 'packed glossary is missing');
+	const glossaryHtml = readFileSync(join(output, 'glossary', 'index.html'), 'utf8');
+	assert.match(glossaryHtml, /<h2\b[^>]*id="callout"[^>]*>/, 'glossary terms must be headings tracked by Starlight');
+	assert.match(glossaryHtml, /<a\b[^>]*class="sl-anchor-link"[^>]*href="#callout"/, 'glossary terms must have shareable anchor links');
 	assert.ok(existsSync(join(output, 'reading.md')), 'packed raw Markdown route is missing');
 	const html = readFileSync(join(output, 'reading', 'index.html'), 'utf8');
 	assert.match(html, /PackedDemo|Packed/);

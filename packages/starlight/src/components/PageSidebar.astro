@@ -20,6 +20,36 @@ import TableOfContents from 'virtual:starlight/components/TableOfContents';
 }
 
 <script>
+	function keepCurrentTocVisible() {
+		const toc = document.querySelector('starlight-toc');
+		const sidebar = toc?.closest<HTMLElement>('.right-sidebar');
+		if (!toc || !sidebar) return;
+
+		const revealCurrent = () => {
+			if (!matchMedia('(min-width: 50rem)').matches) return;
+			const current = toc.querySelector<HTMLAnchorElement>('a[aria-current="true"]');
+			if (!current) return;
+
+			const bounds = current.getBoundingClientRect();
+			const container = sidebar.getBoundingClientRect();
+			const top = Math.max(container.top, document.querySelector('header')?.getBoundingClientRect().bottom ?? 0) + 8;
+			const bottom = container.bottom - 8;
+			// Scroll only the navigation panel; the article keeps its reading position.
+			if (bounds.top < top) sidebar.scrollTop += bounds.top - top;
+			else if (bounds.bottom > bottom) sidebar.scrollTop += bounds.bottom - bottom;
+		};
+
+		new MutationObserver(revealCurrent).observe(toc, {
+			subtree: true,
+			attributes: true,
+			attributeFilter: ['aria-current'],
+		});
+		window.addEventListener('resize', revealCurrent);
+		requestAnimationFrame(revealCurrent);
+	}
+
+	keepCurrentTocVisible();
+
 	// Keep the entry point here so Astro includes it when installed from a package.
 	async function trackReadingPosition() {
 		const toc = document.querySelector('starlight-toc');

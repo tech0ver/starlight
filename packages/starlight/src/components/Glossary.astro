@@ -1,6 +1,7 @@
 ---
 // Renders the configured glossary in alphabetical order. The package does not
 // own glossary data; every consumer supplies its own entries.
+import { Icon } from '@astrojs/starlight/components';
 import config from 'virtual:tech0ver/config';
 
 const base = config.base.replace(/\/?$/, '/');
@@ -10,20 +11,24 @@ const sorted = [...config.glossaryEntries].sort((a, b) => a.term.localeCompare(b
 ---
 
 {sorted.length ? (
-	<dl class="glossary-list">
+	<div class="glossary-list">
 		{sorted.map((entry) => (
-			<>
-				<dt id={entry.id}>
-					{entry.term}
-					{entry.expansion && <span class="glossary-expansion"> ({entry.expansion})</span>}
-				</dt>
-				<dd>
-					<p>{entry.short} {entry.explanation}</p>
-					{entry.readMore && (
-						<p>Read more: <a href={readMoreHref(entry.readMore.href)}>{entry.readMore.label}</a></p>
-					)}
-				</dd>
-			</>
+			<section>
+				<div class="sl-heading-wrapper level-h2">
+					<h2 id={entry.id}>
+						{entry.term}
+						{entry.expansion && <span class="glossary-expansion"> ({entry.expansion})</span>}
+					</h2>
+					<a class="sl-anchor-link" href={`#${entry.id}`}>
+						<span aria-hidden="true" class="sl-anchor-icon"><Icon name="link-alt" /></span>
+						<span class="sr-only" data-pagefind-ignore>{Astro.locals.t('heading.anchorLabel', { title: entry.term })}</span>
+					</a>
+				</div>
+				<p>{entry.short} {entry.explanation}</p>
+				{entry.readMore && (
+					<p>Read more: <a href={readMoreHref(entry.readMore.href)}>{entry.readMore.label}</a></p>
+				)}
+			</section>
 		))}
-	</dl>
+	</div>
 ) : <p>The glossary is empty for this site.</p>}
