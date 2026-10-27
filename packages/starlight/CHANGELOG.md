@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/tech0ver/starlight/compare/v0.3.0...v0.4.0) (2026-10-27)
+
+
+### Features
+
+* add article reading status and favorites ([#15](https://github.com/tech0ver/starlight/issues/15)) ([415823a](https://github.com/tech0ver/starlight/commit/415823a0e5b7569b72ebccd3f1adfbbd18d28e25))
+
+
+### Bug Fixes
+
+* show glossary tooltips above the article outline ([#17](https://github.com/tech0ver/starlight/issues/17)) ([9122431](https://github.com/tech0ver/starlight/commit/91224319f6e8e0a6dc2622b1a8d61dbb2a87e6fe))
+
 ## [0.3.0](https://github.com/tech0ver/starlight/compare/v0.2.1...v0.3.0) (2026-10-27)
 
 
