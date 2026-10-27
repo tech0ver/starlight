@@ -306,6 +306,19 @@ site-search dialog {
    under the logo then spans the full width. */
 .sidebar-pane { scrollbar-gutter: auto; }
 
+/* The favorite button and article link are separate touch and keyboard targets. */
+.sidebar-content .article-nav { display: flex; align-items: stretch; color: var(--sl-color-gray-2); }
+.sidebar-content .article-nav:is(:hover, :focus-within),
+.sidebar-content .article-nav:has(a[aria-current='page']) { color: var(--sl-color-text-accent); }
+:root .sidebar-content .article-nav > a { flex: 1; min-width: 0; display: flex; align-items: center; flex-wrap: wrap; min-height: 2rem; padding-inline-start: 0.25rem; color: inherit; }
+.favorite-toggle { display: flex; flex: 0 0 2rem; align-items: center; justify-content: center; min-height: 2rem; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.favorite-toggle[hidden] { display: none; }
+.favorite-toggle:focus-visible { outline: 2px solid var(--sl-color-text-accent); outline-offset: -2px; }
+@media (width < 50rem), (pointer: coarse) {
+	.favorite-toggle { flex-basis: 2.75rem; min-height: 2.75rem; }
+	:root .sidebar-content .article-nav > a { min-height: 2.75rem; }
+}
+
 /* Copy controls use the same box and icon size as the header icon buttons. */
 :root .expressive-code .copy button {
   /* Shield the icon from scrolling code without adding a visible plaque. */

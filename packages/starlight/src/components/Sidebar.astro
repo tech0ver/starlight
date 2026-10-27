@@ -5,6 +5,8 @@ import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.ast
 import SidebarSublist from './SidebarSublist.astro';
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import ReadingState from './ReadingState.astro';
+import config from 'virtual:tech0ver/config';
 ---
 
 <div class="site-sidebar-brand">
@@ -16,6 +18,7 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle';
 <div class="md:sl-hidden">
   <MobileMenuFooter />
 </div>
+{config.reading.enabled && <ReadingState />}
 
 <style>
   /* Full sidebar width and the header's height, so its bottom line continues

@@ -4,6 +4,8 @@ import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 import { Icon, Badge } from '@astrojs/starlight/components';
 import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoint.astro';
 import config from 'virtual:tech0ver/config';
+import ReadingIcon from './ReadingIcon.astro';
+import { articleKey } from '../lib/reading-state.mjs';
 
 type SidebarEntry = StarlightRouteData['sidebar'][number];
 const hasCurrent = (entry: SidebarEntry): boolean => entry.type === 'link' ? entry.isCurrent : entry.entries.some(hasCurrent);
@@ -26,13 +28,19 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 			<span class="planned-topic" aria-disabled="true"><span class="large">{label}</span><span class="planned-badge">Planned</span></span>
 		</li>
 	))}
-	{sublist.map((entry) => (
+	{sublist.map((entry) => {
+		const article = config.reading.enabled && nested && entry.type === 'link'
+			? articleKey(entry.href, config.base, Astro.site?.origin ?? Astro.url.origin) : null;
+		return (
 		<li>
 			{entry.type === 'link' ? (
+				<div class:list={{ 'article-nav': article }}>
+					{article && <button type="button" class="favorite-toggle" hidden data-favorite-article={article} data-article-label={entry.label} data-article-current={entry.isCurrent ? '' : undefined} aria-label={`${config.reading.labels.addFavorite}: ${entry.label}`} aria-pressed="false"><ReadingIcon /></button>}
 				<a href={entry.href} aria-current={entry.isCurrent ? 'page' : undefined} class:list={[{ large: !nested }, entry.attrs.class]} {...entry.attrs}>
 					<span>{entry.label}</span>
 					{entry.badge && <Badge variant={entry.badge.variant} class={entry.badge.class} text={entry.badge.text} />}
 				</a>
+				</div>
 			) : (
 				<details open={hasCurrent(entry) || !entry.collapsed}>
 					<summary>
@@ -47,7 +55,8 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 				</details>
 			)}
 		</li>
-	))}
+		);
+	})}
 	{unwritten(planned).map((label) => (
 		<li>
 			<span class="planned-topic" aria-disabled="true"><span>{label}</span><span class="planned-badge">Planned</span></span>

@@ -10,6 +10,7 @@ import { articleMarkdown } from '../packages/starlight/src/lib/article-markdown.
 import { glossaryPlugin } from '../packages/starlight/src/plugins/glossary.mjs';
 import { blocksPlugin } from '../packages/starlight/src/plugins/blocks.mjs';
 import { diagramsPlugin } from '../packages/starlight/src/plugins/diagrams.mjs';
+import { readingPlugin } from '../packages/starlight/src/plugins/reading.mjs';
 
 const entry = {
 	id: 'callout',
@@ -17,6 +18,26 @@ const entry = {
 	short: 'A styled block of guidance.',
 	explanation: 'It highlights a useful point in an article.',
 };
+
+test('reading markers become explicit slots without consuming other directives', () => {
+	const replacements = [];
+	const ctx = { replaceNode(_node, value) { replacements.push(value.raw); } };
+	readingPlugin().leafDirective({ name: 'mark-as-read' }, ctx);
+	readingPlugin().leafDirective({ name: 'diagram' }, ctx);
+	assert.deepEqual(replacements, ['<div class="not-content" data-mark-read-slot hidden></div>']);
+});
+
+test('raw Markdown omits reading controls while preserving code examples', () => {
+	const output = articleMarkdown({
+		title: 'Reading',
+		body: 'Before\n\n::mark-as-read\n\n## Reference\n\n```md\n::mark-as-read\n```\n\nAfter\n\n::mark-as-read',
+		articleUrl: new URL('https://example.test/reading/'),
+		siteRoot: new URL('https://example.test/'),
+	});
+	assert.equal(output.match(/::mark-as-read/g)?.length, 1);
+	assert.match(output, /```md\n::mark-as-read\n```/);
+	assert.match(output, /Before[\s\S]*## Reference[\s\S]*After/);
+});
 
 test('an empty glossary is a no-op', () => {
 	const plugin = glossaryPlugin({ entries: [] });

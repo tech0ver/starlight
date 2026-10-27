@@ -44,7 +44,7 @@ preview, use the host's shared URL with the same path.
 - Shared colors, typography, callout colors, and organization favicon.
 - A home page, template overview, configuration guide, feature gallery, and glossary.
 - Desktop navigation, mobile menu, right table of contents, theme toggle, search,
-  and saved reading position.
+  saved reading position, article status, and favorites.
 - Article callouts, theme-aware inline SVGs, and first-mention glossary tooltips.
 - An optional study prompt and a plain Markdown export for article readers.
 
@@ -100,6 +100,7 @@ export default defineTech0verConfig({
   site: 'https://example.com',
   base: '/starlight',
   brand: { name: 'Demo', suffix: '0ver' },
+  reading: { storageKey: 'demo0ver' },
   callouts: { do: 'Example', explain: 'Explain it' },
   searchSuggestions: [
     { href: 'getting-started', label: 'Getting started' },
@@ -128,6 +129,7 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 |---|---|
 | `brand` | Name and optional accent suffix, using the shared fonts and colors |
 | `sidebarWidth` | Desktop sidebar and tablet drawer width in pixels; a positive number, default `200` |
+| `reading` | Local article status and favorites, with a stable project key and optional labels |
 | `callouts` | Labels for the five semantic callout kinds; their colors stay shared |
 | `searchSuggestions` | Project-owned links shown before a search query |
 | `plannedTopics` | Unlinked topic labels keyed by an existing sidebar group label |
@@ -187,6 +189,81 @@ Omit `index` from `starlight.sidebar`; the site name already links home. On narr
 screens, the sidebar uses the same menu button as the rest of the site.
 
 See [the demo home page](demo/src/content/docs/index.md).
+
+### Article status and favorites
+
+Reading controls are enabled by default for internal links inside sidebar groups,
+including deeper groups. Top-level links, the home page, external links, and
+planned topics have no controls. Opening an article changes **New** (empty circle)
+to **Seen** (left half filled). **Mark as read** toggles between **Read** (a check
+inside) and **Seen**. The checked button uses the primary accent color.
+
+Authors choose every button location. In Markdown, put `::mark-as-read` on its own
+line, separated from other content by blank lines:
+
+```md
+The article ends here.
+
+::mark-as-read
+
+## Quick reference
+
+Optional reference content.
+
+::mark-as-read
+```
+
+Each marker displays a centered button for the current article. Multiple buttons
+stay in sync. The package does not add buttons at the end automatically or look
+for particular headings. Omit the marker to leave a page without a button.
+Markers inside code examples stay literal, and raw Markdown exports omit the
+controls.
+
+For an MDX page, use the public component at the chosen locations:
+
+```mdx
+import MarkAsRead from '@tech0ver/starlight/components/MarkAsRead.astro';
+
+Article content.
+
+<MarkAsRead />
+```
+
+Press the icon beside an article name to add or remove a favorite. Favorites use
+a star with the same empty, half-filled, or checked state. Press the name to open
+the article. Both controls have separate keyboard and touch targets.
+
+Set a unique, permanent project key in every consumer:
+
+```js
+reading: {
+  storageKey: 'my-project',
+  labels: {
+    markAsRead: 'Mark as read',
+    addFavorite: 'Add to favorites',
+    removeFavorite: 'Remove favorite',
+    new: 'New',
+    seen: 'Seen',
+    read: 'Read',
+  },
+},
+```
+
+Labels can be overridden separately. Use `reading.enabled: false` to disable all
+reading controls. Component and CSS overrides remain available through Starlight.
+
+State is stored in `localStorage`, one versioned record per article, under the
+project key. Package versions, page titles, queries, fragments, and trailing
+slashes are excluded from the key. Article paths are relative to `base`, so a
+base path change on the same origin keeps the marks when `storageKey` stays the
+same. Renaming an article's path gives it a new record. Without an explicit key,
+the normalized base path isolates sites at different prefixes; set an explicit
+key to preserve marks when moving the site and to identify each project clearly.
+
+Updates appear in other open tabs. Marks stay on this browser and origin; they
+do not sync across devices, and clearing site data removes them. When storage is
+blocked or full, the controls still work for the current page, without guaranteed
+persistence.
 
 ### Glossary
 

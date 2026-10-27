@@ -48,3 +48,5 @@ site can add more groups and pages as its documentation grows.
 
 Continue with the [configuration guide](../configuration/) or open the
 [feature gallery](../reading/).
+
+::mark-as-read

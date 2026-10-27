@@ -22,6 +22,7 @@ export default defineTech0verConfig({
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
 	sidebarWidth: 256,
+	reading: { storageKey: 'demo0ver' },
 	callouts: { do: 'Example', explain: 'Explain it' },
 	plannedTopics: { 'Feature gallery': ['Component overrides'] },
 	plannedTopLevel: ['Examples'],
@@ -71,6 +72,16 @@ The active link in the table of contents uses accent color and bold text.
 Scroll the [feature gallery](../reading/) to check it on desktop or open
 **On this page** on a phone.
 
+`reading.storageKey` gives this project's reading status and favorites a stable
+place in browser storage. Use a different key for each project on the same domain,
+and keep it unchanged across releases. Article paths are relative to `base`, so
+moving the whole site to another prefix on the same domain keeps its marks.
+See the [feature gallery](../reading/#reading-status-and-favorites) to try the controls.
+
+Add `::mark-as-read` on its own line, with a blank line before and after it, at
+each place where an article needs a **Mark as read** button. The package does not
+add buttons automatically or look for specific heading names.
+
 `tutor.title` sets the article tools heading. This demo uses **Explore this
 article with AI**. If omitted, the heading stays **Study this article with an AI
 assistant**. `tutor.intro` sets the first paragraph of the copied prompt.
@@ -85,3 +96,5 @@ Markdown export. The output directory keeps this demo at `demo/dist/starlight/`.
 Keep project articles and SVG files in the consumer. Pass the diagram directory
 to the package instead of copying those files into shared UI code.
 :::
+
+::mark-as-read

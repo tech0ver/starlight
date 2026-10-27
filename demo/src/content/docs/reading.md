@@ -71,3 +71,32 @@ so they work when copied into an external chat.
 
 Change the table or add a heading, then use the same page to check navigation,
 search, the table of contents, and the light and dark themes.
+
+## Reading status and favorites
+
+Nested articles in the menu show an empty circle before the first visit, a circle
+filled on the left after opening the page, and a check inside after pressing
+**Mark as read**. Press the same button again to return to **Seen**.
+
+Press an article's icon in the menu to add it to favorites. The circle becomes
+a star with the same reading status. Press the star to remove the favorite.
+The icon and article name have separate touch and keyboard targets.
+
+Marks stay in this browser across visits and package updates. They do not sync
+to other devices, and clearing site data removes them.
+
+The author places each button with `::mark-as-read` on its own line. This page
+places one before the sheet below and another after it. Both control the same
+article, regardless of the heading's name.
+
+::mark-as-read
+
+## Cheat Sheet
+
+| Action | Control |
+| --- | --- |
+| Open an article | Press its name in the menu |
+| Add or remove a favorite | Press its circle or star in the menu |
+| Mark as read or return to seen | Press **Mark as read** above this sheet or at the end |
+
+::mark-as-read

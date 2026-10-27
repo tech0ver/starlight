@@ -1,0 +1,7 @@
+---
+import StarlightMarkdownContent from '@astrojs/starlight/components/MarkdownContent.astro';
+import MarkAsRead from './MarkAsRead.astro';
+---
+
+<StarlightMarkdownContent><slot /></StarlightMarkdownContent>
+<template data-mark-read-template data-pagefind-ignore><MarkAsRead /></template>
