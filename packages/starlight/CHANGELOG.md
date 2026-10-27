@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/tech0ver/starlight/compare/v0.2.1...v0.3.0) (2026-10-27)
+
+
+### Features
+
+* make the article study heading configurable ([#12](https://github.com/tech0ver/starlight/issues/12)) ([6d0f0fa](https://github.com/tech0ver/starlight/commit/6d0f0fa57dd48eac64ceb3802391d81eb2c2eb7c))
+
+
+### Bug Fixes
+
+* align glossary navigation and planned sidebar labels ([#14](https://github.com/tech0ver/starlight/issues/14)) ([83df91a](https://github.com/tech0ver/starlight/commit/83df91a2e9057321042b80a9cbf5440160c35fbe))
+
 ## [0.2.1](https://github.com/tech0ver/starlight/compare/v0.2.0...v0.2.1) (2026-10-27)
 
 
