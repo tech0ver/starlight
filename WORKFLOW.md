@@ -77,10 +77,23 @@ not create tags, publish GitHub Releases, or publish packages.
    `GITHUB_TOKEN` do not trigger normal PR workflows.
 3. Require the CI check before merging into `main`. Allow the App to create PRs,
    while retaining maintainer approval for merging. No workflow enables auto-merge.
-4. Allow this repository's `GITHUB_TOKEN` to publish GitHub Packages. After the
-   first publication, check the package's visibility and **Manage Actions access**.
-   Grant consumer repositories read access and use `packages: read` in their
-   install jobs. Package visibility and access are separate GitHub settings.
+4. Allow this repository's `GITHUB_TOKEN` to publish GitHub Packages. The package
+   is intended to be public. GitHub creates npm packages as private on their
+   first publication, even when their source repository is public. Open this
+   repository, select the package under **Packages**, then **Package settings** →
+   **Danger Zone** → **Change visibility** → **Public**. This is a one-time setting
+   for the whole package, not each version; later releases keep it public.
+   Changing it requires the GitHub web interface, not the Packages REST API.
+   Package admin access is required; GitHub can return 404 when the current
+   account cannot access a private package.
+5. Check **Manage Actions access** for consumers and use `packages: read` in their
+   install jobs. Package visibility and Actions access are separate settings.
+
+Release verification checks that this existing package is public before building
+or publishing another version. A failed metadata request also stops publication;
+it must not be treated as an absent package or a successful visibility change.
+This check does not change the package visibility. No new release is needed just
+to make already-published versions public.
 
 The publication workflow uses its own `GITHUB_TOKEN`; it does not need a stored
 registry publishing token. Local consumers need a personal access token (classic)
