@@ -18,6 +18,9 @@
 	@layer starlight.core {
 		.main-pane {
 			isolation: isolate;
+			/* Let article tooltips cover the adjacent outline, below the header and menu. */
+			position: relative;
+			z-index: 1;
 		}
 
 		@media (min-width: 50rem) {
