@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/tech0ver/starlight/compare/v0.2.0...v0.2.1) (2026-10-27)
+
+
+### Bug Fixes
+
+* preserve reading position and tablet layout ([#9](https://github.com/tech0ver/starlight/issues/9)) ([ea0c7b0](https://github.com/tech0ver/starlight/commit/ea0c7b026e9c84313dbf6d753e602fed7e76fad3))
+
 ## [0.2.0](https://github.com/tech0ver/starlight/compare/v0.1.0...v0.2.0) (2026-10-27)
 
 
