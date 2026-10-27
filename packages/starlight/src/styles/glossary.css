@@ -1,7 +1,7 @@
 /*
  * Glossary tooltips (see src/plugins/glossary.mjs).
  * No JavaScript: the tip opens on hover, on keyboard focus, and on tap (tap focuses the term).
- * On narrow screens the tip is a card fixed to the bottom of the screen.
+ * On phone and tablet screens the tip is a card fixed to the bottom of the screen.
  */
 
 .sl-markdown-content .term {
@@ -70,7 +70,7 @@
 	opacity: 1;
 }
 
-@media (max-width: 50rem) {
+@media (width < 72rem) {
 	.sl-markdown-content .term-tip {
 		position: fixed;
 		top: auto;
