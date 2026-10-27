@@ -75,12 +75,18 @@ export function normalizeTech0verOptions(input = {}) {
 	const tutor = input.tutor && typeof input.tutor === 'object' ? input.tutor : {};
 	const rawMarkdown = input.rawMarkdown && typeof input.rawMarkdown === 'object' ? input.rawMarkdown : {};
 	const diagrams = input.diagrams && typeof input.diagrams === 'object' ? input.diagrams : {};
+	const sidebarWidth = input.sidebarWidth ?? 200;
+	if (typeof sidebarWidth !== 'number' || !Number.isFinite(sidebarWidth) || sidebarWidth <= 0) {
+		throw new Error('sidebarWidth must be a positive number of pixels.');
+	}
 
 	return {
 		base,
 		brand,
+		sidebarWidth,
 		callouts: resolveCalloutLabels(input.callouts),
 		plannedTopics: clone(input.plannedTopics ?? {}),
+		plannedTopLevel: clone(input.plannedTopLevel ?? []),
 		searchSuggestions: clone(input.searchSuggestions ?? search.suggestions ?? []),
 		footer: clone(input.footer ?? {}),
 		socialImage: input.socialImage ?? input.social?.image,
@@ -103,8 +109,10 @@ export function serializableConfig(config) {
 	return {
 		base: config.base,
 		brand: config.brand,
+		sidebarWidth: config.sidebarWidth,
 		callouts: config.callouts,
 		plannedTopics: config.plannedTopics,
+		plannedTopLevel: config.plannedTopLevel,
 		searchSuggestions: config.searchSuggestions,
 		footer: config.footer,
 		socialImage: config.socialImage,

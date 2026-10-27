@@ -33,10 +33,12 @@ export default defineTech0verConfig({
 	base: '/starlight',
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
+	sidebarWidth: 256,
 	callouts: { do: 'Example', explain: 'Explain it' },
 	socialImage: '/social-preview.svg',
 	socialImageAlt: 'Demo0ver reusable Starlight template demo.',
 	plannedTopics: { 'Feature gallery': ['Component overrides'] },
+	plannedTopLevel: ['Examples'],
 	searchSuggestions: [
 		{ href: 'getting-started', label: 'Getting started', description: 'See the template shell and navigation.' },
 		{ href: 'configuration', label: 'Configuration', description: 'Inspect one consumer setup and its labels.' },

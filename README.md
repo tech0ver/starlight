@@ -126,9 +126,11 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 | Option | Purpose |
 |---|---|
 | `brand` | Name and optional accent suffix, using the shared fonts and colors |
+| `sidebarWidth` | Desktop sidebar and tablet drawer width in pixels; a positive number, default `200` |
 | `callouts` | Labels for the five semantic callout kinds; their colors stay shared |
 | `searchSuggestions` | Project-owned links shown before a search query |
 | `plannedTopics` | Unlinked topic labels keyed by an existing sidebar group label |
+| `plannedTopLevel` | Unlinked topic labels before the top-level navigation entries |
 | `footer` | Optional text and links; no fixed author or license statement |
 | `socialImage`, `socialImageAlt` | Optional project-owned preview image and description |
 | `glossary` | Entries, phrases to skip, and the glossary route or `false` |
@@ -151,6 +153,28 @@ across projects. The package supplies the favicon; a consumer does not need a
 public favicon file. Shared visual changes belong in the package. Project CSS
 and component overrides can extend content or behavior. Keep visual improvements
 in the shared package.
+
+### Navigation layout
+
+Choose a sidebar width that fits the site's navigation labels:
+
+```js
+sidebarWidth: 256,
+plannedTopLevel: ['Examples'],
+plannedTopics: { 'Feature gallery': ['Component overrides'] },
+```
+
+`sidebarWidth` is a positive number of pixels and defaults to `200`. It controls
+the desktop sidebar, the header and content offset, and the tablet drawer.
+On phones, the menu still uses the full viewport width.
+
+`plannedTopLevel` adds non-clickable labels with a **Planned** badge before the
+regular top-level entries. `plannedTopics` adds them inside existing groups.
+A planned label is hidden when a published entry has the same label in that
+list. Remove its planned setting when publishing the page.
+
+The active table-of-contents link uses the accent color and bold text on both
+desktop and mobile. It follows the current section as the reader scrolls.
 
 ### Home page layout
 

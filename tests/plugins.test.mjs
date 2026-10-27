@@ -33,15 +33,29 @@ test('glossary wraps only the first configured mention', () => {
 });
 
 test('each config owns its data and virtual module', () => {
-	const first = normalizeTech0verOptions({ brand: { name: 'First' }, glossary: { entries: [entry] } });
-	const second = normalizeTech0verOptions({ brand: { name: 'Second' }, glossary: { entries: [entry] } });
+	const plannedTopLevel = ['Future guide'];
+	const first = normalizeTech0verOptions({ brand: { name: 'First' }, glossary: { entries: [entry] }, plannedTopLevel, sidebarWidth: 256 });
+	const second = normalizeTech0verOptions({ brand: { name: 'Second' }, glossary: { entries: [entry] }, plannedTopLevel });
 	first.glossaryEntries[0].term = 'Changed';
+	first.plannedTopLevel.push('Another guide');
 	assert.equal(second.glossaryEntries[0].term, 'Callout');
+	assert.deepEqual(second.plannedTopLevel, ['Future guide']);
+	assert.deepEqual(plannedTopLevel, ['Future guide']);
 	const firstModule = createConfigVirtualModule(first);
 	const secondModule = createConfigVirtualModule(second);
 	assert.match(firstModule.load('\0virtual:tech0ver/config'), /First/);
 	assert.match(secondModule.load('\0virtual:tech0ver/config'), /Second/);
 	assert.notEqual(firstModule.load('\0virtual:tech0ver/config'), secondModule.load('\0virtual:tech0ver/config'));
+	assert.match(firstModule.load('\0virtual:tech0ver/config'), /"plannedTopLevel":\["Future guide","Another guide"\]/);
+	assert.match(firstModule.load('\0virtual:tech0ver/layout.css'), /--site-left-sidebar-width: 256px/);
+	assert.match(secondModule.load('\0virtual:tech0ver/layout.css'), /--site-left-sidebar-width: 200px/);
+});
+
+test('sidebar width accepts positive pixel values and rejects invalid CSS input', () => {
+	assert.equal(normalizeTech0verOptions({ sidebarWidth: 240.5 }).sidebarWidth, 240.5);
+	for (const sidebarWidth of [0, -1, NaN, Infinity, '256px', '200px; color: red']) {
+		assert.throws(() => normalizeTech0verOptions({ sidebarWidth }), /positive number of pixels/);
+	}
 });
 
 test('relative diagram directories belong to the consumer root', () => {

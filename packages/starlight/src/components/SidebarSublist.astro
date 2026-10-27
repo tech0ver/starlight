@@ -15,9 +15,17 @@ interface Props {
 }
 
 const { sublist, nested, planned = [] } = Astro.props;
+// A published entry takes the place of its planned label at either level.
+const unwritten = (labels: string[]) => labels.filter((label) => !sublist.some((entry) => entry.label === label));
+const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 ---
 
 <ul class:list={{ 'top-level': !nested }}>
+	{plannedFirst.map((label) => (
+		<li>
+			<span class="planned-topic" aria-disabled="true"><span class="large">{label}</span><span class="planned-badge">Planned</span></span>
+		</li>
+	))}
 	{sublist.map((entry) => (
 		<li>
 			{entry.type === 'link' ? (
@@ -40,7 +48,7 @@ const { sublist, nested, planned = [] } = Astro.props;
 			)}
 		</li>
 	))}
-	{planned.map((label) => (
+	{unwritten(planned).map((label) => (
 		<li>
 			<span class="planned-topic" aria-disabled="true"><span>{label}</span><span class="planned-badge">Planned</span></span>
 		</li>

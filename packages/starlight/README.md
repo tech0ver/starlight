@@ -12,6 +12,15 @@ across projects. Consumers configure their name, page content, navigation, and
 callout labels through `callouts: { do: 'Try this' }`. Unspecified labels use the
 shared defaults. The same labels appear in optional raw Markdown exports.
 
+Set `sidebarWidth: 256` to fit longer navigation labels. The value is a positive
+number of pixels; the default is `200`. It controls the desktop sidebar and
+tablet drawer, while the phone menu stays full width. Use
+`plannedTopLevel: ['Examples']` for unlinked **Planned** labels before the
+navigation groups, or
+`plannedTopics: { 'Feature gallery': ['Component overrides'] }` for labels
+inside a group, as shown in Demo0ver. Published entries with matching labels
+replace planned ones.
+
 When enabled, the raw Markdown endpoint exports `.md` content entries. MDX-only
 pages keep their rendered article URL in the study prompt because their imports
 and components cannot be represented as plain Markdown safely.

@@ -410,6 +410,10 @@ site-search dialog {
 }
 :root .sidebar-content ul a:hover { background: transparent; color: var(--sl-color-text-accent); }
 :root .sidebar-content a[aria-current='page'] { background: transparent; color: var(--sl-color-text-accent); font-weight: 600; }
+:root :is(starlight-toc, mobile-starlight-toc) a[aria-current='true'] {
+  color: var(--sl-color-text-accent);
+  font-weight: 600;
+}
 :root .site-pagination a { border: 0; padding: 0.5rem 0; }
 :root .site-search-start a {
   -webkit-tap-highlight-color: transparent;

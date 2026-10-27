@@ -21,8 +21,10 @@ export default defineTech0verConfig({
 	base: '/starlight',
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
+	sidebarWidth: 256,
 	callouts: { do: 'Example', explain: 'Explain it' },
 	plannedTopics: { 'Feature gallery': ['Component overrides'] },
+	plannedTopLevel: ['Examples'],
 	searchSuggestions: [
 		{ href: 'getting-started', label: 'Getting started' },
 		{ href: 'reading', label: 'Feature gallery' },
@@ -51,6 +53,19 @@ callout colors. This consumer configures its name, labels, pages, and navigation
 Changing `callouts.do` to `Example` changes the label while keeping the shared
 color. `callouts.explain` becomes `Explain it`; unspecified labels keep their
 default names and colors.
+
+The demo sets `sidebarWidth` to `256` pixels so its navigation labels have room.
+The default is `200`. Desktop content and the header move with the sidebar;
+the tablet drawer uses the same width, and the phone menu stays full width.
+
+`plannedTopLevel` shows **Examples** with a **Planned** badge above the groups.
+`plannedTopics` shows **Component overrides** inside **Feature gallery**. These
+labels have no links. When a published entry uses the same label at that level,
+the planned label is hidden. Remove the planned setting when publishing it.
+
+The active link in the table of contents uses accent color and bold text.
+Scroll the [feature gallery](../reading/) to check it on desktop or open
+**On this page** on a phone.
 
 The package adds shared CSS and components first. A consumer can add `customCss`,
 component overrides, and Starlight plugins when a page needs an extension.
