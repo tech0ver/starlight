@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/tech0ver/starlight/compare/v0.5.1...v0.6.0) (2026-10-28)
+
+
+### Features
+
+* match planned topics by page slug ([#22](https://github.com/tech0ver/starlight/issues/22)) ([52ad6a6](https://github.com/tech0ver/starlight/commit/52ad6a61edb61c717250ae4b95c66c88bbce7ca2))
+
 ## [0.5.1](https://github.com/tech0ver/starlight/compare/v0.5.0...v0.5.1) (2026-10-28)
 
 
