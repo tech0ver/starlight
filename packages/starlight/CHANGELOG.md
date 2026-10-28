@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/tech0ver/starlight/compare/v0.5.0...v0.5.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* center diagrams in the article column ([#20](https://github.com/tech0ver/starlight/issues/20)) ([bb1fc56](https://github.com/tech0ver/starlight/commit/bb1fc56c89c1e5b4e960e7b2c1935514daf7ea1d))
+
 ## [0.5.0](https://github.com/tech0ver/starlight/compare/v0.4.0...v0.5.0) (2026-10-28)
 
 
