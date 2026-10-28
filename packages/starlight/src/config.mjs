@@ -30,6 +30,7 @@ export const packagePaths = {
 	},
 	routeData: fileURLToPath(new URL('./route-data.mjs', packageRoot)),
 	rawMarkdown: fileURLToPath(new URL('./routes/raw-markdown.ts', packageRoot)),
+	llms: fileURLToPath(new URL('./routes/llms.txt.ts', packageRoot)),
 };
 
 export function normalizeBase(base = DEFAULT_BASE) {
@@ -88,6 +89,8 @@ export function normalizeTech0verOptions(input = {}) {
 	return {
 		base,
 		brand,
+		siteDescription: typeof starlight.description === 'string' ? starlight.description : undefined,
+		htmlUrls: { format: input.build?.format ?? 'directory', trailingSlash: input.trailingSlash ?? 'ignore' },
 		sidebarWidth,
 		reading: {
 			enabled: reading.enabled !== false,
@@ -128,6 +131,8 @@ export function serializableConfig(config) {
 	return {
 		base: config.base,
 		brand: config.brand,
+		siteDescription: config.siteDescription,
+		htmlUrls: config.htmlUrls,
 		sidebarWidth: config.sidebarWidth,
 		reading: config.reading,
 		callouts: config.callouts,

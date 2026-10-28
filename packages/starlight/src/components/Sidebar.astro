@@ -15,6 +15,13 @@ import config from 'virtual:tech0ver/config';
 <SidebarPersister>
   <SidebarSublist sublist={Astro.locals.starlightRoute.sidebar} />
 </SidebarPersister>
+{config.rawMarkdown.enabled && (
+  <div class="site-sidebar-tools">
+    <a class="site-llms-link" href={`${config.base.replace(/\/$/, '')}/llms.txt`} target="_blank" rel="noopener" aria-label="llms.txt (opens in a new tab)">
+      llms.txt
+    </a>
+  </div>
+)}
 <script is:inline define:vars={{ projectKey: config.reading.storageKey }}>
   (() => {
     const key = `tech0ver:sidebar:collapsed:${encodeURIComponent(projectKey)}`;
@@ -64,7 +71,20 @@ import config from 'virtual:tech0ver/config';
     font-size: var(--sl-text-base);
     line-height: 1;
   }
+  .site-sidebar-tools {
+    margin-block-start: auto;
+    padding: 0.75rem 0.5rem;
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+  }
+  .site-llms-link {
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    line-height: 1.4;
+    text-decoration: none;
+  }
+  .site-llms-link:hover { color: var(--sl-color-text-accent); }
   @media (width < 50rem) {
     .site-sidebar-brand :global(.site-title) { font-size: 18px; }
+    .site-llms-link { font-size: var(--sl-text-base); }
   }
 </style>

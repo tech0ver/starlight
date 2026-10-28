@@ -88,11 +88,23 @@ add buttons automatically or look for specific heading names.
 article with AI**. If omitted, the heading stays **Study this article with an AI
 assistant**. `tutor.intro` sets the first paragraph of the copied prompt.
 
+`rawMarkdown.enabled` exports Markdown articles and generates the
+[site index for AI assistants](../llms.txt). The index lists published pages with
+their titles and descriptions. Article links point to Markdown; MDX pages, the
+home page, and the glossary keep their rendered URLs. Drafts are excluded.
+It also works when `tutor.enabled` is off.
+
+Give an assistant the index URL and ask it to find and read the pages relevant to
+your question. This keeps the initial context small. Pages advertise the index
+and available Markdown exports through HTML link metadata.
+The `llms.txt` link at the bottom of the navigation opens the text index in a
+new tab. It also appears in the mobile menu.
+
 The package adds shared CSS and components first. A consumer can add `customCss`,
 component overrides, and Starlight plugins when a page needs an extension.
 
-`base` is used for search links, glossary links, tutor links, and the optional
-Markdown export. The output directory keeps this demo at `demo/dist/starlight/`.
+`base` is used for search links, glossary links, tutor links, Markdown exports,
+and `llms.txt`. The output directory keeps this demo at `demo/dist/starlight/`.
 
 :::avoid
 Keep project articles and SVG files in the consumer. Pass the diagram directory

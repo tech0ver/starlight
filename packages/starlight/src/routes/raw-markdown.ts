@@ -2,15 +2,10 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import type { APIRoute, GetStaticPaths } from 'astro';
 import config from 'virtual:tech0ver/config';
 import { articleMarkdown } from '../lib/article-markdown.mjs';
+import { hasMarkdownExport } from '../lib/llms.mjs';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const articles = await getCollection('docs', (entry) =>
-		Boolean(entry.filePath?.endsWith('.md')) &&
-		entry.id !== 'index' &&
-		entry.id !== config.glossaryRoute &&
-		!entry.data.draft &&
-		entry.data.template !== 'splash',
-	);
+	const articles = await getCollection('docs', (entry) => hasMarkdownExport(entry, config.glossaryRoute));
 	return articles.map((entry) => ({ params: { article: entry.id }, props: { entry } }));
 };
 

@@ -75,7 +75,7 @@ try {
 		"  diagrams: { directory: './src/diagrams/' },",
 		"  rawMarkdown: { enabled: true },",
 		"  tutor: { enabled: true, title: 'Explore this article with AI' },",
-		"  starlight: { title: 'PackedDemo', sidebar: [{ label: 'Docs', items: ['index', 'reading', 'interactive'] }, 'glossary'] },",
+		"  starlight: { title: 'PackedDemo', description: 'A packed documentation site.', sidebar: [{ label: 'Docs', items: ['index', 'reading', 'interactive'] }, 'glossary'] },",
 		'});',
 	].join('\n'));
 	write(join(temp, 'astro.config.mjs'), consumerConfig);
@@ -85,7 +85,7 @@ try {
 		"import { docsSchema } from '@astrojs/starlight/schema';",
 		'export const collections = { docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }) };',
 	].join('\n'));
-	write(join(temp, 'src/content/docs/index.mdx'), [
+	write(join(temp, 'src/content/docs/index.md'), [
 		'---', 'title: PackedDemo', 'description: A packed consumer.', '---', '', 'A **callout** highlights a useful point.',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/reading.md'), [
@@ -98,6 +98,10 @@ try {
 	write(join(temp, 'src/content/docs/glossary.mdx'), [
 		'---', 'title: Glossary', '---', '', "import Glossary from '@tech0ver/starlight/components/Glossary.astro';", '', '<Glossary />',
 	].join('\n'));
+	mkdirSync(join(temp, 'src/content/docs/nested'), { recursive: true });
+	write(join(temp, 'src/content/docs/nested/guide.md'), '---\ntitle: Nested guide\ndescription: A nested article.\n---\n\nNested content.');
+	write(join(temp, 'src/content/docs/nested/overview.mdx'), '---\ntitle: Nested overview\nslug: nested/index\n---\n\nAn MDX landing page.');
+	write(join(temp, 'src/content/docs/draft.md'), '---\ntitle: Unpublished\ndraft: true\n---\n\nDraft content.');
 	write(join(temp, 'src/diagrams/layout.svg'), '<svg class="diagram-svg" viewBox="0 0 720 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Article layout</text></svg>\n');
 	write(join(temp, 'src/diagrams/compact.svg'), '<svg class="diagram-svg" viewBox="0 0 360 120"><rect class="dg-box" x="10" y="10" width="200" height="80"/><text class="dg-name" x="30" y="55">Compact layout</text></svg>\n');
 
@@ -117,7 +121,20 @@ try {
 	assert.match(glossaryHtml, /<h2\b[^>]*id="callout"[^>]*>/, 'glossary terms must be headings tracked by Starlight');
 	assert.match(glossaryHtml, /<a\b[^>]*class="sl-anchor-link"[^>]*href="#callout"/, 'glossary terms must have shareable anchor links');
 	assert.ok(existsSync(join(output, 'reading.md')), 'packed raw Markdown route is missing');
+	const llms = readFileSync(join(output, 'llms.txt'), 'utf8');
+	assert.match(llms, /^# PackedDemo\n\n> A packed documentation site\.\n/);
+	assert.ok(llms.includes('[Reading](https://example.test/consumer/reading.md): A packed article.'));
+	assert.ok(llms.includes('[Nested guide](https://example.test/consumer/nested/guide.md): A nested article.'));
+	assert.ok(llms.includes('[Interactive](https://example.test/consumer/interactive/)'));
+	assert.ok(llms.includes('[Glossary](https://example.test/consumer/glossary/)'));
+	assert.ok(llms.includes('[Nested overview](https://example.test/consumer/nested/)'));
+	assert.ok(llms.includes('[PackedDemo](https://example.test/consumer/)'));
+	assert.doesNotMatch(llms, /Unpublished|draft\.md|interactive\.md|glossary\.md|index\.md/);
+	assert.doesNotMatch(readFileSync(join(output, 'index.html'), 'utf8'), /rel="alternate"[^>]*type="text\/markdown"/);
+	assert.ok(!existsSync(join(output, 'draft.md')), 'draft articles must not have Markdown exports');
 	const html = readFileSync(join(output, 'reading', 'index.html'), 'utf8');
+	assert.match(html, /<link\b[^>]*rel="describedby"[^>]*href="\/consumer\/llms\.txt"/);
+	assert.match(html, /<link\b[^>]*rel="alternate"[^>]*type="text\/markdown"[^>]*href="\/consumer\/reading\.md"/);
 	assert.equal([...html.matchAll(/<div\b[^>]*\bdata-mark-read-slot/g)].length, 2, 'each Markdown marker must have its own button slot');
 	assert.doesNotMatch(readFileSync(join(output, 'reading.md'), 'utf8'), /::mark-as-read/, 'raw exports must omit reading controls');
 	assert.match(html, /PackedDemo|Packed/);
@@ -127,6 +144,7 @@ try {
 	assert.match(mdxHtml, /data-mark-read="interactive"/, 'MDX must support the public reading button without props');
 	assertTutorUrl(mdxHtml, 'https://example.test/consumer/interactive/');
 	assert.ok(!existsSync(join(output, 'interactive.md')), 'MDX must not have a plain Markdown endpoint');
+	assert.doesNotMatch(mdxHtml, /rel="alternate"[^>]*type="text\/markdown"/);
 	const plannedLabels = [...html.matchAll(/class="planned-topic(?: [^"]*)?"[^>]*>\s*<span(?: class="[^"]*")?>([^<]+)<\/span>/g)].map((match) => match[1]);
 	assert.deepEqual(plannedLabels, ['Future guide', 'Coming next'], 'planned labels must be unlinked and skip published entries');
 	assert.match(html, /class="planned-topic(?: [^"]*)?" aria-disabled="true"/);
@@ -148,19 +166,45 @@ try {
 	assert.match(css, /--site-left-sidebar-width:\s*256px/, 'consumer sidebar width must be included in the installed package build');
 	assert.ok(assets.some((name) => name.endsWith('.ttf')), 'wordmark font was not packaged');
 
-	// Rebuild at the domain root without exports: prompts must use rendered pages.
+	// Rebuild at the domain root to check index and discovery links without a prefix.
+	const rootConfig = consumerConfig
+		.replace("base: '/consumer'", "base: '/'")
+		.replace("'./dist/consumer/'", "'./dist/root/'");
+	write(join(temp, 'astro.config.mjs'), rootConfig);
+	run(['run', 'build'], temp);
+	const rootOutput = join(temp, 'dist', 'root');
+	const rootLlms = readFileSync(join(rootOutput, 'llms.txt'), 'utf8');
+	assert.ok(rootLlms.includes('[Nested guide](https://example.test/nested/guide.md)'));
+	assert.ok(rootLlms.includes('[PackedDemo](https://example.test/)'));
+	assert.doesNotMatch(rootLlms, /\/consumer\/|Unpublished/);
+	assert.match(readFileSync(join(rootOutput, 'reading', 'index.html'), 'utf8'), /rel="describedby"[^>]*href="\/llms\.txt"/);
+
+	// File output must link to the actual .html pages, including explicit index slugs.
+	write(join(temp, 'astro.config.mjs'), consumerConfig
+		.replace("  base: '/consumer',", "  base: '/consumer',\n  build: { format: 'file' },")
+		.replace("'./dist/consumer/'", "'./dist/files/'"));
+	run(['run', 'build'], temp);
+	const fileOutput = join(temp, 'dist', 'files');
+	const fileLlms = readFileSync(join(fileOutput, 'llms.txt'), 'utf8');
+	for (const [title, path] of [['PackedDemo', 'index.html'], ['Interactive', 'interactive.html'], ['Glossary', 'glossary.html'], ['Nested overview', 'nested.html'], ['Reading', 'reading.md']]) {
+		assert.ok(fileLlms.includes(`[${title}](https://example.test/consumer/${path})`));
+		assert.ok(existsSync(join(fileOutput, path)), `index target ${path} must exist`);
+	}
+
+	// Disable exports: prompts must use rendered pages and discovery links disappear.
 	write(join(temp, 'astro.config.mjs'), consumerConfig
 		.replace("base: '/consumer'", "base: '/'")
 		.replace("'./dist/consumer/'", "'./dist/root/'")
 		.replace('rawMarkdown: { enabled: true }', 'rawMarkdown: { enabled: false }')
 		.replace("tutor: { enabled: true, title: 'Explore this article with AI' }", 'tutor: { enabled: true }'));
 	run(['run', 'build'], temp);
-	const rootOutput = join(temp, 'dist', 'root');
 	const rootHtml = readFileSync(join(rootOutput, 'reading', 'index.html'), 'utf8');
 	assert.equal([...rootHtml.matchAll(/<div\b[^>]*\bdata-mark-read-slot/g)].length, 2, 'explicit placement must also work at the domain root');
 	assertTutorUrl(rootHtml, 'https://example.test/reading/');
 	assert.match(rootHtml, /<summary\b[^>]*><span\b[^>]*>Study this article with an AI assistant<\/span>/, 'omitting the study heading must preserve the default');
 	assert.ok(!existsSync(join(rootOutput, 'reading.md')), 'disabled exports must not create Markdown endpoints');
+	assert.ok(!existsSync(join(rootOutput, 'llms.txt')), 'disabled exports must not create the index');
+	assert.doesNotMatch(rootHtml, /rel="describedby"|rel="alternate"[^>]*type="text\/markdown"/);
 	assertTutorUrl(readFileSync(join(rootOutput, 'interactive', 'index.html'), 'utf8'), 'https://example.test/interactive/');
 	console.log(`Packed consumer passed: ${temp}`);
 	rmSync(temp, { recursive: true, force: true });

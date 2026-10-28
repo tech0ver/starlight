@@ -51,6 +51,7 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 	};
 	diagrams?: { directory?: URL | string };
 	tutor?: { enabled?: boolean; title?: string; intro?: string };
+	/** Generate article Markdown exports and a llms.txt index under the site base. */
 	rawMarkdown?: { enabled?: boolean };
 	starlight?: Omit<Partial<StarlightUserConfig>, 'favicon'> & { plugins?: StarlightPlugin[] };
 	mdastPlugins?: unknown[];
@@ -62,6 +63,8 @@ export declare function defineTech0verConfig(input?: Tech0verOptions): AstroUser
 export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	base: string;
 	brand: { name: string; suffix: string; fullName: string };
+	siteDescription?: string;
+	htmlUrls: { format: 'directory' | 'file' | 'preserve'; trailingSlash: 'always' | 'never' | 'ignore' };
 	sidebarWidth: number;
 	reading: Required<Omit<ReadingOptions, 'labels'>> & { labels: Required<NonNullable<ReadingOptions['labels']>> };
 	callouts: Record<CalloutKind, string>;
