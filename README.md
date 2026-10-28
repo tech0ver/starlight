@@ -301,8 +301,10 @@ shared `dg-*` classes to make it follow both themes. SVG files and their titles
 stay in the consumer; the package owns rendering and styles.
 
 Diagrams use a 720-unit reference width. A narrower SVG uses a proportional
-share of the article column so its text keeps the same scale. See the full-width
-and compact versions in the demo's feature gallery.
+share of the article column so its text keeps the same scale. Diagrams are
+centered in the text column when they fit. Wider diagrams scroll horizontally
+from the left edge on narrow screens. See the full-width and compact versions
+in the demo's feature gallery.
 
 Container directives `:::do`, `:::tradeoff`, `:::explain`, `:::avoid`, and
 `:::distinguish` render article callouts. The feature gallery exercises all five.

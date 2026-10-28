@@ -42,6 +42,8 @@ export function firstFeature(items = features) {
 
 This compact diagram shows the first step of the same flow. Its 360-unit width
 uses half of the 720-unit reference grid, keeping its text at the same scale.
+It is centered in the text column. On narrow screens, diagrams that do not fit
+scroll horizontally from the left edge.
 
 ::diagram{name="compact-flow"}
 
