@@ -2,7 +2,6 @@
 // Adapted from Starlight's SidebarSublist to show consumer-owned planned topics.
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 import { Icon, Badge } from '@astrojs/starlight/components';
-import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoint.astro';
 import config from 'virtual:tech0ver/config';
 import ReadingIcon from './ReadingIcon.astro';
 import { articleKey } from '../lib/reading-state.mjs';
@@ -14,9 +13,10 @@ interface Props {
 	sublist: SidebarEntry[];
 	nested?: boolean;
 	planned?: string[];
+	groupPath?: string[];
 }
 
-const { sublist, nested, planned = [] } = Astro.props;
+const { sublist, nested, planned = [], groupPath = [] } = Astro.props;
 // A published entry takes the place of its planned label at either level.
 const unwritten = (labels: string[]) => labels.filter((label) => !sublist.some((entry) => entry.label === label));
 const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
@@ -28,7 +28,7 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 			<span class="planned-topic" aria-disabled="true"><span class="large">{label}</span><span class="planned-badge">Planned</span></span>
 		</li>
 	))}
-	{sublist.map((entry) => {
+	{sublist.map((entry, index) => {
 		const article = config.reading.enabled && nested && entry.type === 'link'
 			? articleKey(entry.href, config.base, Astro.site?.origin ?? Astro.url.origin) : null;
 		return (
@@ -42,7 +42,7 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 				</a>
 				</div>
 			) : (
-				<details open={hasCurrent(entry) || !entry.collapsed}>
+				<details open={hasCurrent(entry) || !entry.collapsed} data-sidebar-group={JSON.stringify([...groupPath, `${entry.label}:${sublist.slice(0, index).filter((item) => item.type === 'group' && item.label === entry.label).length}`])}>
 					<summary>
 						<span class="group-label">
 							<span class="large">{entry.label}</span>
@@ -50,8 +50,7 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 						</span>
 						<Icon name="right-caret" class="caret" size="1.25rem" />
 					</summary>
-					<SidebarRestorePoint />
-					<Astro.self sublist={entry.entries} nested planned={config.plannedTopics?.[entry.label] ?? []} />
+					<Astro.self sublist={entry.entries} nested groupPath={[...groupPath, `${entry.label}:${sublist.slice(0, index).filter((item) => item.type === 'group' && item.label === entry.label).length}`]} planned={config.plannedTopics?.[entry.label] ?? []} />
 				</details>
 			)}
 		</li>

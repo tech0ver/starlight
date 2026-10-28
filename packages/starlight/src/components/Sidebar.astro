@@ -15,6 +15,32 @@ import config from 'virtual:tech0ver/config';
 <SidebarPersister>
   <SidebarSublist sublist={Astro.locals.starlightRoute.sidebar} />
 </SidebarPersister>
+<script is:inline define:vars={{ projectKey: config.reading.storageKey }}>
+  (() => {
+    const key = `tech0ver:sidebar:collapsed:${encodeURIComponent(projectKey)}`;
+    const groups = document.querySelectorAll('details[data-sidebar-group]');
+    const read = () => {
+      try {
+        const value = JSON.parse(localStorage.getItem(key) || '[]');
+        return new Set(Array.isArray(value) ? value.filter((item) => typeof item === 'string') : []);
+      } catch { return new Set(); }
+    };
+    const collapsed = read();
+    groups.forEach((group) => {
+      if (collapsed.has(group.dataset.sidebarGroup)) group.open = false;
+    });
+    // Ignore the toggle events queued by the initial HTML and restoration.
+    setTimeout(() => groups.forEach((group) => group.addEventListener('toggle', () => {
+      const state = read();
+      if (group.open) state.delete(group.dataset.sidebarGroup);
+      else state.add(group.dataset.sidebarGroup);
+      try {
+        if (state.size) localStorage.setItem(key, JSON.stringify([...state]));
+        else localStorage.removeItem(key);
+      } catch {}
+    })), 0);
+  })();
+</script>
 <div class="md:sl-hidden">
   <MobileMenuFooter />
 </div>
