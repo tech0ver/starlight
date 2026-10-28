@@ -45,6 +45,13 @@ preview, use the host's shared URL with the same path.
 - A home page, template overview, configuration guide, feature gallery, and glossary.
 - Desktop navigation, mobile menu, right table of contents, theme toggle, search,
   saved reading position, article status, and favorites.
+- Sidebar groups collapsed by a reader stay collapsed across visits on the same
+  browser. The local storage key is `tech0ver:sidebar:collapsed:<project>`, where
+  `<project>` is the URL-encoded `reading.storageKey` (`demo0ver` in the demo;
+  otherwise it defaults to `base:` followed by the Astro base path). Storage is
+  also scoped by the browser to the site's origin.
+  Opening a group removes it from the saved list; groups configured as collapsed
+  keep their default state.
 - Article callouts, theme-aware inline SVGs, and first-mention glossary tooltips.
 - An optional study prompt and a plain Markdown export for article readers.
 
