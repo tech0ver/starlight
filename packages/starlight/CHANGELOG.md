@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/tech0ver/starlight/compare/v0.6.0...v0.6.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* align planned topics with article links ([#24](https://github.com/tech0ver/starlight/issues/24)) ([3f862cf](https://github.com/tech0ver/starlight/commit/3f862cfb163acc7dacaf0fe895d1be1f0893eca6))
+
 ## [0.6.0](https://github.com/tech0ver/starlight/compare/v0.5.1...v0.6.0) (2026-10-28)
 
 
