@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/tech0ver/starlight/compare/v0.4.0...v0.5.0) (2026-10-28)
+
+
+### Features
+
+* remember collapsed sidebar groups ([#18](https://github.com/tech0ver/starlight/issues/18)) ([6b38f89](https://github.com/tech0ver/starlight/commit/6b38f89eb04877c30e73e3355551b982f222d6c0))
+
 ## [0.4.0](https://github.com/tech0ver/starlight/compare/v0.3.0...v0.4.0) (2026-10-27)
 
 
