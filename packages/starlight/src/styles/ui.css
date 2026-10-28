@@ -307,15 +307,20 @@ site-search dialog {
 .sidebar-pane { scrollbar-gutter: auto; }
 
 /* The favorite button and article link are separate touch and keyboard targets. */
+.sidebar-content { --favorite-button-width: 2rem; }
 .sidebar-content .article-nav { display: flex; align-items: stretch; color: var(--sl-color-gray-2); }
 .sidebar-content .article-nav:is(:hover, :focus-within),
 .sidebar-content .article-nav:has(a[aria-current='page']) { color: var(--sl-color-text-accent); }
 :root .sidebar-content .article-nav > a { flex: 1; min-width: 0; display: flex; align-items: center; flex-wrap: wrap; min-height: 2rem; padding-inline-start: 0.25rem; color: inherit; }
-.favorite-toggle { display: flex; flex: 0 0 2rem; align-items: center; justify-content: center; min-height: 2rem; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.favorite-toggle { display: flex; flex: 0 0 var(--favorite-button-width); align-items: center; justify-content: center; min-height: 2rem; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .favorite-toggle[hidden] { display: none; }
 .favorite-toggle:focus-visible { outline: 2px solid var(--sl-color-text-accent); outline-offset: -2px; }
+.sidebar-content ul:has(> li > .article-nav > .favorite-toggle:not([hidden])) > li > .planned-topic {
+	padding-inline-start: calc(var(--favorite-button-width) + 0.25rem);
+}
 @media (width < 50rem), (pointer: coarse) {
-	.favorite-toggle { flex-basis: 2.75rem; min-height: 2.75rem; }
+	.sidebar-content { --favorite-button-width: 2.75rem; }
+	.favorite-toggle { min-height: 2.75rem; }
 	:root .sidebar-content .article-nav > a { min-height: 2.75rem; }
 }
 
