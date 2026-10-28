@@ -1,6 +1,7 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
 import config from 'virtual:tech0ver/config';
 import favicon from './assets/favicon.png';
+import { hasMarkdownExport } from './lib/llms.mjs';
 
 export const onRequest = defineRouteMiddleware((context) => {
 	const route = context.locals.starlightRoute;
@@ -11,6 +12,13 @@ export const onRequest = defineRouteMiddleware((context) => {
 		item.tag === 'link' && String(item.attrs?.rel ?? '').split(/\s+/).includes('icon')
 	));
 	route.head.push({ tag: 'link', attrs: { rel: 'icon', href: favicon.src, type: 'image/png' } });
+	if (config.rawMarkdown.enabled) {
+		const base = config.base.replace(/\/$/, '');
+		route.head.push({ tag: 'link', attrs: { rel: 'describedby', href: `${base}/llms.txt` } });
+		if (hasMarkdownExport(route.entry, config.glossaryRoute)) {
+			route.head.push({ tag: 'link', attrs: { rel: 'alternate', type: 'text/markdown', href: `${base}/${route.entry.id}.md` } });
+		}
+	}
 
 	if (routeId === 'index' || routeId === '') {
 		route.head = route.head.map((item) => {

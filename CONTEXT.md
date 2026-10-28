@@ -30,7 +30,8 @@ with no dependency on another checkout or a particular machine.
 - Nested sidebar articles have local reading status and favorites. Consumers
   choose a stable project storage key to keep sites on one origin separate.
 - Markdown supports callouts, inline SVG diagrams, and glossary tooltips.
-- Sites can enable an article prompt for an AI chat and plain Markdown exports.
+- Sites can enable an article prompt for an AI chat, plain Markdown exports,
+  and a `llms.txt` index that links to published content.
   The site itself does not call an AI service.
 
 ## Demo and development

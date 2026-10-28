@@ -53,7 +53,7 @@ preview, use the host's shared URL with the same path.
   Opening a group removes it from the saved list; groups configured as collapsed
   keep their default state.
 - Article callouts, theme-aware inline SVGs, and first-mention glossary tooltips.
-- An optional study prompt and a plain Markdown export for article readers.
+- An optional study prompt, plain Markdown article exports, and a `llms.txt` index.
 
 See [the actual demo configuration](demo/astro.config.mjs) and
 [the configuration guide](demo/src/content/docs/configuration.md).
@@ -146,7 +146,7 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 | `glossary` | Entries, phrases to skip, and the glossary route or `false` |
 | `diagrams` | Consumer-owned SVG directory |
 | `tutor` | Optional study prompt; disabled by default |
-| `rawMarkdown` | Optional article Markdown endpoints; disabled by default |
+| `rawMarkdown` | Optional article Markdown endpoints and `llms.txt` index; disabled by default |
 | `mdastPlugins`, `hastPlugins` | Additional Satteri plugins after the shared processors |
 | `starlight.customCss` | Consumer styles loaded after shared styles |
 | `starlight.components` | Consumer replacements that take precedence over shared components |
@@ -347,6 +347,33 @@ links include the correct domain and base path. In the demo, the Markdown link
 is `https://tech0ver.github.io/starlight/reading.md`.
 Raw Markdown exports cover `.md` entries. MDX pages keep their rendered page URL
 because their components and imports are not plain Markdown.
+
+### Site index for AI assistants
+
+`rawMarkdown: { enabled: true }` also generates `llms.txt` under the site's `base`,
+for example `https://tech0ver.github.io/starlight/llms.txt` in the demo or
+`https://example.com/llms.txt` at the domain root. It works without enabling the
+study prompt. Set `site` to the deployed URL so the index uses the correct domain.
+
+The index follows the [llms.txt proposal](https://llmstxt.org/): a site name,
+the `starlight.description` summary when it is a string, and links with page titles
+and descriptions. It includes all non-draft docs entries, including pages outside
+the sidebar. Articles link to their Markdown exports; the home page, glossary,
+splash pages, and MDX pages link to rendered HTML, respecting `build.format`
+and `trailingSlash`. Planned navigation labels are
+not content entries and do not appear in the index.
+
+Give an assistant the `llms.txt` URL and ask it to find a topic, then follow the
+relevant article links. The index contains no article bodies, so the assistant
+can fetch only what it needs. Pages also include `rel="describedby"` links to the
+index and `rel="alternate" type="text/markdown"` links where an export exists.
+An assistant must support or be directed to use these links; publishing the file
+does not make every AI service discover it automatically.
+
+The left navigation includes a plain text `llms.txt` link below a divider at the bottom.
+It opens the text index in a new tab, keeping the current article available. The
+same link appears in the mobile menu. It has no reading status or favorite control
+and is hidden when raw Markdown exports are disabled.
 
 ### Content cache
 

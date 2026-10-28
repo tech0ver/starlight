@@ -47,6 +47,11 @@ export function createRawMarkdownIntegration(entrypoint) {
 					entrypoint,
 					prerender: true,
 				});
+				injectRoute({
+					pattern: 'llms.txt',
+					entrypoint: packagePaths.llms,
+					prerender: true,
+				});
 			},
 		},
 	};
