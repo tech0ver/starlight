@@ -60,6 +60,7 @@
 
 .diagram-svg {
 	display: block;
+	margin-inline: auto;
 	width: 100%;
 	min-width: 600px;
 	height: auto;
