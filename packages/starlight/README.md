@@ -18,8 +18,9 @@ tablet drawer, while the phone menu stays full width. Use
 `plannedTopLevel: ['Examples']` for unlinked **Planned** labels before the
 navigation groups, or
 `plannedTopics: { 'Feature gallery': ['Component overrides'] }` for labels
-inside a group, as shown in Demo0ver. Published entries with matching labels
-replace planned ones.
+inside a group, as shown in Demo0ver. Strings are hidden by matching entry
+labels. Use `{ label: 'More diagrams', slug: 'more-diagrams' }` to match a
+published link by its page path without `base`, even if its title changes.
 
 Enable article study tools with `tutor.enabled`. Set `tutor.title` to customize
 the block heading and `tutor.intro` to customize the first paragraph of the

@@ -24,8 +24,8 @@ export default defineTech0verConfig({
 	sidebarWidth: 256,
 	reading: { storageKey: 'demo0ver' },
 	callouts: { do: 'Example', explain: 'Explain it' },
-	plannedTopics: { 'Feature gallery': ['Component overrides'] },
-	plannedTopLevel: ['Examples'],
+	plannedTopics: { 'Feature gallery': ['Component overrides', { label: 'More diagrams', slug: 'more-diagrams' }, { label: 'Gallery', slug: 'reading' }] },
+	plannedTopLevel: ['Examples', { label: 'More guides', slug: 'more-guides' }, { label: 'Terms', slug: 'glossary' }],
 	searchSuggestions: [
 		{ href: 'getting-started', label: 'Getting started' },
 		{ href: 'reading', label: 'Feature gallery' },
@@ -65,8 +65,10 @@ the tablet drawer uses the same width, and the phone menu stays full width.
 
 `plannedTopLevel` shows **Examples** with a **Planned** badge above the groups.
 `plannedTopics` shows **Component overrides** inside **Feature gallery**. These
-labels have no links. When a published entry uses the same label at that level,
-the planned label is hidden. Remove the planned setting when publishing it.
+labels have no links. Strings are hidden when an entry at that level has the
+same label. Objects use a page slug without `base` instead, so a title change
+does not create a duplicate. **Gallery** and **Terms** are hidden because their
+pages are already in the same lists. Remove the planned setting when publishing it.
 
 The active link in the table of contents uses accent color and bold text.
 Scroll the [feature gallery](../reading/) to check it on desktop or open

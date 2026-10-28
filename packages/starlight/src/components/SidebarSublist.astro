@@ -5,6 +5,8 @@ import { Icon, Badge } from '@astrojs/starlight/components';
 import config from 'virtual:tech0ver/config';
 import ReadingIcon from './ReadingIcon.astro';
 import { articleKey } from '../lib/reading-state.mjs';
+import { unwrittenTopics } from '../lib/planned-topics.mjs';
+import type { PlannedTopic } from '../index';
 
 type SidebarEntry = StarlightRouteData['sidebar'][number];
 const hasCurrent = (entry: SidebarEntry): boolean => entry.type === 'link' ? entry.isCurrent : entry.entries.some(hasCurrent);
@@ -12,20 +14,20 @@ const hasCurrent = (entry: SidebarEntry): boolean => entry.type === 'link' ? ent
 interface Props {
 	sublist: SidebarEntry[];
 	nested?: boolean;
-	planned?: string[];
+	planned?: PlannedTopic[];
 	groupPath?: string[];
 }
 
 const { sublist, nested, planned = [], groupPath = [] } = Astro.props;
-// A published entry takes the place of its planned label at either level.
-const unwritten = (labels: string[]) => labels.filter((label) => !sublist.some((entry) => entry.label === label));
+const unwritten = (topics: PlannedTopic[]) => unwrittenTopics(topics, sublist, config.base, Astro.site?.origin ?? Astro.url.origin);
+const topicLabel = (topic: PlannedTopic) => typeof topic === 'string' ? topic : topic.label;
 const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 ---
 
 <ul class:list={{ 'top-level': !nested }}>
-	{plannedFirst.map((label) => (
+	{plannedFirst.map((topic) => (
 		<li>
-			<span class="planned-topic" aria-disabled="true"><span class="large">{label}</span><span class="planned-badge">Planned</span></span>
+			<span class="planned-topic" aria-disabled="true"><span class="large">{topicLabel(topic)}</span><span class="planned-badge">Planned</span></span>
 		</li>
 	))}
 	{sublist.map((entry, index) => {
@@ -56,9 +58,9 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 		</li>
 		);
 	})}
-	{unwritten(planned).map((label) => (
+	{unwritten(planned).map((topic) => (
 		<li>
-			<span class="planned-topic" aria-disabled="true"><span>{label}</span><span class="planned-badge">Planned</span></span>
+			<span class="planned-topic" aria-disabled="true"><span>{topicLabel(topic)}</span><span class="planned-badge">Planned</span></span>
 		</li>
 	))}
 </ul>

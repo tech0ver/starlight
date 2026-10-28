@@ -22,6 +22,8 @@ export interface ReadingOptions {
 	labels?: Partial<Record<'markAsRead' | 'addFavorite' | 'removeFavorite' | 'new' | 'seen' | 'read', string>>;
 }
 
+export type PlannedTopic = string | { label: string; slug: string };
+
 export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integrations' | 'markdown'> {
 	base?: string;
 	integrations?: AstroUserConfig['integrations'];
@@ -31,8 +33,8 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 	sidebarWidth?: number;
 	reading?: ReadingOptions;
 	callouts?: CalloutLabels;
-	plannedTopics?: Record<string, string[]>;
-	plannedTopLevel?: string[];
+	plannedTopics?: Record<string, PlannedTopic[]>;
+	plannedTopLevel?: PlannedTopic[];
 	searchSuggestions?: Array<{ href: string; label: string; description?: string }>;
 	search?: { suggestions?: Array<{ href: string; label: string; description?: string }> };
 	footer?: {
@@ -63,8 +65,8 @@ export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	sidebarWidth: number;
 	reading: Required<Omit<ReadingOptions, 'labels'>> & { labels: Required<NonNullable<ReadingOptions['labels']>> };
 	callouts: Record<CalloutKind, string>;
-	plannedTopics: Record<string, string[]>;
-	plannedTopLevel: string[];
+	plannedTopics: Record<string, PlannedTopic[]>;
+	plannedTopLevel: PlannedTopic[];
 	searchSuggestions: Array<{ href: string; label: string; description?: string }>;
 	footer: Tech0verOptions['footer'];
 	socialImage?: string;
