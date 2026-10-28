@@ -170,8 +170,8 @@ Choose a sidebar width that fits the site's navigation labels:
 
 ```js
 sidebarWidth: 256,
-plannedTopLevel: ['Examples'],
-plannedTopics: { 'Feature gallery': ['Component overrides'] },
+plannedTopLevel: ['Examples', { label: 'More guides', slug: 'more-guides' }],
+plannedTopics: { 'Feature gallery': ['Component overrides', { label: 'More diagrams', slug: 'more-diagrams' }] },
 ```
 
 `sidebarWidth` is a positive number of pixels and defaults to `200`. It controls
@@ -180,8 +180,10 @@ On phones, the menu still uses the full viewport width.
 
 `plannedTopLevel` adds non-clickable labels with a **Planned** badge before the
 regular top-level entries. `plannedTopics` adds them inside existing groups.
-A planned label is hidden when a published entry has the same label in that
-list. Remove its planned setting when publishing the page.
+A string is hidden when an entry has the same label in that list. An object is
+hidden when a published link in that list has the same page path, regardless of
+the label. Set `slug` to the page path without `base`; leading and trailing
+slashes are optional. Remove the planned setting when publishing the page.
 
 The active table-of-contents link uses the accent color and bold text on both
 desktop and mobile. It follows the current section as the reader scrolls.

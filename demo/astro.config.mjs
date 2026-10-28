@@ -38,8 +38,8 @@ export default defineTech0verConfig({
 	callouts: { do: 'Example', explain: 'Explain it' },
 	socialImage: '/social-preview.svg',
 	socialImageAlt: 'Demo0ver reusable Starlight template demo.',
-	plannedTopics: { 'Feature gallery': ['Component overrides'] },
-	plannedTopLevel: ['Examples'],
+	plannedTopics: { 'Feature gallery': ['Component overrides', { label: 'More diagrams', slug: 'more-diagrams' }, { label: 'Gallery', slug: 'reading' }] },
+	plannedTopLevel: ['Examples', { label: 'More guides', slug: 'more-guides' }, { label: 'Terms', slug: 'glossary' }],
 	searchSuggestions: [
 		{ href: 'getting-started', label: 'Getting started', description: 'See the template shell and navigation.' },
 		{ href: 'configuration', label: 'Configuration', description: 'Inspect one consumer setup and its labels.' },
