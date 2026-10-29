@@ -62,6 +62,11 @@ Changing `callouts.do` to `Example` changes the label while keeping the shared
 color. `callouts.explain` becomes `Explain it`; unspecified labels keep their
 default names and colors.
 
+Invalid shared settings report the exact field, for example
+`glossary.entries[1].id` for a duplicate ID or `searchSuggestions[0].href` for an
+invalid link. Glossary entries need unique IDs, a term, short meaning, and an
+explanation. Astro and Starlight validate their own settings.
+
 The demo sets `sidebarWidth` to `256` pixels so its navigation labels have room.
 The default is `200`. Desktop content and the header move with the sidebar;
 the tablet drawer uses the same width, and the phone menu stays full width.

@@ -152,6 +152,12 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 | `starlight.components` | Consumer replacements that take precedence over shared components |
 | `starlight.plugins` | Consumer plugins run after the shared plugin |
 
+Invalid shared settings stop configuration with a path such as
+`glossary.entries[1].id` or `searchSuggestions[0].href`. Glossary IDs must be unique;
+entries need a term, short meaning, and explanation. Links need an HTTP(S) URL or
+a site-relative path and a label; footer links also accept `mailto:` and `tel:`.
+Astro and Starlight validate their own options.
+
 The helper owns `markdown.processor` to connect callouts, SVGs, and glossary
 tooltips through Satteri. Extend that pipeline with the plugin options rather than
 supplying a second Markdown processor. Additional Astro integrations and Vite
