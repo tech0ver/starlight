@@ -1,6 +1,6 @@
 /*
  * Glossary tooltips (see src/plugins/glossary.mjs).
- * No JavaScript: the tip opens on hover, on keyboard focus, and on tap (tap focuses the term).
+ * Hover and focus work without JavaScript; the script adds dismissal and positioning.
  * On phone and tablet screens the tip is a card fixed to the bottom of the screen.
  */
 
@@ -14,7 +14,7 @@
 	border-radius: 0.2rem;
 }
 
-.sl-markdown-content .term:focus-visible {
+.sl-markdown-content .term-label:focus-visible {
 	outline: 2px solid var(--sl-color-accent);
 	outline-offset: 2px;
 }
@@ -26,6 +26,7 @@
 	z-index: 20;
 	width: max-content;
 	max-width: min(24rem, 85vw);
+	transform: translateX(var(--term-tip-offset, 0px));
 	padding-top: 0.4rem; /* keeps the hover area continuous between the term and the card */
 	visibility: hidden;
 	opacity: 0;
@@ -45,6 +46,31 @@
 	border: 1px solid var(--sl-color-accent-low);
 	border-radius: 0.5rem;
 	box-shadow: var(--sl-shadow-md);
+	max-height: var(--term-tip-max-height, calc(100dvh - var(--sl-nav-height) - 3rem));
+	overflow-y: auto;
+	overflow-wrap: anywhere;
+}
+
+.sl-markdown-content .term-tip-close {
+	float: right;
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin: -0.35rem -0.5rem 0 0.5rem;
+	padding: 0;
+	border: 0;
+	border-radius: 0.25rem;
+	background: transparent;
+	color: var(--sl-color-gray-1);
+	font: inherit;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+.sl-markdown-content .term-tip-close[hidden] { display: none; }
+.sl-markdown-content .term-tip-close:focus-visible {
+	outline: 2px solid var(--sl-color-text-accent);
+	outline-offset: -2px;
 }
 
 .sl-markdown-content .term-tip-name {
@@ -64,10 +90,20 @@
 	color: var(--sl-color-gray-2);
 }
 
-.sl-markdown-content .term:hover .term-tip,
-.sl-markdown-content .term:focus-within .term-tip {
+.sl-markdown-content .term:not([data-enhanced]):hover .term-tip,
+.sl-markdown-content .term:not([data-enhanced]):focus-within .term-tip,
+.sl-markdown-content .term[data-open] .term-tip {
 	visibility: visible;
 	opacity: 1;
+}
+
+@media (width >= 72rem) {
+	.sl-markdown-content .term[data-above] .term-tip {
+		top: auto;
+		bottom: 100%;
+		padding-top: 0;
+		padding-bottom: 0.4rem;
+	}
 }
 
 @media (width < 72rem) {
@@ -80,6 +116,7 @@
 		width: auto;
 		max-width: none;
 		padding-top: 0;
+		transform: none;
 	}
 }
 

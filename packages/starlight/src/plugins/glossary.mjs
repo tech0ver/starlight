@@ -53,10 +53,11 @@ export function glossaryPlugin({ entries = [], skip = [], base = '/', route = 'g
 		const tipId = `term-tip-${entry.id}`;
 		const name = `<span class="term-tip-name">${escapeHtml(entry.expansion ?? entry.term)}</span>`;
 		return (
-			`<span class="term" tabindex="0" aria-describedby="${tipId}">` +
-			`<span class="term-label">${escapeHtml(text)}</span>` +
-			`<span class="term-tip" role="tooltip" id="${tipId}"><span class="term-tip-card">` +
-			`${name}<span class="term-tip-text">${escapeHtml(entry.short)} ${escapeHtml(entry.explanation)}</span>` +
+			`<span class="term">` +
+			`<span class="term-label" tabindex="0" role="button" aria-expanded="false" aria-controls="${tipId}" aria-describedby="${tipId}-text">${escapeHtml(text)}</span>` +
+			`<span class="term-tip" role="region" aria-label="${escapeHtml(entry.term)}" id="${tipId}"><span class="term-tip-card">` +
+			`<button type="button" class="term-tip-close" aria-label="Close definition" hidden>×</button>` +
+			`${name}<span class="term-tip-text" id="${tipId}-text">${escapeHtml(entry.short)} ${escapeHtml(entry.explanation)}</span>` +
 			`${readMoreLink(entry.readMore)}</span></span></span>`
 		);
 	};
