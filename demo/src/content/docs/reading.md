@@ -105,6 +105,11 @@ article, regardless of the heading's name.
 
 ## Cheat Sheet
 
+This section is excluded from saved reading progress. Opening it clears the
+saved section. To try restoration, open [Try a small change](#try-a-small-change),
+then open [this article without a fragment](./). To clear progress and start
+again, open [the beginning](#_top).
+
 | Action | Control |
 | --- | --- |
 | Open an article | Press its name in the menu |

@@ -26,7 +26,8 @@ with no dependency on another checkout or a particular machine.
 - The home page uses the same responsive sidebar as articles. It is left out of
   the navigation list; the site name links home.
 - Articles have a table of contents, search, light and dark themes, and saved
-  reading position.
+  reading section. Opening an article without a fragment restores that section;
+  explicit anchors take priority. Sites can exclude reference sections.
 - Nested sidebar articles have local reading status and favorites. Consumers
   choose a stable project storage key to keep sites on one origin separate.
 - Markdown supports callouts, inline SVG diagrams, and glossary tooltips.

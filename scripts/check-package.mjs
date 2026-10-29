@@ -68,6 +68,7 @@ try {
 		"  outDir: fileURLToPath(new URL('./dist/consumer/', import.meta.url)),",
 		"  brand: { name: 'Packed', suffix: 'Demo' },",
 		"  sidebarWidth: 256,",
+		"  reading: { storageKey: 'packed-demo', position: { ignoreSections: ['reference'] } },",
 		"  plannedTopLevel: ['Future guide', 'Glossary'],",
 		"  plannedTopics: { Docs: ['Reading', 'Coming next'] },",
 		"  callouts: { do: 'Try \"this\" & learn', explain: 'How it works' },",
@@ -95,6 +96,7 @@ try {
 	write(join(temp, 'src/content/docs/interactive.mdx'), [
 		'---', 'title: Interactive', 'description: A packed MDX article.', '---', '', "import MarkAsRead from '@tech0ver/starlight/components/MarkAsRead.astro';", '', '<span>This page uses MDX.</span>', '', '<MarkAsRead />',
 	].join('\n'));
+	write(join(temp, 'src/content/docs/no-outline.md'), '---\ntitle: Without an outline\ntableOfContents: false\n---\n\n## First section\n\nArticle content.\n\n## Reference\n\nReference content.');
 	write(join(temp, 'src/content/docs/glossary.mdx'), [
 		'---', 'title: Glossary', '---', '', "import Glossary from '@tech0ver/starlight/components/Glossary.astro';", '', '<Glossary />',
 	].join('\n'));
@@ -117,6 +119,11 @@ try {
 	assert.ok(existsSync(join(output, 'index.html')), 'packed home page is missing');
 	assert.ok(existsSync(join(output, 'reading', 'index.html')), 'packed article is missing');
 	assert.ok(existsSync(join(output, 'glossary', 'index.html')), 'packed glossary is missing');
+	const noOutlineHtml = readFileSync(join(output, 'no-outline', 'index.html'), 'utf8');
+	assert.match(noOutlineHtml, /data-reading-position/, 'articles without a TOC must support section progress');
+	const positionScript = noOutlineHtml.match(/src="([^"]*ReadingPosition[^"]*\.js)"/)?.[1];
+	assert.ok(positionScript, 'section tracking must load independently of the table of contents');
+	assert.ok(existsSync(join(output, positionScript.slice('/consumer/'.length))), 'installed section tracking script is missing');
 	const glossaryHtml = readFileSync(join(output, 'glossary', 'index.html'), 'utf8');
 	assert.match(glossaryHtml, /<h2\b[^>]*id="callout"[^>]*>/, 'glossary terms must be headings tracked by Starlight');
 	assert.match(glossaryHtml, /<a\b[^>]*class="sl-anchor-link"[^>]*href="#callout"/, 'glossary terms must have shareable anchor links');

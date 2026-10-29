@@ -13,7 +13,7 @@ const escapedGlossarySlug = glossarySlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const isArticle = sourcePath && !new RegExp(`^(index|${escapedGlossarySlug})\\.mdx?$`).test(sourcePath) && entry.data.template !== 'splash';
 ---
 
-<div class="article-heading">
+<div class="article-heading" data-reading-position={isArticle ? '' : undefined}>
 	{section && <p class="article-section">{section.label}</p>}
 	<h1 id="_top">{title}</h1>
 	{description && <p class="article-description">{description}</p>}
