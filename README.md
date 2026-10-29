@@ -136,7 +136,7 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 |---|---|
 | `brand` | Name and optional accent suffix, using the shared fonts and colors |
 | `sidebarWidth` | Desktop sidebar and tablet drawer width in pixels; a positive number, default `200` |
-| `reading` | Local article status and favorites, with a stable project key and optional labels |
+| `reading` | Local article status, favorites, and section progress, with a stable project key and optional labels |
 | `callouts` | Labels for the five semantic callout kinds; their colors stay shared |
 | `searchSuggestions` | Project-owned links shown before a search query |
 | `plannedTopics` | Unlinked topic labels keyed by an existing sidebar group label |
@@ -273,6 +273,40 @@ Updates appear in other open tabs. Marks stay on this browser and origin; they
 do not sync across devices, and clearing site data removes them. When storage is
 blocked or full, the controls still work for the current page, without guaranteed
 persistence.
+
+### Saved reading section
+
+Articles save the last section in this browser. Opening an article without a
+fragment restores that section automatically. An explicit fragment always takes
+priority. Opening `#_top`, scrolling back above the first section, or entering an
+ignored section removes the saved position. Entering another eligible section,
+by scrolling or a direct link, saves it again. This does not change the article's
+read status or favorites.
+
+Configure section progress separately from the sidebar reading controls:
+
+```js
+reading: {
+  storageKey: 'my-project',
+  position: {
+    enabled: true,
+    ignoreSections: ['cheat-sheet', 'references'],
+  },
+},
+```
+
+`position.enabled` defaults to `true`, including when `reading.enabled` is `false`.
+Set `position.enabled: false` to disable section tracking and restoration.
+`ignoreSections` defaults to an empty array. Use heading IDs without `#`; an
+ignored section includes its subsections until the next heading of the same or
+higher level. The demo ignores `cheat-sheet`. A missing or newly ignored saved
+heading is discarded on the next visit. Home, glossary, and splash pages do not
+save section progress. Articles work even when their table of contents is hidden.
+
+Position records use the same project key and base-relative article paths as
+reading marks, but are stored separately. They stay on this browser and origin.
+A link to `#_top` starts the article again and clears its position; a link without
+a fragment resumes it. Without available storage, explicit anchors still work.
 
 ### Glossary
 

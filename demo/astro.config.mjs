@@ -34,7 +34,10 @@ export default defineTech0verConfig({
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
 	sidebarWidth: 256,
-	reading: { storageKey: 'demo0ver' },
+	reading: {
+		storageKey: 'demo0ver',
+		position: { ignoreSections: ['cheat-sheet'] },
+	},
 	callouts: { do: 'Example', explain: 'Explain it' },
 	socialImage: '/social-preview.svg',
 	socialImageAlt: 'Demo0ver reusable Starlight template demo.',

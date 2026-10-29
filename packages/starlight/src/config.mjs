@@ -65,6 +65,23 @@ function normalizeDirectory(directory, root) {
 	return new URL(value.endsWith('/') ? value : `${value}/`, rootUrl);
 }
 
+function validateReadingPosition(position) {
+	if (position === undefined) return;
+	if (!position || typeof position !== 'object' || Array.isArray(position)) {
+		throw new Error('reading.position must be an object.');
+	}
+	if (position.enabled !== undefined && typeof position.enabled !== 'boolean') {
+		throw new Error('reading.position.enabled must be true or false.');
+	}
+	if (position.ignoreSections === undefined) return;
+	if (!Array.isArray(position.ignoreSections)) throw new Error('reading.position.ignoreSections must be an array.');
+	position.ignoreSections.forEach((id, index) => {
+		if (typeof id !== 'string' || !id.trim() || /[\s#]/u.test(id)) {
+			throw new Error(`reading.position.ignoreSections[${index}] must be a heading ID without # or spaces.`);
+		}
+	});
+}
+
 export function normalizeTech0verOptions(input = {}) {
 	// Keep plugin hook functions and component paths intact. The serializable
 	// consumer data is copied separately before it crosses the virtual module.
@@ -78,6 +95,7 @@ export function normalizeTech0verOptions(input = {}) {
 	const rawMarkdown = input.rawMarkdown && typeof input.rawMarkdown === 'object' ? input.rawMarkdown : {};
 	const diagrams = input.diagrams && typeof input.diagrams === 'object' ? input.diagrams : {};
 	const reading = input.reading ?? {};
+	validateReadingPosition(reading.position);
 	if (reading.storageKey !== undefined && (typeof reading.storageKey !== 'string' || !reading.storageKey.trim())) {
 		throw new Error('reading.storageKey must be a non-empty project key.');
 	}
@@ -95,6 +113,10 @@ export function normalizeTech0verOptions(input = {}) {
 		reading: {
 			enabled: reading.enabled !== false,
 			storageKey: reading.storageKey ?? `base:${base}`,
+			position: {
+				enabled: reading.position?.enabled !== false,
+				ignoreSections: clone(reading.position?.ignoreSections ?? []),
+			},
 			labels: {
 				markAsRead: 'Mark as read',
 				addFavorite: 'Add to favorites',

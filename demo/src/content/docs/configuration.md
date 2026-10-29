@@ -22,7 +22,10 @@ export default defineTech0verConfig({
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),
 	brand: { name: 'Demo', suffix: '0ver' },
 	sidebarWidth: 256,
-	reading: { storageKey: 'demo0ver' },
+	reading: {
+		storageKey: 'demo0ver',
+		position: { ignoreSections: ['cheat-sheet'] },
+	},
 	callouts: { do: 'Example', explain: 'Explain it' },
 	plannedTopics: { 'Feature gallery': ['Component overrides', { label: 'More diagrams', slug: 'more-diagrams' }, { label: 'Gallery', slug: 'reading' }] },
 	plannedTopLevel: ['Examples', { label: 'More guides', slug: 'more-guides' }, { label: 'Terms', slug: 'glossary' }],
@@ -79,6 +82,14 @@ place in browser storage. Use a different key for each project on the same domai
 and keep it unchanged across releases. Article paths are relative to `base`, so
 moving the whole site to another prefix on the same domain keeps its marks.
 See the [feature gallery](../reading/#reading-status-and-favorites) to try the controls.
+
+`reading.position` saves and restores the last section independently of those
+controls. The demo sets `ignoreSections: ['cheat-sheet']`. Entering that section
+clears the saved position, including its subsections. Opening an article without
+a fragment resumes the saved section; an explicit fragment takes priority.
+Opening `#_top` or scrolling back to the beginning clears the saved section.
+A later scroll or direct link into another section saves progress again.
+Set `reading.position.enabled: false` to disable tracking and restoration.
 
 Add `::mark-as-read` on its own line, with a blank line before and after it, at
 each place where an article needs a **Mark as read** button. The package does not

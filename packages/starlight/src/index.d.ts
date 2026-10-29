@@ -19,6 +19,13 @@ export interface ReadingOptions {
 	enabled?: boolean;
 	/** Keep this project key unchanged across releases and base path changes. */
 	storageKey?: string;
+	/** Section progress is independent of reading status and favorites. */
+	position?: {
+		/** Restore the last section on visits without a fragment. Defaults to true. */
+		enabled?: boolean;
+		/** Heading IDs without #. Entering one clears the saved section. */
+		ignoreSections?: string[];
+	};
 	labels?: Partial<Record<'markAsRead' | 'addFavorite' | 'removeFavorite' | 'new' | 'seen' | 'read', string>>;
 }
 
@@ -66,7 +73,10 @@ export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	siteDescription?: string;
 	htmlUrls: { format: 'directory' | 'file' | 'preserve'; trailingSlash: 'always' | 'never' | 'ignore' };
 	sidebarWidth: number;
-	reading: Required<Omit<ReadingOptions, 'labels'>> & { labels: Required<NonNullable<ReadingOptions['labels']>> };
+	reading: Required<Omit<ReadingOptions, 'labels' | 'position'>> & {
+		labels: Required<NonNullable<ReadingOptions['labels']>>;
+		position: { enabled: boolean; ignoreSections: string[] };
+	};
 	callouts: Record<CalloutKind, string>;
 	plannedTopics: Record<string, PlannedTopic[]>;
 	plannedTopLevel: PlannedTopic[];
