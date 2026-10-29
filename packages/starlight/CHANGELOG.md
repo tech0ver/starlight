@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0](https://github.com/tech0ver/starlight/compare/v0.6.1...v0.7.0) (2026-10-29)
+
+
+### Features
+
+* add llms.txt site index ([#26](https://github.com/tech0ver/starlight/issues/26)) ([cc0036e](https://github.com/tech0ver/starlight/commit/cc0036e5ee540531091b7ea304b263b4d8d90280))
+* restore saved article sections ([#28](https://github.com/tech0ver/starlight/issues/28)) ([5e3174b](https://github.com/tech0ver/starlight/commit/5e3174bad4bf5a82e46fa86e98cdaef4d0219522))
+* validate shared configuration with field paths ([#30](https://github.com/tech0ver/starlight/issues/30)) ([0582c8e](https://github.com/tech0ver/starlight/commit/0582c8e237538ae0547cc47549828f0fb5275cf6))
+
+
+### Bug Fixes
+
+* make glossary cards dismissible and keep them in view ([#29](https://github.com/tech0ver/starlight/issues/29)) ([6b61e6f](https://github.com/tech0ver/starlight/commit/6b61e6f257ad6d69e606b7b5bffd903333b334a0))
+
 ## [0.6.1](https://github.com/tech0ver/starlight/compare/v0.6.0...v0.6.1) (2026-10-28)
 
 
