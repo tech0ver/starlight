@@ -313,8 +313,11 @@ a fragment resumes it. Without available storage, explicit anchors still work.
 Supply entries through `glossary.entries`. Each entry has `id`, `term`, `short`,
 and `explanation`; it can also have aliases, expansion, a read-more link, and pages
 that explain the term. Internal read-more links use paths relative to the site's
-base. Only the first eligible mention receives a tooltip. Links, code, headings,
-and the entry's own explanatory page are excluded.
+base. Only the first eligible mention receives a definition card. Open it by hovering,
+focusing the term, or tapping it. Press Escape or the close button to dismiss it;
+tapping outside also closes it. Cards stay within the viewport and keep read-more
+links available to keyboard users. Hover and focus also work without JavaScript.
+Links, code, headings, and the entry's own explanatory page are excluded.
 
 The glossary renders each term as a compact level-two heading with an anchor
 link. The table of contents highlights the term while scrolling. Entry IDs stay

@@ -10,7 +10,9 @@ on one page. The URL prefix keeps those links and assets under `/starlight`.
 
 Glossary terms can appear near the right edge of the article. Hover or focus
 the term below: its card should stay readable over the table of contents.
-The read-more link inside the card works with a pointer or keyboard.
+The read-more link inside the card works with a pointer or keyboard. Press Escape
+or the close button to dismiss the card. On a phone, tap the term to open it and
+tap outside to close it.
 
 <div style="text-align: end">
 
