@@ -1,6 +1,7 @@
 import { isAbsolute, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { resolveCalloutLabels } from './lib/callouts.mjs';
+import { validateTech0verOptions } from './validate-config.mjs';
 
 const DEFAULT_BASE = '/';
 
@@ -83,6 +84,7 @@ function validateReadingPosition(position) {
 }
 
 export function normalizeTech0verOptions(input = {}) {
+	validateTech0verOptions(input);
 	// Keep plugin hook functions and component paths intact. The serializable
 	// consumer data is copied separately before it crosses the virtual module.
 	const starlight = { ...(input.starlight ?? {}) };
