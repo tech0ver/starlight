@@ -50,7 +50,21 @@ export async function trackReadingPosition(config, signal) {
 	let storage;
 	try { storage = localStorage; } catch { /* No persistence when storage is blocked. */ }
 	const store = createPositionStore(storage, config.reading.storageKey, article);
-	const save = (id) => store.set(id && byId.has(id) && !ignored.has(id) ? id : null);
+	const syncToc = (id) => {
+		for (const toc of document.querySelectorAll('starlight-toc, mobile-starlight-toc')) {
+			const Toc = customElements.get(toc.localName);
+			if (!Toc || !(toc instanceof Toc)) continue;
+			const links = [...toc.querySelectorAll('a')];
+			// Headings outside the configured TOC depth belong to the preceding TOC entry.
+			const candidates = id === '_top' || !id ? ['_top'] : headings.slice(0, headings.findIndex((heading) => heading.id === id) + 1).reverse().map((heading) => heading.id);
+			const link = candidates.map((candidate) => links.find((item) => fragmentId(item.hash) === candidate)).find(Boolean);
+			if (link) toc.current = link;
+		}
+	};
+	const save = (id) => {
+		store.set(id && byId.has(id) && !ignored.has(id) ? id : null);
+		syncToc(id);
+	};
 
 	// Explicit fragments always take priority, including #_top and unknown anchors.
 	const initialHash = location.hash;
@@ -68,6 +82,7 @@ export async function trackReadingPosition(config, signal) {
 		byId.get(saved).scrollIntoView({ behavior: 'instant' });
 		anchorTarget = saved;
 	}
+	if (anchorTarget) syncToc(anchorTarget);
 
 	let timeout;
 	const update = () => {
