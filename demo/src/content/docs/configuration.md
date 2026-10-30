@@ -80,7 +80,8 @@ pages are already in the same lists. Remove the planned setting when publishing 
 
 The active link in the table of contents uses accent color and bold text.
 Scroll the [feature gallery](../reading/) to check it on desktop or open
-**On this page** on a phone.
+**On this page** on a phone. At the bottom, the short final section is active
+in both the table of contents and the URL.
 
 `reading.storageKey` gives this project's reading status and favorites a stable
 place in browser storage. Use a different key for each project on the same domain,
