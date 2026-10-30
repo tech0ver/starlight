@@ -12,9 +12,14 @@ import config from 'virtual:tech0ver/config';
 <div class="site-sidebar-brand">
   <SiteTitle />
 </div>
-<SidebarPersister>
-  <SidebarSublist sublist={Astro.locals.starlightRoute.sidebar} />
-</SidebarPersister>
+<div class="site-sidebar-navigation">
+  <SidebarPersister>
+    <SidebarSublist sublist={Astro.locals.starlightRoute.sidebar} />
+  </SidebarPersister>
+  <div class="site-mobile-preferences md:sl-hidden">
+    <MobileMenuFooter />
+  </div>
+</div>
 {config.rawMarkdown.enabled && (
   <div class="site-sidebar-tools">
     <a class="site-llms-link" href={`${config.base.replace(/\/$/, '')}/llms.txt`} target="_blank" rel="noopener" aria-label="llms.txt (opens in a new tab)">
@@ -48,9 +53,6 @@ import config from 'virtual:tech0ver/config';
     })), 0);
   })();
 </script>
-<div class="md:sl-hidden">
-  <MobileMenuFooter />
-</div>
 {config.reading.enabled && <ReadingState />}
 
 <style>
@@ -71,17 +73,33 @@ import config from 'virtual:tech0ver/config';
     font-size: var(--sl-text-base);
     line-height: 1;
   }
+  .site-sidebar-navigation {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    margin-inline: calc(-1 * var(--sl-sidebar-pad-x));
+    padding: 1rem var(--sl-sidebar-pad-x);
+  }
+  .site-mobile-preferences { margin-block-start: 1rem; }
   .site-sidebar-tools {
+    display: flex;
+    flex: 0 0 var(--sl-nav-height);
     margin-block-start: auto;
-    padding: 0.75rem 0.5rem;
-    border-block-start: 1px solid var(--sl-color-hairline-light);
+    margin-inline: calc(-1 * var(--sl-sidebar-pad-x));
+    padding-inline: var(--sl-sidebar-pad-x);
+    box-shadow: inset 0 1px var(--sl-color-hairline-shade);
   }
   .site-llms-link {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding-inline: 0.5rem;
     color: var(--sl-color-gray-2);
     font-size: var(--sl-text-sm);
     line-height: 1.4;
     text-decoration: none;
   }
+  .site-llms-link:focus-visible { outline-offset: -3px; }
   .site-llms-link:hover { color: var(--sl-color-text-accent); }
   @media (width < 50rem) {
     .site-sidebar-brand :global(.site-title) { font-size: 18px; }

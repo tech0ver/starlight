@@ -30,6 +30,9 @@ Enable `rawMarkdown.enabled` to export Markdown articles and generate a `llms.tx
 index under the site's `base`. The index lists non-draft docs pages with titles
 and descriptions, using Markdown exports where available and rendered HTML for
 other pages. Give its URL to an assistant so it can find and read relevant pages.
+Article groups and order follow the sidebar; articles outside it appear under
+**Other articles**. Links inside exports prefer available Markdown exports and
+preserve queries and fragments.
 Set `site` to the deployed URL for absolute links. The index also works without
 the study prompt.
 
