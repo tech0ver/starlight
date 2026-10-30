@@ -40,16 +40,38 @@ lockfile, then rebuild, to receive a package change.
 
 Keep third-party notices with copied code and assets. See [NOTICES.md](NOTICES.md).
 
-## Git and releases
+## Git and pull requests
 
-- Use branches named `<type>/<short-topic>` and open a PR against `main`.
-- Use Conventional Commits, sign off commits, and credit agent contributions
-  with accurate `Co-authored-by` trailers.
-- Write PR descriptions for a reader who has not seen the discussion.
-- Wait for the author's approval before squash merging. Let GitHub use the PR
-  title and description for the squash commit.
-- Publish packages and deploy sites only when requested. Check the actual
-  repository settings and automation instead of assuming they are configured.
+Use GitHub Flow. `main` accepts changes only through pull requests; force pushes
+and deletion are blocked.
+
+1. Create a short-lived branch from `main`, named `<type>/<kebab-case-topic>` —
+   for example `feat/search`, `fix/theme-toggle`, `docs/agents`.
+2. Make a focused change. Do not mix unrelated changes.
+3. Open a pull request. Its title and description become the commit message on
+   `main`, so write them as a record of the change, not as a note to the reviewer.
+   Explain the result, how it was checked, and any remaining limits. Avoid tables
+   and long lines.
+4. Wait for the author's approval and a passing required CI check. Do not merge
+   unapproved work. Approval is part of this process; GitHub does not require an
+   approving review.
+5. Squash merge with `gh pr merge <number> --squash` (or the merge button on
+   GitHub). Do not pass `--subject` or `--body`: GitHub builds the commit message
+   from the PR title and description. Squash is the only merge method enabled.
+   GitHub automatically deletes merged branches in this repository.
+
+Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for
+commit messages and PR titles. The branch `<type>` uses the same set of types.
+
+Sign off every commit with `git commit -s`. When an agent contributes, add a
+`Co-authored-by` trailer with its name and model. Do not put these trailers in the
+PR description.
+
+Do not add tool banners such as "Generated with …" to PR descriptions or commit
+messages. The `Co-authored-by` trailer is the attribution.
+
+Publish packages and deploy sites only when requested. Check the actual
+repository settings and automation instead of assuming they are configured.
 
 ## CI
 
