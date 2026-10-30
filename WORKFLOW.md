@@ -210,10 +210,12 @@ The updater checks the stable release and published package, updates the root
 package's required exact versions. Missing required peers stop the update for manual
 installation. It accepts simple stable, caret, or tilde
 Starlight dependency versions; other specifications need manual migration. It
-serializes runs and uses a per-version branch. An existing equal or newer update
+serializes runs with a queue of up to 100 pending jobs and uses a per-version
+branch. GitHub cancels jobs beyond that limit; retry canceled deliveries manually. An existing equal or newer update
 PR or an equal or newer dependency makes an event a no-op. It never overwrites
 an existing branch. A retry can create a missing PR only if the existing branch
-has the exact expected tree, base, and bot commit; otherwise inspect it manually.
+has the exact expected tree, base, and bot commit. If the default branch moved or
+lockfile regeneration differs, inspect the branch and recover manually.
 After creating a newer PR, it closes older bot update PRs only after checking
 their author, commit and changed files. Human changes stop the run for review. Review release
 notes, migrations, and consumer CI before merging; no automation enables auto-merge.

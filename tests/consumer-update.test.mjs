@@ -30,19 +30,19 @@ describe('consumer updates', () => {
 
 import { ownedUpdates, safeOwnedCommit, recoverableBranch } from '../scripts/consumer-pr.mjs';
 test('only owned PRs on the default branch participate in ordering', () => {
-  const context = { owner: 'tech0ver', base: 'main', bot: 'updates[bot]' };
-  const pr = { headRefName: 'starlight-update/v0.8.0', author: { login: 'updates[bot]' }, headRepositoryOwner: { login: 'tech0ver' }, baseRefName: 'main' };
+  const context = { owner: 'tech0ver', base: 'main', prBot: 'app/updates' };
+  const pr = { headRefName: 'starlight-update/v0.8.0', author: { login: 'app/updates' }, headRepositoryOwner: { login: 'tech0ver' }, baseRefName: 'main' };
   expect(ownedUpdates([pr, { ...pr, author: { login: 'human' } }, { ...pr, baseRefName: 'other' }], context).map(p => p.version)).toEqual(['0.8.0']);
 });
 test('human edits and unrelated files prevent superseding a bot PR', () => {
-  const commit = { author: { login: 'updates[bot]' }, commit: { message: 'chore: update starlight to 0.8.0' } };
+  const commit = { author: { login: 'updates[bot]' }, commit: { message: 'chore: update starlight to 0.8.0\n\nSigned-off-by: updates[bot] <123+updates[bot]@users.noreply.github.com>' } };
   expect(safeOwnedCommit([commit], [{ filename: 'bun.lock' }], 'updates[bot]', '0.8.0')).toBe(true);
   expect(safeOwnedCommit([commit, commit], [{ filename: 'bun.lock' }], 'updates[bot]', '0.8.0')).toBe(false);
   expect(safeOwnedCommit([commit], [{ filename: 'astro.config.mjs' }], 'updates[bot]', '0.8.0')).toBe(false);
 });
 
 test('only the exact bot branch can recover a failed PR creation', () => {
-  const branch = { tree: 'tree', expectedTree: 'tree', parents: ['base'], base: 'base', author: 'updates[bot]', bot: 'updates[bot]', message: 'chore: update starlight to 0.8.0', version: '0.8.0' };
+  const branch = { tree: 'tree', expectedTree: 'tree', parents: ['base'], base: 'base', author: 'updates[bot]', bot: 'updates[bot]', message: 'chore: update starlight to 0.8.0\n\nSigned-off-by: updates[bot] <123+updates[bot]@users.noreply.github.com>', version: '0.8.0' };
   expect(recoverableBranch(branch)).toBe(true);
   expect(recoverableBranch({ ...branch, tree: 'human-edit' })).toBe(false);
   expect(recoverableBranch({ ...branch, author: 'human' })).toBe(false);

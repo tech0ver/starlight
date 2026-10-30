@@ -1,25 +1,32 @@
 import { execFileSync } from 'node:child_process';
 import { compareVersions, validateVersion } from './consumer-update.mjs';
 
-export function ownedUpdates(pulls, { owner, base, bot }) {
+export function ownedUpdates(pulls, { owner, base, prBot }) {
   return pulls.flatMap((p) => {
     const match = /^starlight-update\/v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))$/.exec(p.headRefName);
-    return match && p.author?.login === bot && p.headRepositoryOwner?.login?.toLowerCase() === owner.toLowerCase() && p.baseRefName === base
+    return match && p.author?.login === prBot && p.headRepositoryOwner?.login?.toLowerCase() === owner.toLowerCase() && p.baseRefName === base
       ? [{ ...p, version: match[1] }] : [];
   });
 }
+export function botMessage(message, bot, version) {
+  const lines = message.split('\n');
+  const prefix = `Signed-off-by: ${bot} <`;
+  return lines.length === 3 && lines[0] === `chore: update starlight to ${validateVersion(version)}` &&
+    lines[1] === '' && lines[2].startsWith(prefix) && lines[2].endsWith('>') &&
+    /^[0-9]+\+[^<>@]+@users\.noreply\.github\.com>$/.test(lines[2].slice(prefix.length));
+}
 export function safeOwnedCommit(commits, files, bot, version) {
   return commits.length === 1 && commits[0].author?.login === bot &&
-    commits[0].commit?.message === `chore: update starlight to ${validateVersion(version)}` &&
+    botMessage(commits[0].commit?.message || '', bot, version) &&
     files.length > 0 && files.every((file) => ['package.json', 'bun.lock'].includes(file.filename));
 }
 export function recoverableBranch({ tree, expectedTree, parents, base, author, bot, message, version }) {
   return tree === expectedTree && parents.length === 1 && parents[0] === base && author === bot &&
-    message === `chore: update starlight to ${validateVersion(version)}`;
+    botMessage(message, bot, version);
 }
 function gh(...args) { return JSON.parse(execFileSync('gh', args, { encoding: 'utf8' })); }
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
-  const { GH_REPO, OWNER, BASE, BOT, VERSION, RUNNER_TEMP } = process.env;
+  const { GH_REPO, OWNER, BASE, BOT, PR_BOT, VERSION, RUNNER_TEMP } = process.env;
   validateVersion(VERSION);
   if (process.argv[2] === 'branch') {
     const fs = await import('node:fs');
@@ -31,7 +38,7 @@ if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).
     }
     process.exit(0);
   }
-  const pulls = ownedUpdates(gh('pr', 'list', '--state', 'open', '--json', 'number,author,headRefName,headRepositoryOwner,baseRefName', '--limit', '1000'), { owner: OWNER, base: BASE, bot: BOT });
+  const pulls = ownedUpdates(gh('pr', 'list', '--state', 'open', '--json', 'number,author,headRefName,headRepositoryOwner,baseRefName', '--limit', '1000'), { owner: OWNER, base: BASE, prBot: PR_BOT });
   // Verify ownership and scope before using a PR for version ordering or closing it.
   for (const pr of pulls) {
     const commits = gh('api', '--paginate', `repos/${GH_REPO}/pulls/${pr.number}/commits`);

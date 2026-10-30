@@ -3,7 +3,7 @@ import fs from 'node:fs';
 export const packageName = '@tech0ver/starlight';
 const stable = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 export function validateVersion(version) {
-  if (!stable.test(version || '')) throw new Error('Expected a canonical stable x.y.z version.');
+  if (typeof version !== 'string' || !stable.test(version)) throw new Error('Expected a canonical stable x.y.z version.');
   return version;
 }
 export function compareVersions(a, b) {
