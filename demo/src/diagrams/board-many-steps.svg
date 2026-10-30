@@ -1,0 +1,33 @@
+<svg class="sk-svg" viewBox="0 0 720 200" role="img" aria-label="A consumer builds pages with the shared package for a reader" data-steps='["A consumer creates a site", "The site needs settings", "The consumer adds site settings", "The settings connect to the package", "The site uses the shared package", "The package processes the content", "The package renders the pages", "The pages are ready to open", "A reader opens the site", "The site is ready to read"]' data-final="From a consumer site to its readers" xmlns="http://www.w3.org/2000/svg">
+  <g class="sk-el" data-step="1">
+    <rect class="sk-bg" x="15" y="65" width="110" height="70"/>
+    <path class="sk-line" d="M15 65 L125 66 L124 135 L14 134 Z M17 67 L123 64 L126 133 L16 136"/>
+    <text class="sk-name" x="70" y="105" text-anchor="middle" font-size="14">Consumer</text>
+  </g>
+  <g class="sk-el" data-step="2"><path class="sk-line" d="M128 100 L155 100 M148 94 L157 100 L148 106"/></g>
+  <g class="sk-el" data-step="3">
+    <rect class="sk-bg" x="160" y="65" width="110" height="70"/>
+    <path class="sk-line" d="M160 65 L270 66 L269 135 L159 134 Z M162 67 L268 64 L271 133 L161 136"/>
+    <text class="sk-name" x="215" y="105" text-anchor="middle" font-size="14">Site settings</text>
+  </g>
+  <g class="sk-el" data-step="4"><path class="sk-line" d="M273 100 L300 100 M293 94 L302 100 L293 106"/></g>
+  <g class="sk-el" data-step="5">
+    <rect class="sk-bg" x="305" y="55" width="110" height="90"/>
+    <path class="sk-line" d="M305 55 L415 56 L414 145 L304 144 Z M307 57 L413 54 L416 143 L306 146"/>
+    <text class="sk-name" x="360" y="95" text-anchor="middle" font-size="14">Shared</text>
+    <text class="sk-name" x="360" y="115" text-anchor="middle" font-size="14">package</text>
+  </g>
+  <g class="sk-el" data-step="6"><path class="sk-line" d="M418 100 L445 100 M438 94 L447 100 L438 106"/></g>
+  <g class="sk-el" data-step="7">
+    <rect class="sk-bg" x="450" y="65" width="110" height="70"/>
+    <path class="sk-line" d="M450 65 L560 66 L559 135 L449 134 Z M452 67 L558 64 L561 133 L451 136"/>
+    <text class="sk-name" x="505" y="105" text-anchor="middle" font-size="14">Pages</text>
+  </g>
+  <g class="sk-el" data-step="8"><path class="sk-line" d="M563 100 L590 100 M583 94 L592 100 L583 106"/></g>
+  <g class="sk-el" data-step="9">
+    <rect class="sk-bg" x="595" y="65" width="110" height="70"/>
+    <path class="sk-line" d="M595 65 L705 66 L704 135 L594 134 Z M597 67 L703 64 L706 133 L596 136"/>
+    <text class="sk-name" x="650" y="105" text-anchor="middle" font-size="14">Reader</text>
+  </g>
+  <g class="sk-el" data-step="10"><text class="sk-note" x="360" y="180" text-anchor="middle" font-size="14">A site ready to read</text></g>
+</svg>

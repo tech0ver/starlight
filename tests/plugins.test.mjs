@@ -157,3 +157,18 @@ test('raw Markdown uses consumer callout labels with defaults for other kinds', 
 	assert.match(markdown, /> \*\*How it works\*\*/);
 	assert.match(markdown, /> \*\*Avoid\*\*/);
 });
+
+test('board diagrams keep the final caption visible without JavaScript and validate captions', () => {
+	const directory = mkdtempSync(join(tmpdir(), 'starlight-board-'));
+	try {
+		const plugin = diagramsPlugin({ directory: pathToFileURL(`${directory}/`) });
+		writeFileSync(join(directory, 'board.svg'), `<svg class="sk-svg" viewBox="0 0 720 200" data-steps='["First &amp; next", "Second"]' data-final="Whole &amp; complete"><g class="sk-el" data-step="1"/></svg>`);
+		let result;
+		plugin.leafDirective({ name: 'diagram', attributes: { name: 'board' } }, { replaceNode(_node, replacement) { result = replacement.raw; } });
+		assert.match(result, /class="sk-scroll" tabindex="0"/);
+		assert.match(result, /aria-live="polite">Whole &amp; complete<\/figcaption>/);
+		assert.match(result, /class="sk-controls" hidden/);
+		writeFileSync(join(directory, 'board.svg'), `<svg class="sk-svg" data-steps='[]' data-final="Whole"></svg>`);
+		assert.throws(() => plugin.leafDirective({ name: 'diagram', attributes: { name: 'board' } }, { replaceNode() {} }), /non-empty step captions/);
+	} finally { rmSync(directory, { recursive: true, force: true }); }
+});

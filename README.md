@@ -473,3 +473,37 @@ then rebuild. Publishing and consumer migrations are separate tasks.
 - [Agent instructions](AGENTS.md)
 - [Change workflow](WORKFLOW.md)
 - [Third-party notices](NOTICES.md)
+
+### Board diagrams
+
+Board diagrams use the same `::diagram{name="..."}` directive and diagram
+folder. Give the SVG the class `sk-svg` to use the shared board colors and the
+Comic Shanns Mono font. The font is loaded when a board diagram is displayed.
+The SVG remains a site-owned file; the package does not generate drawings.
+
+For a diagram with steps, put all views in one SVG. Add a JSON array of captions
+in `data-steps` and a final caption in `data-final` on the SVG root. Wrap each
+drawn element in `<g class="sk-el" data-step="1">`, numbering steps from 1.
+Elements without a step belong to the first step. Escape attribute values as
+required by XML. Each caption describes its view; the controls show its number.
+
+```svg
+<svg class="sk-svg" viewBox="0 0 720 200" role="img" aria-label="Message delivery"
+  data-steps='["Send a message", "Deliver the message"]' data-final="The whole design"
+  xmlns="http://www.w3.org/2000/svg">
+  <g class="sk-el" data-step="1"><text class="sk-name" x="20" y="40">Team</text></g>
+  <g class="sk-el" data-step="2"><text class="sk-name" x="200" y="40">Worker</text></g>
+</svg>
+```
+
+The diagram starts on the first step. Older elements fade, later elements are
+hidden, and **All** shows the whole design. Without JavaScript the whole design
+and its final caption are visible. When the step buttons do not fit, they
+scroll horizontally between the arrows. Focus a control and use the left or
+right arrow key to move between views. You can also focus the diagram and use
+the arrow keys, Home, or End. The selected view is not saved.
+
+For a static key-part view, put `data-focus-mode` on the SVG and `data-focus` on
+its focused `sk-el` groups. The remaining groups fade. The shared drawing
+classes are `sk-line`, `sk-dash`, `sk-bg`, `sk-name`, `sk-heading`, `sk-label`,
+`sk-note`, and `sk-note-strong`. See the [demo](demo/src/content/docs/board-diagrams.md).
