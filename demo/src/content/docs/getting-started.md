@@ -1,6 +1,8 @@
 ---
 title: Getting started
 description: See the page shell and navigation provided by the shared template.
+sidebar:
+  badge: WIP
 ---
 
 ## Start with the template
