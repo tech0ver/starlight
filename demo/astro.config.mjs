@@ -62,7 +62,7 @@ export default defineTech0verConfig({
 		description: 'A compact demonstration of reusable documentation UI.',
 		sidebar: [
 			{ label: 'Learn the template', items: ['getting-started', 'configuration'] },
-			{ label: 'Feature gallery', items: ['reading'] },
+			{ label: 'Feature gallery', items: ['reading', 'board-diagrams'] },
 			'glossary',
 		],
 		pagination: true,

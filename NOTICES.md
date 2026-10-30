@@ -23,3 +23,9 @@ The Site Wordmark font is a renamed four-character subset of JetBrains Mono Bold
 It is licensed under the SIL Open Font License 1.1. The font's accompanying
 LICENSE.txt must stay with the asset, including in the package archive.
 See the [font license](packages/starlight/src/assets/fonts/LICENSE.txt).
+
+## Comic Shanns Mono
+
+Board diagrams use the Latin subset of Comic Shanns Mono under the MIT License.
+The copyright notice and license are included with the font in
+[comic-shanns-LICENSE.md](packages/starlight/src/assets/fonts/comic-shanns/comic-shanns-LICENSE.md).

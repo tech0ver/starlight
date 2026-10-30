@@ -3,9 +3,11 @@ import StarlightMarkdownContent from '@astrojs/starlight/components/MarkdownCont
 import GlossaryTooltips from './GlossaryTooltips.astro';
 import MarkAsRead from './MarkAsRead.astro';
 import ReadingPosition from './ReadingPosition.astro';
+import BoardDiagrams from './BoardDiagrams.astro';
 ---
 
 <StarlightMarkdownContent><slot /></StarlightMarkdownContent>
 <GlossaryTooltips />
 <template data-mark-read-template data-pagefind-ignore><MarkAsRead /></template>
 <ReadingPosition />
+<BoardDiagrams />
