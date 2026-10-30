@@ -488,11 +488,11 @@ Elements without a step belong to the first step. Escape attribute values as
 required by XML. Each caption describes its view; the controls show its number.
 
 ```svg
-<svg class="sk-svg" viewBox="0 0 720 200" role="img" aria-label="Message delivery"
-  data-steps='["Send a message", "Deliver the message"]' data-final="The whole design"
+<svg class="sk-svg" viewBox="0 0 720 200" role="img" aria-label="A site uses the shared package"
+  data-steps='["A consumer creates a site", "The site uses the shared package"]' data-final="A site and the shared package"
   xmlns="http://www.w3.org/2000/svg">
-  <g class="sk-el" data-step="1"><text class="sk-name" x="20" y="40">Team</text></g>
-  <g class="sk-el" data-step="2"><text class="sk-name" x="200" y="40">Worker</text></g>
+  <g class="sk-el" data-step="1"><text class="sk-name" x="20" y="40">Consumer</text></g>
+  <g class="sk-el" data-step="2"><text class="sk-name" x="200" y="40">Shared package</text></g>
 </svg>
 ```
 
