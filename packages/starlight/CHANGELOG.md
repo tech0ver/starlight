@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/tech0ver/starlight/compare/v0.8.1...v0.8.2) (2026-10-30)
+
+
+### Bug Fixes
+
+* match default sidebar page badges to planned badges ([#41](https://github.com/tech0ver/starlight/issues/41)) ([bcfc35d](https://github.com/tech0ver/starlight/commit/bcfc35db8616a276a98ed120957711259f0eb4f3))
+
 ## [0.8.1](https://github.com/tech0ver/starlight/compare/v0.8.0...v0.8.1) (2026-10-30)
 
 
