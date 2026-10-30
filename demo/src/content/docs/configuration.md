@@ -109,6 +109,12 @@ assistant**. `tutor.intro` sets the first paragraph of the copied prompt.
 their titles and descriptions. Article links point to Markdown; MDX pages, the
 home page, and the glossary keep their rendered URLs. Drafts are excluded.
 It also works when `tutor.enabled` is off.
+Article groups and order follow the sidebar, including automatic groups. Articles
+outside the menu appear under **Other articles**. Empty groups are omitted.
+Within an exported article, links to other exported articles use `.md` URLs and
+keep their queries and heading fragments. For example, the export of
+[Getting started](../getting-started/) links to `configuration.md`, while its
+glossary link keeps the rendered page URL.
 
 Give an assistant the index URL and ask it to find and read the pages relevant to
 your question. This keeps the initial context small. Pages advertise the index

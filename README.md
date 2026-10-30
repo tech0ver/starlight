@@ -390,6 +390,9 @@ links include the correct domain and base path. In the demo, the Markdown link
 is `https://tech0ver.github.io/starlight/reading.md`.
 Raw Markdown exports cover `.md` entries. MDX pages keep their rendered page URL
 because their components and imports are not plain Markdown.
+Inside an export, links to articles with Markdown exports also use `.md` URLs,
+including links in glossary notes. Queries and heading fragments are preserved.
+Other page links and assets keep their original targets, resolved to absolute URLs.
 
 ### Site index for AI assistants
 
@@ -401,7 +404,11 @@ study prompt. Set `site` to the deployed URL so the index uses the correct domai
 The index follows the [llms.txt proposal](https://llmstxt.org/): a site name,
 the `starlight.description` summary when it is a string, and links with page titles
 and descriptions. It includes all non-draft docs entries, including pages outside
-the sidebar. Articles link to their Markdown exports; the home page, glossary,
+the sidebar. Under `## Articles`, sidebar groups become `###` headings, deeper
+groups use deeper headings, and links follow the menu order. Top-level articles
+stay directly under `## Articles`. Articles outside the menu appear under
+`### Other articles`. Empty groups and planned topics are omitted.
+Articles link to their Markdown exports; the home page, glossary,
 splash pages, and MDX pages link to rendered HTML, respecting `build.format`
 and `trailingSlash`. Planned navigation labels are
 not content entries and do not appear in the index.
@@ -413,7 +420,10 @@ index and `rel="alternate" type="text/markdown"` links where an export exists.
 An assistant must support or be directed to use these links; publishing the file
 does not make every AI service discover it automatically.
 
-The left navigation includes a plain text `llms.txt` link below a divider at the bottom.
+The left navigation includes a plain text `llms.txt` link in a bottom row that
+matches the 48px header height, with a full-width divider above it.
+Long menus scroll between the site name and this row, keeping both visible.
+Desktop menu scroll position is kept across page visits in the current tab.
 It opens the text index in a new tab, keeping the current article available. The
 same link appears in the mobile menu. It has no reading status or favorite control
 and is hidden when raw Markdown exports are disabled.

@@ -104,4 +104,6 @@ export declare function articleMarkdown(options: {
 	siteRoot: URL;
 	glossary?: GlossaryEntry[];
 	callouts?: CalloutLabels;
+	/** Absolute rendered page URLs mapped to their Markdown export URLs. */
+	markdownUrls?: Record<string, string>;
 }): string;

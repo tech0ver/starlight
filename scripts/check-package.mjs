@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -56,6 +56,7 @@ try {
 			sharp: '0.35.3',
 		},
 	}, null, 2));
+	const sidebar = JSON.stringify([{ label: 'Docs', items: ['index', 'reading', 'interactive', { label: 'Nested guides', items: [{ autogenerate: { directory: 'nested' } }] }] }, 'glossary']);
 	const consumerConfig = [
 		"import { defineTech0verConfig } from '@tech0ver/starlight';",
 		"import { fileURLToPath } from 'node:url';",
@@ -76,7 +77,7 @@ try {
 		"  diagrams: { directory: './src/diagrams/' },",
 		"  rawMarkdown: { enabled: true },",
 		"  tutor: { enabled: true, title: 'Explore this article with AI' },",
-		"  starlight: { title: 'PackedDemo', description: 'A packed documentation site.', sidebar: [{ label: 'Docs', items: ['index', 'reading', 'interactive'] }, 'glossary'] },",
+		`  starlight: { title: 'PackedDemo', description: 'A packed documentation site.', sidebar: ${sidebar} },`,
 		'});',
 	].join('\n'));
 	write(join(temp, 'astro.config.mjs'), consumerConfig);
@@ -92,6 +93,7 @@ try {
 	write(join(temp, 'src/content/docs/reading.md'), [
 		'---', 'title: Reading', 'description: A packed article.', '---', '', '::diagram{name="layout"}', '', '::diagram{name="compact"}', '', ':::do', 'Use the shared layout.', ':::', '', ':::explain', 'Each site owns its articles.', ':::',
 		'', '::mark-as-read', '', '## A custom summary', '', 'Reference text.', '', '::mark-as-read',
+		'', '[Nested guide](../nested/guide/?from=reading#details)', '[MDX](../interactive/)', '[Glossary](../glossary/)',
 	].join('\n'));
 	write(join(temp, 'src/content/docs/interactive.mdx'), [
 		'---', 'title: Interactive', 'description: A packed MDX article.', '---', '', "import MarkAsRead from '@tech0ver/starlight/components/MarkAsRead.astro';", '', '<span>This page uses MDX.</span>', '', '<MarkAsRead />',
@@ -136,6 +138,12 @@ try {
 	assert.ok(llms.includes('[Glossary](https://example.test/consumer/glossary/)'));
 	assert.ok(llms.includes('[Nested overview](https://example.test/consumer/nested/)'));
 	assert.ok(llms.includes('[PackedDemo](https://example.test/consumer/)'));
+	assert.match(llms, /## Articles\n\n### Docs\n\n- \[Reading\][\s\S]*#### Nested guides\n\n- \[Nested guide\][\s\S]*### Other articles\n\n- \[Without an outline\]/);
+	assert.doesNotMatch(llms, /Future guide|Coming next/);
+	const rawReading = readFileSync(join(output, 'reading.md'), 'utf8');
+	assert.ok(rawReading.includes('[Nested guide](https://example.test/consumer/nested/guide.md?from=reading#details)'));
+	assert.ok(rawReading.includes('[MDX](https://example.test/consumer/interactive/)'));
+	assert.ok(rawReading.includes('[Glossary](https://example.test/consumer/glossary/)'));
 	assert.doesNotMatch(llms, /Unpublished|draft\.md|interactive\.md|glossary\.md|index\.md/);
 	assert.doesNotMatch(readFileSync(join(output, 'index.html'), 'utf8'), /rel="alternate"[^>]*type="text\/markdown"/);
 	assert.ok(!existsSync(join(output, 'draft.md')), 'draft articles must not have Markdown exports');
@@ -176,6 +184,7 @@ try {
 	// Rebuild at the domain root to check index and discovery links without a prefix.
 	const rootConfig = consumerConfig
 		.replace("base: '/consumer'", "base: '/'")
+		.replace(`sidebar: ${sidebar}`, 'sidebar: undefined')
 		.replace("'./dist/consumer/'", "'./dist/root/'");
 	write(join(temp, 'astro.config.mjs'), rootConfig);
 	run(['run', 'build'], temp);
@@ -184,6 +193,8 @@ try {
 	assert.ok(rootLlms.includes('[Nested guide](https://example.test/nested/guide.md)'));
 	assert.ok(rootLlms.includes('[PackedDemo](https://example.test/)'));
 	assert.doesNotMatch(rootLlms, /\/consumer\/|Unpublished/);
+	assert.match(rootLlms, /### nested\n\n- \[Nested guide\]/);
+	assert.ok(readFileSync(join(rootOutput, 'reading.md'), 'utf8').includes('[Nested guide](https://example.test/nested/guide.md?from=reading#details)'));
 	assert.match(readFileSync(join(rootOutput, 'reading', 'index.html'), 'utf8'), /rel="describedby"[^>]*href="\/llms\.txt"/);
 
 	// File output must link to the actual .html pages, including explicit index slugs.
@@ -213,6 +224,17 @@ try {
 	assert.ok(!existsSync(join(rootOutput, 'llms.txt')), 'disabled exports must not create the index');
 	assert.doesNotMatch(rootHtml, /rel="describedby"|rel="alternate"[^>]*type="text\/markdown"/);
 	assertTutorUrl(readFileSync(join(rootOutput, 'interactive', 'index.html'), 'utf8'), 'https://example.test/interactive/');
+
+	// A prefixed default locale must resolve manual sidebar slugs in that locale.
+	renameSync(join(temp, 'src/content/docs'), join(temp, 'src/content/localized-docs'));
+	mkdirSync(join(temp, 'src/content/docs'));
+	renameSync(join(temp, 'src/content/localized-docs'), join(temp, 'src/content/docs/en'));
+	renameSync(join(temp, 'src/content/docs/en/index.md'), join(temp, 'src/content/docs/en/index.mdx'));
+	write(join(temp, 'astro.config.mjs'), consumerConfig.replace("starlight: { title:", "starlight: { locales: { en: { label: 'English', lang: 'en' } }, defaultLocale: 'en', title:"));
+	run(['run', 'build'], temp);
+	const localizedLlms = readFileSync(join(output, 'llms.txt'), 'utf8');
+	assert.match(localizedLlms, /### Docs\n\n- \[Reading\]\(https:\/\/example.test\/consumer\/en\/reading.md\)/);
+	assert.ok(localizedLlms.includes('#### Nested guides'));
 	console.log(`Packed consumer passed: ${temp}`);
 	rmSync(temp, { recursive: true, force: true });
 } catch (error) {

@@ -5,6 +5,7 @@ export const CONFIG_MODULE = 'virtual:tech0ver/config';
 const RESOLVED_CONFIG_MODULE = `\0${CONFIG_MODULE}`;
 export const LAYOUT_MODULE = 'virtual:tech0ver/layout.css';
 const RESOLVED_LAYOUT_MODULE = `\0${LAYOUT_MODULE}`;
+const SIDEBAR_MODULE = 'virtual:tech0ver/sidebar';
 
 /**
  * Each call creates a new Vite plugin. The generated module belongs to one
@@ -18,10 +19,17 @@ export function createConfigVirtualModule(config) {
 		resolveId(id) {
 			if (id === CONFIG_MODULE) return RESOLVED_CONFIG_MODULE;
 			if (id === LAYOUT_MODULE) return RESOLVED_LAYOUT_MODULE;
+			if (id === SIDEBAR_MODULE) return `\0${SIDEBAR_MODULE}`;
 		},
 		load(id) {
 			if (id === RESOLVED_CONFIG_MODULE) return code;
 			if (id === RESOLVED_LAYOUT_MODULE) return `:root { --site-left-sidebar-width: ${config.sidebarWidth}px; }`;
+			// Starlight has no public sidebar builder. Use the installed, pinned
+			// version so automatic groups and plugin config match the site's menu.
+			if (id === `\0${SIDEBAR_MODULE}`) {
+				const navigation = new URL('./utils/navigation.js', import.meta.resolve('@astrojs/starlight'));
+				return `export { getSidebar } from ${JSON.stringify(fileURLToPath(navigation))};`;
+			}
 		},
 	};
 }
