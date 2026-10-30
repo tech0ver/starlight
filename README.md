@@ -423,6 +423,7 @@ does not make every AI service discover it automatically.
 The left navigation includes a plain text `llms.txt` link in a bottom row that
 matches the 48px header height, with a full-width divider above it.
 Long menus scroll between the site name and this row, keeping both visible.
+Desktop menu scroll position is kept across page visits in the current tab.
 It opens the text index in a new tab, keeping the current article available. The
 same link appears in the mobile menu. It has no reading status or favorite control
 and is hidden when raw Markdown exports are disabled.

@@ -41,6 +41,25 @@ import config from 'virtual:tech0ver/config';
     groups.forEach((group) => {
       if (collapsed.has(group.dataset.sidebarGroup)) group.open = false;
     });
+    // Starlight persists the outer pane; the article list now scrolls separately.
+    const navigation = document.querySelector('.site-sidebar-navigation');
+    const hash = navigation.querySelector('sl-sidebar-state-persist').dataset.hash;
+    const scrollKey = `tech0ver:sidebar:scroll:${encodeURIComponent(projectKey)}`;
+    const desktop = matchMedia('(min-width: 72rem)');
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(scrollKey) || 'null');
+      if (desktop.matches && saved?.hash === hash && Number.isFinite(saved.scroll)) {
+        navigation.scrollTop = saved.scroll;
+      }
+    } catch {}
+    const saveScroll = () => {
+      if (!desktop.matches) return;
+      try { sessionStorage.setItem(scrollKey, JSON.stringify({ hash, scroll: navigation.scrollTop })); } catch {}
+    };
+    addEventListener('pagehide', saveScroll);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') saveScroll();
+    });
     // Ignore the toggle events queued by the initial HTML and restoration.
     setTimeout(() => groups.forEach((group) => group.addEventListener('toggle', () => {
       const state = read();
