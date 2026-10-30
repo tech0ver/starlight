@@ -20,6 +20,7 @@
 }
 
 .sl-markdown-content .term-tip {
+	display: none;
 	position: absolute;
 	top: 100%;
 	left: 0;
@@ -28,9 +29,6 @@
 	max-width: min(24rem, 85vw);
 	transform: translateX(var(--term-tip-offset, 0px));
 	padding-top: 0.4rem; /* keeps the hover area continuous between the term and the card */
-	visibility: hidden;
-	opacity: 0;
-	transition: opacity 0.12s ease, visibility 0.12s;
 	font-size: var(--sl-text-sm);
 	font-weight: normal;
 	line-height: 1.45;
@@ -93,8 +91,16 @@
 .sl-markdown-content .term:not([data-enhanced]):hover .term-tip,
 .sl-markdown-content .term:not([data-enhanced]):focus-within .term-tip,
 .sl-markdown-content .term[data-open] .term-tip {
-	visibility: visible;
-	opacity: 1;
+	display: block;
+}
+
+.sl-markdown-content .term-tip:popover-open {
+	position: fixed;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	inset: auto;
 }
 
 @media (width >= 72rem) {
@@ -109,6 +115,12 @@
 		padding-top: 0;
 		padding-bottom: 0.4rem;
 	}
+	.sl-markdown-content .term .term-tip:popover-open {
+		left: var(--term-tip-left);
+		top: var(--term-tip-top);
+		bottom: auto;
+		transform: none;
+	}
 }
 
 @media (width < 72rem) {
@@ -122,6 +134,11 @@
 		max-width: none;
 		padding-top: 0;
 		transform: none;
+	}
+	.sl-markdown-content .term-tip:popover-open {
+		left: 1rem;
+		right: 1rem;
+		bottom: 1rem;
 	}
 }
 

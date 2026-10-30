@@ -37,6 +37,10 @@ python3 -m http.server 4340 --bind 127.0.0.1 --directory demo/dist
 Open `http://localhost:4340/starlight/` on the same machine. When sharing a remote
 preview, use the host's shared URL with the same path.
 
+To check glossary cards in tables, build the demo and run
+`CHROMIUM_PATH=/path/to/chromium bun run check:glossary-browser` with a local
+Chromium executable.
+
 ## What the demo shows
 
 - One `Demo0ver` site explaining the template through working examples.
