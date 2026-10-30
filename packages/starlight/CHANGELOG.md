@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.1](https://github.com/tech0ver/starlight/compare/v0.8.0...v0.8.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* align glossary close button on desktop ([#37](https://github.com/tech0ver/starlight/issues/37)) ([293e95d](https://github.com/tech0ver/starlight/commit/293e95d0880d3b9a07412241bb4d8e46cf765189))
+* keep table of contents aligned with reading position ([#40](https://github.com/tech0ver/starlight/issues/40)) ([f67d3dc](https://github.com/tech0ver/starlight/commit/f67d3dc0f9676f0d7a43f0a7f2886997409bf556))
+* prevent glossary cards from overflowing tables ([#39](https://github.com/tech0ver/starlight/issues/39)) ([2025b16](https://github.com/tech0ver/starlight/commit/2025b168d87db8aae9ff061ba1b67ac7194156d9))
+
 ## [0.8.0](https://github.com/tech0ver/starlight/compare/v0.7.0...v0.8.0) (2026-10-30)
 
 
