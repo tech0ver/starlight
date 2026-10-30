@@ -17,6 +17,8 @@ export function initializeGlossaryTooltips() {
 		current.removeAttribute('data-above');
 		if (!matchMedia('(min-width: 72rem)').matches) return;
 		const trigger = label(current).getBoundingClientRect();
+		tip.style.setProperty('--term-tip-left', `${trigger.left}px`);
+		tip.style.setProperty('--term-tip-top', `${trigger.bottom}px`);
 		const above = trigger.top - Math.max(8, document.querySelector('header')?.getBoundingClientRect().bottom ?? 8) - 8;
 		const below = innerHeight - trigger.bottom - 8;
 		const placeAbove = tip.getBoundingClientRect().height > below && above > below;
@@ -26,6 +28,8 @@ export function initializeGlossaryTooltips() {
 		const width = document.documentElement.clientWidth;
 		const offset = Math.max(8 - bounds.left, Math.min(0, width - 8 - bounds.right));
 		tip.style.setProperty('--term-tip-offset', `${offset}px`);
+		tip.style.setProperty('--term-tip-left', `${trigger.left + offset}px`);
+		tip.style.setProperty('--term-tip-top', `${placeAbove ? trigger.top - tip.getBoundingClientRect().height : trigger.bottom}px`);
 	};
 	const close = (restoreFocus = false) => {
 		if (!current) return;
@@ -33,6 +37,7 @@ export function initializeGlossaryTooltips() {
 		// Restore focus before closing so focusin cannot reopen the dismissed card.
 		if (restoreFocus && term.querySelector('.term-tip').contains(document.activeElement)) label(term).focus({ preventScroll: true });
 		term.removeAttribute('data-open');
+		term.querySelector('.term-tip').hidePopover();
 		label(term).setAttribute('aria-expanded', 'false');
 		current = undefined;
 	};
@@ -40,11 +45,14 @@ export function initializeGlossaryTooltips() {
 		if (current !== term) close();
 		current = term;
 		term.setAttribute('data-open', '');
+		const tip = term.querySelector('.term-tip');
+		if (!tip.matches(':popover-open')) tip.showPopover();
 		label(term).setAttribute('aria-expanded', 'true');
 		position();
 	};
 	for (const term of terms) {
 		term.setAttribute('data-enhanced', '');
+		term.querySelector('.term-tip').setAttribute('popover', 'manual');
 		term.querySelector('.term-tip-close').hidden = false;
 		term.addEventListener('pointerenter', (event) => {
 			if (event.pointerType === 'mouse') open(term);
@@ -78,10 +86,14 @@ export function initializeGlossaryTooltips() {
 	window.addEventListener('scroll', () => {
 		cancelAnimationFrame(frame);
 		frame = requestAnimationFrame(position);
-	}, { signal, passive: true });
+	}, { signal, passive: true, capture: true });
 	cleanup = () => {
 		close();
 		controller.abort();
+		for (const term of terms) {
+			term.removeAttribute('data-enhanced');
+			term.querySelector('.term-tip').removeAttribute('popover');
+		}
 		cancelAnimationFrame(frame);
 	};
 }

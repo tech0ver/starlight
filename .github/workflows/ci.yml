@@ -40,5 +40,8 @@ jobs:
       - name: Build the demo
         run: bun run build
 
+      - name: Check glossary cards in a browser
+        run: CHROMIUM_PATH=/usr/bin/google-chrome bun run check:glossary-browser
+
       - name: Check the packed package
         run: bun run check:package
