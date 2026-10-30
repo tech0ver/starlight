@@ -13,15 +13,23 @@ const { status = 'new' } = Astro.props;
 			<path d="m12 2.75 2.86 5.8 6.39.93-4.63 4.51 1.1 6.37L12 17.35l-5.72 3.01 1.1-6.37-4.63-4.51 6.39-.93Z" />
 			<path class="half" d="M12 2.75 9.14 8.55l-6.39.93 4.63 4.51-1.1 6.37L12 17.35Z" fill="currentColor" stroke="none" />
 		</g>
-		<path class="check" d="m8.8 11.9 2.1 2.1 4.2-4.2" />
+		<g class="star-check" stroke-width="1.35">
+			<path d="M14.7 8.1 13.1 2.9a1.15 1.15 0 0 0-2.2 0L9.3 8.1a1.5 1.5 0 0 1-1.4 1H2.5a1.1 1.1 0 0 0-.65 2l4.4 3.2a1.5 1.5 0 0 1 .55 1.65L5.1 21a1.1 1.1 0 0 0 1.7 1.2l4.35-3.15a1.45 1.45 0 0 1 1.7 0l4.35 3.15a1.1 1.1 0 0 0 1.7-1.2l-1.7-5.05a1.5 1.5 0 0 1 .55-1.65l4.4-3.2a1.1 1.1 0 0 0-.65-2h-1.2" />
+		</g>
+		<path class="circle-check" stroke-width="1.35" d="M20.8 10.2A9 9 0 1 1 15.1 3.55" />
+		<path class="check" stroke-width="1.35" d="m9.2 10.8 2.5 2.5a.9.9 0 0 0 1.25 0l8.35-8.35" />
 	</svg>
 </span>
 
 <style>
-	.reading-icon { display: inline-flex; flex: 0 0 auto; width: 1.25rem; height: 1.25rem; line-height: 0; }
+	.reading-icon { display: inline-flex; flex: 0 0 auto; width: 1em; height: 1em; line-height: 0; }
 	svg { width: 100%; height: 100%; }
-	.star, .half, .check { display: none; }
+	.star, .star-check, .circle-check, .half, .check { display: none; }
 	[data-favorite='true'] .circle { display: none; }
 	[data-favorite='true'] .star { display: initial; }
 	[data-status='seen'] .half, [data-status='read'] .check { display: initial; }
+	[data-status='read'] .circle,
+	[data-favorite='true'][data-status='read'] .star { display: none; }
+	[data-favorite='false'][data-status='read'] .circle-check { display: initial; }
+	[data-favorite='true'][data-status='read'] .star-check { display: initial; }
 </style>
