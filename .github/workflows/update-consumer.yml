@@ -1,0 +1,138 @@
+name: Update Starlight consumer
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      release-url:
+        required: false
+        type: string
+        default: ''
+    secrets:
+      UPDATE_APP_ID:
+        required: true
+      UPDATE_APP_PRIVATE_KEY:
+        required: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: starlight-consumer-update-${{ github.repository }}
+      queue: max
+      cancel-in-progress: false
+    steps:
+      - name: Create repository-scoped App token
+        id: app
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42
+        with:
+          app-id: ${{ secrets.UPDATE_APP_ID }}
+          private-key: ${{ secrets.UPDATE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Check out consumer default branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ steps.app.outputs.token }}
+          fetch-depth: 0
+          path: consumer
+      - name: Check out updater at the workflow commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          persist-credentials: false
+          path: updater
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: '@tech0ver'
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: 1.4.0
+      - name: Inspect existing update pull requests
+        working-directory: consumer
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          BASE: ${{ github.event.repository.default_branch }}
+          BOT: ${{ steps.app.outputs.app-slug }}[bot]
+          PR_BOT: app/${{ steps.app.outputs.app-slug }}
+          VERSION: ${{ inputs.version }}
+        run: node ../updater/scripts/consumer-pr.mjs list
+      - name: Validate release and prepare manifest
+        id: prepare
+        working-directory: consumer
+        env:
+          VERSION: ${{ inputs.version }}
+          RELEASE_URL: ${{ inputs.release-url }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_PACKAGES_READ_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          node -e 'if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(process.env.VERSION)) throw Error("Invalid version")'
+          gh api "repos/tech0ver/starlight/releases/tags/v$VERSION" > "$RUNNER_TEMP/release.json"
+          node -e 'const r=require(process.env.RUNNER_TEMP+"/release.json"); if(r.draft || r.prerelease || r.tag_name!=="v"+process.env.VERSION || r.html_url!=="https://github.com/tech0ver/starlight/releases/tag/v"+process.env.VERSION) throw Error("Invalid release")'
+          npm view "@tech0ver/starlight@$VERSION" --json --registry=https://npm.pkg.github.com > "$RUNNER_TEMP/metadata.json"
+          node ../updater/scripts/consumer-update.mjs "$VERSION" "$RELEASE_URL" "$RUNNER_TEMP/metadata.json" "$RUNNER_TEMP/open.json"
+      - name: Update lockfile
+        if: steps.prepare.outputs.update == 'true'
+        working-directory: consumer
+        env:
+          GITHUB_PACKAGES_READ_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: bun install --ignore-scripts
+      - name: Create update pull request
+        if: steps.prepare.outputs.update == 'true'
+        working-directory: consumer
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+          VERSION: ${{ inputs.version }}
+          RELEASE_URL: ${{ steps.prepare.outputs.release_url }}
+          BASE: ${{ github.event.repository.default_branch }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          test -f bun.lock
+          test -z "$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -vE '^(package.json|bun.lock)$' || true)"
+          branch="starlight-update/v$VERSION"
+          git add package.json bun.lock
+          expected_tree="$(git write-tree)"
+          base_sha="$(git rev-parse HEAD)"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch"
+            existing="$(git rev-parse "refs/remotes/origin/$branch")"
+            gh api "repos/$GH_REPO/commits/$existing" > "$RUNNER_TEMP/existing.json"
+            EXPECTED_TREE="$expected_tree" BASE_SHA="$base_sha" BOT="$APP_SLUG[bot]" node ../updater/scripts/consumer-pr.mjs branch
+          else
+            git checkout -b "$branch"
+            git config user.name "$APP_SLUG[bot]"
+            bot_id="$(gh api "/users/$APP_SLUG%5Bbot%5D" --jq .id)"
+            git config user.email "$bot_id+$APP_SLUG[bot]@users.noreply.github.com"
+            git commit -s -m "chore: update starlight to $VERSION"
+            git push origin "$branch"
+          fi
+          gh pr create --base "$BASE" --head "$branch" --title "chore: update starlight to $VERSION" --body "Updates @tech0ver/starlight and its installed required peers. Review the [release notes]($RELEASE_URL) for changes and any manual migration."
+      - name: Close superseded bot update pull requests
+        working-directory: consumer
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          BASE: ${{ github.event.repository.default_branch }}
+          BOT: ${{ steps.app.outputs.app-slug }}[bot]
+          PR_BOT: app/${{ steps.app.outputs.app-slug }}
+          VERSION: ${{ inputs.version }}
+        run: node ../updater/scripts/consumer-pr.mjs close-older
