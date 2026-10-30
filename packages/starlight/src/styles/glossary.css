@@ -98,6 +98,11 @@
 }
 
 @media (width >= 72rem) {
+	.sl-markdown-content .term-tip-close {
+		/* Align the visible cross with the card's text padding. */
+		margin-right: -0.75rem;
+	}
+
 	.sl-markdown-content .term[data-above] .term-tip {
 		top: auto;
 		bottom: 100%;
