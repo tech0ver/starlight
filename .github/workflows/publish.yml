@@ -266,3 +266,15 @@ jobs:
                 name: 'autorelease: pending',
               });
             }
+
+  notify-consumers:
+    needs: [verify, publish]
+    permissions:
+      contents: read
+      packages: read
+    uses: ./.github/workflows/notify-consumers.yml
+    with:
+      version: ${{ needs.verify.outputs.version }}
+    secrets:
+      UPDATE_APP_ID: ${{ secrets.UPDATE_APP_ID }}
+      UPDATE_APP_PRIVATE_KEY: ${{ secrets.UPDATE_APP_PRIVATE_KEY }}
