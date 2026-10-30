@@ -26,6 +26,7 @@ jobs:
     concurrency:
       group: starlight-consumer-update-${{ github.repository }}
       queue: max
+      cancel-in-progress: false
     steps:
       - name: Create repository-scoped App token
         id: app
