@@ -24,6 +24,12 @@ avoid unrelated changes just to make a check pass.
 
 ## Compatibility
 
+Compatible releases work with existing site configuration and content. Enable shared
+UI improvements by default and reuse existing site configuration. New fields are
+optional unless an opt-in capability needs genuinely new user data. Preserve explicit
+consumer choices, public extension points, imports and Markdown contracts, URLs, and
+saved reading state. Document any breaking change and its migration explicitly.
+
 Keep the demo's toolchain pinned in the lockfile. Test wider dependency ranges
 before claiming support. When updating Astro or Starlight, check the markup and
 behavior used by component overrides.
@@ -56,7 +62,8 @@ Use Conventional Commit PR titles because squash merging makes the title the
 commit subject. Release Please uses `fix:` for patch releases and `feat:` for
 minor releases. Mark breaking changes with `!` or a `BREAKING CHANGE:` footer.
 Before 1.0, breaking changes increase the minor version; after 1.0, they increase
-the major version. Explain migration steps in the PR and release notes.
+the major version. A pre-1.0 minor release can therefore contain breaking changes;
+the version number alone does not promise compatibility. Review release notes. Explain migration steps in the PR and release notes.
 
 ## Releases
 
@@ -161,3 +168,56 @@ Before claiming the setup works on GitHub, verify a hosted CI run, the initial
 publication, and an installation from the registry in a consumer. Local archive
 checks cover package contents and compatibility, but do not verify registry
 permissions or consumer authentication.
+
+### Consumer update notifications
+
+Publication and notification are separate jobs. After successful publication,
+`notify-consumers.yml` verifies the stable release and registry version and sends
+`starlight-release` repository dispatches to explicitly enabled consumers. The
+payload has `package`, `version`, and `release_url`. Delivery failures fail the
+notification job without changing the publication result. Each matrix entry runs
+independently. A disabled consumer produces a warning; an enabled consumer with
+missing credentials fails visibly. Rerun failed jobs or manually run **Notify
+Starlight consumers** with the published version to retry. Delivery can repeat.
+
+To enable the initial `tech0ver/sysdes` consumer:
+
+1. Create a separate update GitHub App with repository **Contents: Read and write**
+   and **Pull requests: Read and write** permissions. Install it on this repository
+   and each opted-in consumer. The existing release App is scoped to this repository
+   and is not assumed to have consumer access.
+2. Add `UPDATE_APP_ID` and `UPDATE_APP_PRIVATE_KEY` Actions secrets to this
+   repository and each consumer, or grant them access to organization secrets.
+   Keep the private key out of the repository.
+3. Grant each consumer repository access under the package's **Manage Actions
+   access**, and give its caller workflow `contents: read` and `packages: read`.
+   The registry read uses the caller's `GITHUB_TOKEN`, exposed as both
+   `GITHUB_PACKAGES_READ_TOKEN` and `NODE_AUTH_TOKEN`; an App token does not grant
+   package access. Use the variable expected by the consumer's `.npmrc`.
+4. Install a receiver on the consumer default branch for `repository_dispatch`
+   type `starlight-release` and optional `workflow_dispatch`. Have its `jobs.update`
+   call `tech0ver/starlight/.github/workflows/update-consumer.yml` pinned to a
+   reviewed full commit SHA. Pass required string `version`, optional string
+   `release-url`, and the two named App secrets. Check the dispatch package name
+   before calling; derive the version from `client_payload.version` or the manual
+   input. An empty release URL derives the canonical URL.
+5. After the receiver and credentials are ready, set the Starlight repository
+   Actions variable `STARLIGHT_UPDATE_SYSDES_ENABLED` to `true`. Verify a manual
+   notification and the consumer PR and CI before relying on later releases.
+
+The updater checks the stable release and published package, updates the root
+`package.json` and `bun.lock`, and updates installed peer dependencies to the
+package's required exact versions. Missing required peers stop the update for manual
+installation. It accepts simple stable, caret, or tilde
+Starlight dependency versions; other specifications need manual migration. It
+serializes runs with a queue of up to 100 pending jobs and uses a per-version
+branch. GitHub cancels jobs beyond that limit; retry canceled deliveries manually. An existing equal or newer update
+PR or an equal or newer dependency makes an event a no-op. It never overwrites
+an existing branch. A retry can create a missing PR only if the existing branch
+has the exact expected tree, base, and bot commit. If the default branch moved or
+lockfile regeneration differs, inspect the branch and recover manually.
+After creating a newer PR, it closes older bot update PRs only after checking
+their author, commit and changed files. Human changes stop the run for review. Review release
+notes, migrations, and consumer CI before merging; no automation enables auto-merge.
+A registry or hosted workflow failure needs a retry after the underlying setup is
+fixed. Local tests cannot establish GitHub App, package access, or delivery setup.

@@ -1,0 +1,89 @@
+name: Notify Starlight consumers
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+    secrets:
+      UPDATE_APP_ID:
+        required: false
+      UPDATE_APP_PRIVATE_KEY:
+        required: false
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published stable package version (x.y.z)
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  deliver:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - owner: tech0ver
+            repo: sysdes
+            enabled: ${{ vars.STARLIGHT_UPDATE_SYSDES_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check rollout setup
+        id: setup
+        env:
+          ENABLED: ${{ matrix.enabled }}
+          APP_ID: ${{ secrets.UPDATE_APP_ID }}
+          APP_KEY: ${{ secrets.UPDATE_APP_PRIVATE_KEY }}
+        run: |
+          if [ "$ENABLED" != true ]; then
+            echo '::warning::Consumer notification is disabled; set STARLIGHT_UPDATE_SYSDES_ENABLED=true after setup.'
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+          elif [ -z "$APP_ID" ] || [ -z "$APP_KEY" ]; then
+            echo '::warning::Consumer notification is enabled but UPDATE_APP_ID or UPDATE_APP_PRIVATE_KEY is missing.'
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            exit 1
+          else
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Set up registry authentication
+        if: steps.setup.outputs.ready == 'true'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: '@tech0ver'
+      - name: Verify published release and package
+        if: steps.setup.outputs.ready == 'true'
+        env:
+          VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          node -e 'if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(process.env.VERSION)) throw Error("Invalid version")'
+          gh api "repos/tech0ver/starlight/releases/tags/v$VERSION" > "$RUNNER_TEMP/release.json"
+          node -e 'const r=require(process.env.RUNNER_TEMP+"/release.json"); if(r.draft || r.prerelease || r.tag_name!=="v"+process.env.VERSION || r.html_url!=="https://github.com/tech0ver/starlight/releases/tag/v"+process.env.VERSION) throw Error("Invalid release")'
+          npm view "@tech0ver/starlight@$VERSION" version --registry=https://npm.pkg.github.com | grep -Fx "$VERSION"
+      - name: Create consumer-scoped App token
+        if: steps.setup.outputs.ready == 'true'
+        id: app
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42
+        with:
+          app-id: ${{ secrets.UPDATE_APP_ID }}
+          private-key: ${{ secrets.UPDATE_APP_PRIVATE_KEY }}
+          owner: ${{ matrix.owner }}
+          repositories: ${{ matrix.repo }}
+          permission-contents: write
+      - name: Dispatch release
+        if: steps.setup.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          VERSION: ${{ inputs.version }}
+          OWNER: ${{ matrix.owner }}
+          REPO: ${{ matrix.repo }}
+        run: |
+          gh api --method POST "repos/$OWNER/$REPO/dispatches" -f event_type=starlight-release -f 'client_payload[package]=@tech0ver/starlight' -f "client_payload[version]=$VERSION" -f "client_payload[release_url]=https://github.com/tech0ver/starlight/releases/tag/v$VERSION"

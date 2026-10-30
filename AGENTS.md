@@ -24,6 +24,7 @@ design, and [WORKFLOW.md](WORKFLOW.md) when making changes.
   installed on its own, without local checkout paths or machine settings.
 - Keep third-party license notices with their code and assets; see
   [NOTICES.md](NOTICES.md).
+- Follow the [compatibility contract](WORKFLOW.md#compatibility) for releases.
 - Update the demo and docs when behavior or the public API changes. Follow the
   checks in WORKFLOW.md and report what passed and what remains unverified.
 
