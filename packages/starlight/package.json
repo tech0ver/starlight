@@ -1,6 +1,6 @@
 {
 	"name": "@tech0ver/starlight",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"license": "MIT",
 	"description": "Shared Astro and Starlight UI for tech0ver article sites",
 	"publishConfig": {

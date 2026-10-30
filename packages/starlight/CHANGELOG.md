@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0](https://github.com/tech0ver/starlight/compare/v0.7.0...v0.8.0) (2026-10-30)
+
+
+### Features
+
+* add board diagrams with step and key-part views ([7a58c14](https://github.com/tech0ver/starlight/commit/7a58c14175c32a24e7bcc96a358744b43c442a9d))
+* align AI exports with sidebar navigation ([#31](https://github.com/tech0ver/starlight/issues/31)) ([e4e3c50](https://github.com/tech0ver/starlight/commit/e4e3c509beb7237ac3a47be91cf0a7d9e43dba8b))
+
+
+### Bug Fixes
+
+* improve reading status icons ([#33](https://github.com/tech0ver/starlight/issues/33)) ([ce5dfc0](https://github.com/tech0ver/starlight/commit/ce5dfc04e040e2a3215fa972019191c97399d845))
+* prevent unnecessary horizontal scrolling on desktop diagrams ([7a58c14](https://github.com/tech0ver/starlight/commit/7a58c14175c32a24e7bcc96a358744b43c442a9d))
+
 ## [0.7.0](https://github.com/tech0ver/starlight/compare/v0.6.1...v0.7.0) (2026-10-29)
 
 
