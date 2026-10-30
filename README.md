@@ -195,6 +195,10 @@ hidden when a published link in that list has the same page path, regardless of
 the label. Set `slug` to the page path without `base`; leading and trailing
 slashes are optional. Remove the planned setting when publishing the page.
 
+For a published page that is still changing, use Starlight frontmatter such as
+`sidebar: { badge: WIP }`. The default page badge matches the Planned badge;
+explicit color variants keep their Starlight styling. The page remains a link.
+
 The active table-of-contents link uses the accent color and bold text on both
 desktop and mobile. It follows the current section as the reader scrolls.
 The desktop panel scrolls to keep the active link visible in long outlines.

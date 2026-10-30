@@ -85,6 +85,8 @@ const plannedFirst = nested ? [] : unwritten(config.plannedTopLevel);
 	}
 	.planned-topic { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem; padding: 0.3em var(--sl-sidebar-item-padding-inline); color: var(--sl-color-gray-3); font-size: var(--sl-text-sm); line-height: 1.4; }
 	.planned-topic > span:first-child { color: inherit; overflow-wrap: normal; }
-	.planned-badge { flex-shrink: 0; padding: 0.1em 0.4em; border: 1px solid var(--sl-color-gray-5); border-radius: 0.3rem; font-size: 0.65rem; line-height: 1.4; }
+	a:has(> :global(.sl-badge.default)) { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem; }
+	a:has(> :global(.sl-badge.default)) > span:first-child { margin-inline-end: 0; overflow-wrap: normal; }
+	.planned-badge, a > :global(.sl-badge.default) { flex-shrink: 0; padding: 0.1em 0.4em; border: 1px solid var(--sl-color-gray-5); border-radius: 0.3rem; color: var(--sl-color-gray-3); background: transparent; font: 400 0.65rem/1.4 var(--sl-font-system); }
 	@media (width < 50rem) { .planned-topic { min-height: 2.75rem; padding-block: 0.55rem; font-size: var(--sl-text-base); } }
 </style>
