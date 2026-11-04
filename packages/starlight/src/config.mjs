@@ -52,6 +52,24 @@ function brandName(brand, title) {
 	return { name, suffix, fullName: `${name}${suffix}` };
 }
 
+function githubRepository(input, base) {
+	if (input.githubRepository === false) return undefined;
+	if (input.githubRepository) {
+		const name = input.githubRepository;
+		return `https://github.com/${name.includes('/') ? name : `tech0ver/${name}`}`;
+	}
+	for (const link of input.footer?.links ?? []) {
+		if (/^(repository|github)$/i.test(link.label.trim()) && /^https:\/\/github\.com\/[^/]+\/[^/?#]+\/?$/i.test(link.href)) return link.href.replace(/\/$/, '');
+	}
+	try {
+		const site = new URL(input.site);
+		if (site.hostname.toLowerCase() === 'tech0ver.github.io' && site.pathname === '/' && /^\/[\w.-]+$/.test(base)) {
+			return `https://github.com/tech0ver${base}`;
+		}
+	} catch {}
+	return undefined;
+}
+
 function normalizeDirectory(directory, root) {
 	if (!directory) return undefined;
 	if (directory instanceof URL) return new URL(directory.href.endsWith('/') ? directory.href : `${directory.href}/`);
@@ -108,6 +126,7 @@ export function normalizeTech0verOptions(input = {}) {
 
 	return {
 		base,
+		githubRepository: githubRepository(input, base),
 		brand,
 		siteDescription: typeof starlight.description === 'string' ? starlight.description : undefined,
 		htmlUrls: { format: input.build?.format ?? 'directory', trailingSlash: input.trailingSlash ?? 'ignore' },
@@ -154,6 +173,7 @@ export function normalizeTech0verOptions(input = {}) {
 export function serializableConfig(config) {
 	return {
 		base: config.base,
+		githubRepository: config.githubRepository,
 		brand: config.brand,
 		siteDescription: config.siteDescription,
 		htmlUrls: config.htmlUrls,

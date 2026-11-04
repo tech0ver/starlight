@@ -139,6 +139,7 @@ The top-level options include ordinary Astro settings such as `site`, `base`,
 | Option | Purpose |
 |---|---|
 | `brand` | Name and optional accent suffix, using the shared fonts and colors |
+| `githubRepository` | Repository name or `owner/name` for the header star link; `false` hides it |
 | `sidebarWidth` | Desktop sidebar and tablet drawer width in pixels; a positive number, default `200` |
 | `reading` | Local article status, favorites, and section progress, with a stable project key and optional labels |
 | `callouts` | Labels for the five semantic callout kinds; their colors stay shared |
@@ -161,6 +162,13 @@ Invalid shared settings stop configuration with a path such as
 entries need a term, short meaning, and explanation. Links need an HTTP(S) URL or
 a site-relative path and a label; footer links also accept `mailto:` and `tel:`.
 Astro and Starlight validate their own options.
+
+The header star opens the project's GitHub repository. Set `githubRepository: 'my-project'`
+to use `tech0ver/my-project`, or set `githubRepository: 'other-owner/my-project'`.
+When omitted, the package uses a repository URL labelled `Repository` or `GitHub` in `footer.links`, or derives the
+repository from a `tech0ver.github.io` site with a single-segment base path. If
+neither identifies a repository, the link is hidden. Set it explicitly when the
+site URL or footer points elsewhere; use `false` to hide it.
 
 The helper owns `markdown.processor` to connect callouts, SVGs, and glossary
 tooltips through Satteri. Extend that pipeline with the plugin options rather than

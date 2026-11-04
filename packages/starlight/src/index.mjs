@@ -19,6 +19,7 @@ export function defineTech0verConfig(input = {}) {
 	const normalized = normalizeTech0verOptions(input);
 	const {
 		brand: _brand,
+		githubRepository: _githubRepository,
 		sidebarWidth: _sidebarWidth,
 		reading: _reading,
 		callouts: _callouts,

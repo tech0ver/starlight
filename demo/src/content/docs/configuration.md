@@ -17,6 +17,7 @@ const glossaryEntries = [
 
 export default defineTech0verConfig({
 	site: 'https://tech0ver.github.io',
+githubRepository: 'starlight', // Defaults to the tech0ver organization.
 	root: fileURLToPath(new URL('./', import.meta.url)),
 	base: '/starlight',
 	outDir: fileURLToPath(new URL('./dist/starlight/', import.meta.url)),

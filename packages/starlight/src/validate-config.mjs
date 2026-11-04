@@ -47,6 +47,10 @@ const planned = (value, path) => array(value, path, (topic, itemPath) => {
 
 export function validateTech0verOptions(input) {
 	object(input, 'Tech0ver options');
+	if (input.githubRepository !== undefined && input.githubRepository !== false &&
+		(typeof input.githubRepository !== 'string' || !/^[a-z\d_.-]+(?:\/[a-z\d_.-]+)?$/i.test(input.githubRepository) || input.githubRepository.split('/').some((part) => part === '.' || part === '..'))) {
+		fail('githubRepository', 'must be a repository name, owner/repository, or false.');
+	}
 	for (const name of ['brand', 'reading', 'callouts', 'plannedTopics', 'search', 'footer', 'glossary', 'diagrams', 'tutor', 'rawMarkdown']) {
 		if (input[name] !== undefined) object(input[name], name);
 	}
