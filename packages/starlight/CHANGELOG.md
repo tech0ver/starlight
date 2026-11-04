@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/tech0ver/starlight/compare/v0.8.2...v0.9.0) (2026-11-04)
+
+
+### Features
+
+* add GitHub repository link to header ([#43](https://github.com/tech0ver/starlight/issues/43)) ([a67c4da](https://github.com/tech0ver/starlight/commit/a67c4da0dad5617e5a1f9fe6ddc80a0be420db54))
+
 ## [0.8.2](https://github.com/tech0ver/starlight/compare/v0.8.1...v0.8.2) (2026-10-30)
 
 
