@@ -36,6 +36,8 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 	integrations?: AstroUserConfig['integrations'];
 	title?: string;
 	brand?: { name?: string; suffix?: string };
+	/** GitHub repository name (default owner: tech0ver), owner/name, or false to hide the star link. */
+	githubRepository?: string | false;
 	/** Width of the desktop sidebar and tablet drawer in pixels. Defaults to 200. */
 	sidebarWidth?: number;
 	reading?: ReadingOptions;
@@ -69,6 +71,7 @@ export interface Tech0verOptions extends Omit<AstroUserConfig, 'base' | 'integra
 export declare function defineTech0verConfig(input?: Tech0verOptions): AstroUserConfig;
 export declare function normalizeTech0verOptions(input?: Tech0verOptions): {
 	base: string;
+	githubRepository?: string;
 	brand: { name: string; suffix: string; fullName: string };
 	siteDescription?: string;
 	htmlUrls: { format: 'directory' | 'file' | 'preserve'; trailingSlash: 'always' | 'never' | 'ignore' };

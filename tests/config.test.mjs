@@ -2,6 +2,16 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { normalizeTech0verOptions } from '../packages/starlight/src/config.mjs';
 
+test('resolves the GitHub star target without requiring a new option', () => {
+	assert.equal(normalizeTech0verOptions({ githubRepository: 'sysdes' }).githubRepository, 'https://github.com/tech0ver/sysdes');
+	assert.equal(normalizeTech0verOptions({ githubRepository: 'other/project' }).githubRepository, 'https://github.com/other/project');
+	assert.equal(normalizeTech0verOptions({ site: 'https://tech0ver.github.io', base: '/sysdes/' }).githubRepository, 'https://github.com/tech0ver/sysdes');
+	assert.equal(normalizeTech0verOptions({ footer: { links: [{ href: 'https://github.com/org/repo', label: 'Repository' }] } }).githubRepository, 'https://github.com/org/repo');
+	assert.equal(normalizeTech0verOptions({ githubRepository: false, site: 'https://tech0ver.github.io', base: '/sysdes' }).githubRepository, undefined);
+	assert.equal(normalizeTech0verOptions({ site: 'https://example.com' }).githubRepository, undefined);
+	assert.throws(() => normalizeTech0verOptions({ githubRepository: '../repo' }), /githubRepository/);
+});
+
 const term = { id: 'example', term: 'Example', short: 'Short meaning.', explanation: 'More detail.' };
 
 test('invalid package data reports the setting and offending array index', () => {

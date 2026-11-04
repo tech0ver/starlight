@@ -3,9 +3,11 @@
 // browser's color scheme (Starlight's ThemeProvider sets it before paint); a
 // click stores the explicit choice under the same key Starlight uses.
 import { Icon } from '@astrojs/starlight/components';
+import config from 'virtual:tech0ver/config';
 const label = 'Toggle theme';
 ---
 
+{config.githubRepository && <a class="site-github-star" href={config.githubRepository} aria-label="Star on GitHub" title="Star on GitHub"><Icon size="1.25rem" name="github" /></a>}
 <site-theme-toggle>
   <button type="button" class="site-theme-toggle" aria-label={label} title={label}>
     <Icon size="1.25rem" name="moon" class="site-theme-icon site-theme-moon" />
